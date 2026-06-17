@@ -263,7 +263,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 </div>
               ) : (
                 // Google Mobile View Card
-                <div className="bg-white text-[#1a0dab] p-4.5 rounded-2xl shadow-md border border-zinc-200 text-left font-sans space-y-1.5 max-w-[370px] mx-auto">
+                <div className="bg-white text-[#1a0dab] p-4.5 rounded-2xl shadow-md border border-zinc-200 text-left font-sans space-y-1.5 w-full max-w-[370px] mx-auto">
                   <div className="flex items-center gap-2 text-xs text-[#202124]">
                     <div className="h-6 w-6 rounded-full bg-zinc-100 flex items-center justify-center border border-zinc-200 text-[#202124] text-[10px] font-bold font-mono">
                       MD

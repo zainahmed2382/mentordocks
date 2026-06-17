@@ -208,16 +208,18 @@ export default function App() {
                 <button
                   onClick={() => exportReportToPDF(report)}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black hover:bg-zinc-200 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm"
+                  title="Download PDF Report"
                 >
                   <Download className="h-3.5 w-3.5" />
-                  Download PDF Report
+                  <span className="hidden sm:inline">Download PDF Report</span>
                 </button>
                 <button
                   onClick={handleReset}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#2c2c2c] hover:bg-[#1f1f1f] rounded-lg text-xs font-semibold text-slate-300 cursor-pointer transition shadow-sm"
+                  title="Audit New URL"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
-                  Audit New URL
+                  <span className="hidden sm:inline">Audit New URL</span>
                 </button>
               </div>
             )}
@@ -331,8 +333,8 @@ export default function App() {
                 <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded">
                   DIAGNOSIS COMPLETE
                 </span>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-2xl font-extrabold text-white tracking-tight select-all font-mono">
+                <div className="flex items-center gap-2 flex-wrap max-w-full">
+                  <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight select-all font-mono break-all">
                     {report.website_url}
                   </h2>
                   <a
@@ -392,7 +394,7 @@ export default function App() {
             </div>
 
             {/* Scoreboard Matrix Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-7 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
               <div className="bg-[#0a0a0a] p-4 rounded-xl border border-[#222] shadow-sm flex flex-col justify-between space-y-4 hover:border-[#333] transition">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Quality</span>
