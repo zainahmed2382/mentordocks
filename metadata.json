@@ -1,0 +1,6 @@
+{
+  "name": "Mentor Docks",
+  "description": "An expert website crawler and analyzer providing comprehensive UX, SEO, performance, and accessibility feedback with actionable improvements.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
