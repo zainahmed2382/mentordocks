@@ -1,9 +1,7 @@
 import express, { Request, Response } from "express";
-import path from "path";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
-import { analyzeHTML } from "./src/utils/parser";
+import { analyzeHTML } from "../utils/parser.js";
 
 // Load environment variables
 dotenv.config();
@@ -218,7 +216,6 @@ Return the results matching the strict response schema structure. Be descriptive
     });
 
     const parsedData = JSON.parse(response.text || "{}");
-    // Ensure URL field is returned correctly
     if (!parsedData.website_url) {
       parsedData.website_url = targetUrl;
     }
@@ -321,7 +318,7 @@ Return the results matching the strict response schema structure. Be descriptive
         category: "Typography",
         severity: "High",
         problem: "Page lacks a major primary heading H1 typography block",
-        reason: "SEO parsers and readers look for an initial primary H1 text element to grasp page topic. Absence ruins heading structure hierarchies.",
+        reason: "SEO parses and readers look for an initial primary H1 text element to grasp page topic. Absence ruins heading structure hierarchies.",
         recommendation: "Introduce exactly one descriptive semantic <h1> element on the primary viewport view.",
         example_fix: '<h1 class="text-4xl font-extrabold text-white tracking-tight">\n  Mentor Docks Directory Hub\n</h1>'
       });
@@ -445,25 +442,11 @@ Return the results matching the strict response schema structure. Be descriptive
   }
 });
 
-// 2. Vite and Static Asset Serving
-async function startServer() {
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
-
+// Start server locally (not in serverless environment)
+if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[website-auditor] Server up and running at http://localhost:${PORT}`);
+    console.log(`[backend-api] Server running at http://localhost:${PORT}`);
   });
 }
 
-startServer();
+export default app;
