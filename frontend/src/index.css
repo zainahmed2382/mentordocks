@@ -42,6 +42,18 @@ body {
 }
 
 /* Custom styles for animations & layout details */
+@keyframes earthyGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-bg-gradient {
+  background: linear-gradient(-45deg, var(--theme-cream), #3d2217, var(--theme-sand), #20110a);
+  background-size: 400% 400%;
+  animation: earthyGradient 15s ease infinite;
+}
+
 @keyframes pulseGlow {
   0%, 100% {
     opacity: 0.4;
