@@ -27,7 +27,9 @@ import {
   ShieldCheck,
   Briefcase,
   ArrowUp,
-  ChevronUp
+  ChevronUp,
+  Moon,
+  Sun
 } from "lucide-react";
 import { AuditReport, CategoryFilter, SeverityFilter } from "./types";
 import { CircularProgress } from "./components/CircularProgress";
@@ -45,6 +47,28 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Theme State
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    try {
+      const savedTheme = localStorage.getItem("ms_theme_mode");
+      if (savedTheme !== null) return savedTheme === "dark";
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDarkMode) {
+      root.classList.add("dark");
+      localStorage.setItem("ms_theme_mode", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("ms_theme_mode", "light");
+    }
+  }, [isDarkMode]);
 
   // Splash Screen State
   const [showSplash, setShowSplash] = useState(() => {
@@ -277,6 +301,14 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 text-custom-choco/60 hover:text-custom-choco hover:bg-custom-sand/50 rounded-full transition-colors cursor-pointer"
+              aria-label="Toggle theme"
+            >
+              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+
             <span className="text-xs font-semibold text-custom-choco/60 uppercase tracking-widest hidden md:inline">
               PRO DIAGNOSTICS
             </span>

@@ -1,16 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+:root {
+  /* Light mode (earthy) */
+  --theme-ochre: #B08401;
+  --theme-rose: #D49E8D;
+  --theme-sand: #DED1BD;
+  --theme-cream: #FAF6F2;
+  --theme-choco: #683B2B;
+}
+
+.dark {
+  /* Dark mode (earthy dark) */
+  --theme-ochre: #D1A221;
+  --theme-rose: #E2AE9E;
+  --theme-sand: #3D261D;
+  --theme-cream: #2A1A14;
+  --theme-choco: #FAF6F2;
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-custom-ochre: #B08401;
-  --color-custom-rose: #D49E8D;
-  --color-custom-sand: #DED1BD;
-  --color-custom-cream: #FAF6F2;
-  --color-custom-choco: #683B2B;
+  --color-custom-ochre: var(--theme-ochre);
+  --color-custom-rose: var(--theme-rose);
+  --color-custom-sand: var(--theme-sand);
+  --color-custom-cream: var(--theme-cream);
+  --color-custom-choco: var(--theme-choco);
 
   --color-brand-50: #121212;
   --color-brand-100: #222222;
