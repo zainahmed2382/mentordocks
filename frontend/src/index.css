@@ -2,21 +2,13 @@
 @import "tailwindcss";
 
 :root {
-  /* Light mode (earthy) */
-  --theme-ochre: #B08401;
-  --theme-rose: #D49E8D;
-  --theme-sand: #DED1BD;
-  --theme-cream: #FAF6F2;
-  --theme-choco: #683B2B;
-}
-
-.dark {
   /* Dark mode (earthy dark) */
   --theme-ochre: #D1A221;
   --theme-rose: #E2AE9E;
   --theme-sand: #3D261D;
   --theme-cream: #2A1A14;
   --theme-choco: #FAF6F2;
+  --theme-yellow: #fbbf24;
 }
 
 @theme {
@@ -29,6 +21,7 @@
   --color-custom-sand: var(--theme-sand);
   --color-custom-cream: var(--theme-cream);
   --color-custom-choco: var(--theme-choco);
+  --color-custom-yellow: var(--theme-yellow);
 
   --color-brand-50: #121212;
   --color-brand-100: #222222;

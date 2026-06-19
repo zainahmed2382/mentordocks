@@ -48,28 +48,6 @@ export default function App() {
   const [currentUrl, setCurrentUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Theme State
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    try {
-      const savedTheme = localStorage.getItem("ms_theme_mode");
-      if (savedTheme !== null) return savedTheme === "dark";
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
-    } catch {
-      return false;
-    }
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDarkMode) {
-      root.classList.add("dark");
-      localStorage.setItem("ms_theme_mode", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("ms_theme_mode", "light");
-    }
-  }, [isDarkMode]);
-
   // Splash Screen State
   const [showSplash, setShowSplash] = useState(() => {
     return localStorage.getItem("ms_splash_dismissed") !== "true";
@@ -301,13 +279,6 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 text-custom-choco/60 hover:text-custom-choco hover:bg-custom-sand/50 rounded-full transition-colors cursor-pointer"
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
 
             <span className="text-xs font-semibold text-custom-choco/60 uppercase tracking-widest hidden md:inline">
               PRO DIAGNOSTICS
@@ -318,7 +289,7 @@ export default function App() {
               id="open-history-dashboard"
               onClick={() => setShowHistory(true)}
               title="View Search History"
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-custom-choco/20 hover:border-custom-choco/30 hover:bg-custom-sand text-custom-choco/80 hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-custom-choco/20 hover:border-custom-choco/30 hover:bg-custom-yellow/20 text-custom-choco/80 hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
             >
               <History className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">History</span>
@@ -342,7 +313,7 @@ export default function App() {
                 <button
                   onClick={handleLogout}
                   title="Sign Out"
-                  className="p-1 hover:bg-custom-sand rounded text-custom-choco/80 hover:text-custom-choco cursor-pointer transition ml-1 shrink-0"
+                  className="p-1 hover:bg-custom-yellow/20 rounded text-custom-choco/80 hover:text-custom-choco cursor-pointer transition ml-1 shrink-0"
                 >
                   <LogOut className="h-3 w-3" />
                 </button>
@@ -350,7 +321,7 @@ export default function App() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-custom-choco/20 hover:border-custom-choco/30 hover:bg-custom-sand text-custom-choco text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-custom-choco/20 hover:border-custom-choco/30 hover:bg-custom-yellow/20 text-custom-choco text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
               >
                 <User className="h-3.5 w-3.5" />
                 Sign In
@@ -361,7 +332,7 @@ export default function App() {
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => exportReportToPDF(report)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream text-custom-choco hover:bg-zinc-200 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream text-custom-choco hover:bg-custom-yellow/20 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm"
                   title="Download PDF Report"
                 >
                   <Download className="h-3.5 w-3.5" />
@@ -369,7 +340,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-[#2c2c2c] hover:bg-custom-sand rounded-lg text-xs font-semibold text-custom-choco cursor-pointer transition shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-[#2c2c2c] hover:bg-custom-yellow/20 rounded-lg text-xs font-semibold text-custom-choco cursor-pointer transition shadow-sm"
                   title="Audit New URL"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -392,7 +363,7 @@ export default function App() {
                 className={`section-nav-item px-3.5 py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all whitespace-nowrap ${
                   activeSection === item.id
                     ? "text-blue-400 bg-custom-ochre/10 active"
-                    : "text-custom-choco/60 hover:text-custom-choco hover:bg-custom-sand/50"
+                    : "text-custom-choco/60 hover:text-custom-choco hover:bg-custom-yellow/20/50"
                 }`}
               >
                 {item.label}
@@ -479,7 +450,7 @@ export default function App() {
                   <div
                     key={hidx}
                     onClick={() => handleRunAudit(hist.url)}
-                    className="bg-custom-sand/40 hover:bg-custom-sand border border-custom-choco/20 hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-sm relative group text-left"
+                    className="bg-custom-sand/40 hover:bg-custom-yellow/20 border border-custom-choco/20 hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-sm relative group text-left"
                   >
                     <div className="space-y-1">
                       <p className="font-mono text-xs font-bold text-custom-choco truncate max-w-[155px] group-hover:text-blue-400 transition">
@@ -521,7 +492,7 @@ export default function App() {
                     href={report.website_url}
                     target="_blank"
                     referrerPolicy="no-referrer"
-                    className="p-1 text-custom-choco/60 hover:text-custom-choco hover:bg-custom-sand rounded transition"
+                    className="p-1 text-custom-choco/60 hover:text-custom-choco hover:bg-custom-yellow/20 rounded transition"
                   >
                     <ExternalLink className="h-4 w-4" />
                   </a>
@@ -550,7 +521,7 @@ export default function App() {
                 <div className="pt-2">
                   <button
                     onClick={() => exportReportToPDF(report)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-custom-ochre hover:bg-custom-ochre/80 text-white font-bold text-xs uppercase tracking-wider rounded transition cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-custom-ochre hover:bg-custom-yellow text-white font-bold text-xs uppercase tracking-wider rounded transition cursor-pointer"
                   >
                     <Download className="h-4 w-4" />
                     Export PDF Report
@@ -744,7 +715,7 @@ export default function App() {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value as CategoryFilter)}
-                    className="text-xs bg-custom-sand border border-[#292929] rounded-lg px-2.5 py-1.5 text-custom-choco focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-custom-sand transition"
+                    className="text-xs bg-custom-sand border border-[#292929] rounded-lg px-2.5 py-1.5 text-custom-choco focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-custom-yellow/20 transition"
                   >
                     <option value="all">All Categories</option>
                     <option value="Code Quality">Code Quality</option>
@@ -762,7 +733,7 @@ export default function App() {
                   <select
                     value={selectedSeverity}
                     onChange={(e) => setSelectedSeverity(e.target.value as SeverityFilter)}
-                    className="text-xs bg-custom-sand border border-[#292929] rounded-lg px-2.5 py-1.5 text-custom-choco focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-custom-sand transition"
+                    className="text-xs bg-custom-sand border border-[#292929] rounded-lg px-2.5 py-1.5 text-custom-choco focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-custom-yellow/20 transition"
                   >
                     <option value="all">All Severities</option>
                     <option value="High">High Severity</option>
@@ -797,7 +768,7 @@ export default function App() {
       {report && showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="back-to-top-btn fixed bottom-8 right-8 z-50 h-11 w-11 rounded-full bg-custom-ochre hover:bg-blue-500 text-white shadow-lg hover:shadow-xl flex items-center justify-center cursor-pointer transition-all duration-200 border border-blue-400/20"
+          className="back-to-top-btn fixed bottom-8 right-8 z-50 h-11 w-11 rounded-full bg-custom-ochre hover:bg-custom-yellow text-white shadow-lg hover:shadow-xl flex items-center justify-center cursor-pointer transition-all duration-200 border border-blue-400/20"
           title="Back to top"
         >
           <ChevronUp className="h-5 w-5" />

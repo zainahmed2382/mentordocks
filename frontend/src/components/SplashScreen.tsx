@@ -130,7 +130,7 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
           {isFinished ? (
             <button
               onClick={onDismiss}
-              className="px-6 py-2.5 bg-custom-ochre text-white hover:bg-blue-500 text-xs font-mono tracking-wider font-bold rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg shadow-blue-900/40 animate-bounce cursor-pointer"
+              className="px-6 py-2.5 bg-custom-ochre text-white hover:bg-custom-yellow text-xs font-mono tracking-wider font-bold rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg shadow-blue-900/40 animate-bounce cursor-pointer"
             >
               ACCESS DIAGNOSTIC SUITE
               <ArrowRight className="h-3.5 w-3.5" />

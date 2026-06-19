@@ -76,7 +76,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-3.5 bg-custom-ochre text-white hover:bg-custom-ochre/80 font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+            className="px-6 py-3.5 bg-custom-ochre text-white hover:bg-custom-yellow font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
           >
             {isLoading ? "Auditing..." : "Run Free Audit"}
             <Zap className="h-4 w-4 text-white" />
@@ -97,7 +97,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
               key={preset.name}
               onClick={() => handleSelectPreset(preset.url)}
               disabled={isLoading}
-              className="text-xs bg-custom-sand hover:bg-custom-sand text-[#888] font-medium px-3 py-1 rounded-full border border-custom-choco/20 cursor-pointer transition"
+              className="text-xs bg-custom-sand hover:bg-custom-yellow/20 text-[#888] font-medium px-3 py-1 rounded-full border border-custom-choco/20 cursor-pointer transition"
             >
               {preset.name}
             </button>

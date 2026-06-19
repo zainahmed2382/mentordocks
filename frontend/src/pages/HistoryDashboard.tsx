@@ -239,7 +239,7 @@ export function HistoryDashboard({
               </div>
               <button
                 onClick={onClose}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-custom-ochre hover:bg-custom-ochre/80 text-white font-bold text-xs rounded-xl transition cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-custom-ochre hover:bg-custom-yellow text-white font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 <Zap className="h-3.5 w-3.5" />
                 Run First Audit
@@ -400,7 +400,7 @@ export function HistoryDashboard({
                     return (
                       <div
                         key={`${entry.url}-${idx}`}
-                        className="group bg-custom-sand hover:bg-custom-sand border border-[#1c1c1c] hover:border-custom-ochre/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all duration-200 relative overflow-hidden"
+                        className="group bg-custom-sand hover:bg-custom-yellow/20 border border-[#1c1c1c] hover:border-custom-ochre/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all duration-200 relative overflow-hidden"
                       >
                         {/* Hover glow accent */}
                         <div className="absolute left-0 top-0 h-full w-0.5 bg-gradient-to-b from-blue-500/0 via-blue-500/60 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl" />

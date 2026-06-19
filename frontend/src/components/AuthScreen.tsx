@@ -73,7 +73,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
           </div>
           <button 
             onClick={onClose}
-            className="text-custom-choco/60 hover:text-custom-choco p-1 hover:bg-custom-sand rounded-lg transition overflow-hidden h-7 w-7 flex items-center justify-center cursor-pointer"
+            className="text-custom-choco/60 hover:text-custom-choco p-1 hover:bg-custom-yellow/20 rounded-lg transition overflow-hidden h-7 w-7 flex items-center justify-center cursor-pointer"
           >
             <X className="h-4 bg-transparent" />
           </button>
@@ -183,7 +183,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-custom-cream text-custom-choco font-bold rounded-xl text-xs uppercase tracking-wider transition hover:bg-zinc-200 mt-2 cursor-pointer"
+                className="w-full py-3 bg-custom-cream text-custom-choco font-bold rounded-xl text-xs uppercase tracking-wider transition hover:bg-custom-yellow/20 mt-2 cursor-pointer"
               >
                 {isSignUp ? "Create Workspace Key" : "Access Workspace Core"}
               </button>

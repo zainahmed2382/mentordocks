@@ -309,7 +309,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 />
                 <button
                   type="submit"
-                  className="bg-custom-ochre hover:bg-blue-500 text-white text-xs font-bold px-4 py-1.5 rounded-xl cursor-pointer transition shrink-0"
+                  className="bg-custom-ochre hover:bg-custom-yellow text-white text-xs font-bold px-4 py-1.5 rounded-xl cursor-pointer transition shrink-0"
                 >
                   Analyze
                 </button>
@@ -329,7 +329,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 </thead>
                 <tbody className="divide-y divide-[#222]">
                   {scannedKeywords.map((k, idx) => (
-                    <tr key={idx} className="hover:bg-custom-sand/40 text-custom-choco font-medium">
+                    <tr key={idx} className="hover:bg-custom-yellow/20/40 text-custom-choco font-medium">
                       <td className="p-3 font-mono font-bold text-blue-400">{k.word}</td>
                       <td className="p-3 text-white">{k.count} times</td>
                       <td className="p-3">
@@ -474,7 +474,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 </div>
                 <button
                   onClick={() => triggerCopy(generatedRobotsTxt, "robots")}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream border border-custom-choco/20 text-xs font-mono text-custom-choco/80 rounded-lg hover:text-custom-choco transition hover:bg-custom-sand cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream border border-custom-choco/20 text-xs font-mono text-custom-choco/80 rounded-lg hover:text-custom-choco transition hover:bg-custom-yellow/20 cursor-pointer"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   {copiedText === "robots" ? "Copied!" : "Copy"}
@@ -494,7 +494,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 </div>
                 <button
                   onClick={() => triggerCopy(generatedSitemapXml, "sitemap")}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream border border-custom-choco/20 text-xs font-mono text-custom-choco/80 rounded-lg hover:text-custom-choco transition hover:bg-custom-sand cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream border border-custom-choco/20 text-xs font-mono text-custom-choco/80 rounded-lg hover:text-custom-choco transition hover:bg-custom-yellow/20 cursor-pointer"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   {copiedText === "sitemap" ? "Copied!" : "Copy"}
