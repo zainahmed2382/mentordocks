@@ -41,6 +41,7 @@ import { SplashScreen } from "./components/SplashScreen";
 import { AuthScreen, UserProfile } from "./components/AuthScreen";
 import { SEOToolsHub } from "./components/SEOToolsHub";
 import { HistoryDashboard } from "./pages/HistoryDashboard";
+import { ParticlesBackground } from "./components/ParticlesBackground";
 
 export default function App() {
   const [report, setReport] = useState<AuditReport | null>(null);
@@ -263,7 +264,9 @@ export default function App() {
   ] : [];
 
   return (
-    <div className="min-h-screen animate-bg-gradient text-custom-choco selection:bg-brand-500 selection:text-white pb-20">
+    <div className="min-h-screen animate-bg-gradient text-custom-choco selection:bg-brand-500 selection:text-white pb-20 relative">
+      {/* Background Particles */}
+      <ParticlesBackground />
       {/* 1. Header Navigation */}
       <header className="sticky top-0 z-50 bg-custom-cream/90 backdrop-blur border-b border-custom-choco/20 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
