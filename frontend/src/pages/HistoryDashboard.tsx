@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   History,
   Search,
@@ -102,6 +102,12 @@ export function HistoryDashboard({
   const [scoreFilter, setScoreFilter] = useState<"all" | "excellent" | "good" | "fair" | "poor">("all");
   const [confirmClear, setConfirmClear] = useState(false);
 
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
   // Derived stats
   const stats = useMemo(() => {
     if (history.length === 0) return null;
@@ -150,8 +156,8 @@ export function HistoryDashboard({
   const maxSparkScore = Math.max(...sparkData.map((d) => d.score), 1);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-start justify-center p-4 overflow-y-auto">
-      <div className="w-full max-w-5xl bg-[#080808] border border-[#1c1c1c] rounded-3xl shadow-2xl overflow-hidden relative my-8">
+    <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden">
+      <div className="w-full max-w-5xl bg-[#080808] border border-[#1c1c1c] rounded-3xl shadow-2xl relative flex flex-col" style={{ maxHeight: "90vh" }}>
         {/* Decorative ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-48 bg-blue-500/6 blur-[80px] pointer-events-none rounded-full" />
         <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500/4 blur-[80px] pointer-events-none rounded-full" />
@@ -191,7 +197,7 @@ export function HistoryDashboard({
           </div>
         </div>
 
-        <div className="relative z-10 p-6 space-y-6">
+        <div className="relative z-10 p-6 space-y-6 flex-1 overflow-y-auto">
           {/* Confirm Clear Banner */}
           {confirmClear && (
             <div className="bg-rose-950/20 border border-rose-900/40 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in">
