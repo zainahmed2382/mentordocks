@@ -40,7 +40,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
     <div className="space-y-12">
       {/* 1. Hero text section */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#0a0a0a] border border-blue-500/20 rounded-full text-blue-400 text-xs font-semibold uppercase tracking-wider animate-bounce">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-blue-500/20 rounded-full text-blue-400 text-xs font-semibold uppercase tracking-wider animate-bounce">
           <Sparkles className="h-3.5 w-3.5 text-blue-500" />
           Next-Gen Website Analyzer
         </div>
@@ -53,7 +53,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
       </div>
 
       {/* 2. URL search bar container */}
-      <div className="max-w-2xl mx-auto bg-[#0a0a0a] p-4 rounded-2xl border border-[#222] shadow-2xl relative">
+      <div className="max-w-2xl mx-auto bg-white p-4 rounded-2xl border border-slate-200 shadow-2xl relative">
         <div className="absolute inset-0 ambient-glow -z-10 rounded-2xl" />
 
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3">
@@ -70,7 +70,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
                 if (error) setError("");
               }}
               disabled={isLoading}
-              className="w-full pl-11 pr-4 py-3.5 bg-[#141414] border border-[#222] focus:border-brand-500 focus:bg-[#1a1a1a] rounded-xl text-[#e0e0e0] placeholder-gray-500 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
+              className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-brand-500 focus:bg-slate-50 rounded-xl text-slate-900 placeholder-gray-500 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
             />
           </div>
           <button
@@ -90,14 +90,14 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         )}
 
         {/* Preset pill list */}
-        <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-3.5 border-t border-[#1f1f1f]">
+        <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-3.5 border-t border-slate-200">
           <span className="text-xs text-[#555] font-semibold uppercase tracking-wider">Try Demo:</span>
           {PRESETS.map((preset) => (
             <button
               key={preset.name}
               onClick={() => handleSelectPreset(preset.url)}
               disabled={isLoading}
-              className="text-xs bg-[#141414] hover:bg-[#1a1a1a] text-[#888] font-medium px-3 py-1 rounded-full border border-[#222] cursor-pointer transition"
+              className="text-xs bg-slate-50 hover:bg-slate-50 text-[#888] font-medium px-3 py-1 rounded-full border border-slate-200 cursor-pointer transition"
             >
               {preset.name}
             </button>
@@ -108,7 +108,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
       {/* 3. Marketing features/checks grids */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pt-4">
         {/* Card 1 */}
-        <div className="bg-[#0a0a0a]/80 backdrop-blur p-6 rounded-2xl border border-[#1a1a1a] shadow-sm space-y-3">
+        <div className="bg-white/80 backdrop-blur p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
             <Code className="h-5 w-5 text-blue-400" />
           </div>
@@ -119,7 +119,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         </div>
 
         {/* Card 2 */}
-        <div className="bg-[#0a0a0a]/80 backdrop-blur p-6 rounded-2xl border border-[#1a1a1a] shadow-sm space-y-3">
+        <div className="bg-white/80 backdrop-blur p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
             <Palette className="h-5 w-5 text-indigo-400" />
           </div>
@@ -130,7 +130,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         </div>
 
         {/* Card 3 */}
-        <div className="bg-[#0a0a0a]/80 backdrop-blur p-6 rounded-2xl border border-[#1a1a1a] shadow-sm space-y-3">
+        <div className="bg-white/80 backdrop-blur p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
             <Monitor className="h-5 w-5 text-purple-400" />
           </div>

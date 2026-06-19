@@ -263,7 +263,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white text-black selection:bg-brand-500 selection:text-white pb-20">
       {/* 1. Header Navigation */}
-      <header className="sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur border-b border-[#222] px-6 py-4">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleReset}>
             <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center shadow-md">
@@ -286,7 +286,7 @@ export default function App() {
               id="open-history-dashboard"
               onClick={() => setShowHistory(true)}
               title="View Search History"
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a] text-zinc-400 hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
             >
               <History className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">History</span>
@@ -299,18 +299,18 @@ export default function App() {
 
             {/* Authentication user profile pill */}
             {currUser ? (
-              <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1 pr-3 rounded-full text-xs">
+              <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1 pr-3 rounded-full text-xs">
                 <div className="h-6 w-6 rounded-full bg-blue-600/10 border border-blue-500/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
                   {currUser.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="font-bold leading-none text-zinc-300 text-[11px] truncate max-w-[90px]">{currUser.name}</p>
-                  <p className="text-[8px] font-mono font-semibold text-zinc-500 tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
+                  <p className="font-bold leading-none text-slate-900 text-[11px] truncate max-w-[90px]">{currUser.name}</p>
+                  <p className="text-[8px] font-mono font-semibold text-slate-500 tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
                 </div>
                 <button
                   onClick={handleLogout}
                   title="Sign Out"
-                  className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-white cursor-pointer transition ml-1 shrink-0"
+                  className="p-1 hover:bg-slate-100 rounded text-slate-600 hover:text-black cursor-pointer transition ml-1 shrink-0"
                 >
                   <LogOut className="h-3 w-3" />
                 </button>
@@ -318,7 +318,7 @@ export default function App() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a] text-zinc-200 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-900 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
               >
                 <User className="h-3.5 w-3.5" />
                 Sign In
@@ -337,7 +337,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#2c2c2c] hover:bg-[#1f1f1f] rounded-lg text-xs font-semibold text-slate-300 cursor-pointer transition shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-[#2c2c2c] hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-900 cursor-pointer transition shadow-sm"
                   title="Audit New URL"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -351,7 +351,7 @@ export default function App() {
 
       {/* ── Sticky Section Navigation (only when report visible) ── */}
       {report && !loading && !errorMsg && (
-        <nav className="sticky top-[65px] z-40 section-nav bg-[#0a0a0a]/80 border-b border-[#1a1a1a] px-6 py-0">
+        <nav className="sticky top-[65px] z-40 section-nav bg-white/80 border-b border-slate-200 px-6 py-0">
           <div className="max-w-7xl mx-auto flex items-center gap-1 overflow-x-auto scrollbar-hide py-2">
             {sectionNavItems.map((item) => (
               <button
@@ -360,12 +360,12 @@ export default function App() {
                 className={`section-nav-item px-3.5 py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all whitespace-nowrap ${
                   activeSection === item.id
                     ? "text-blue-400 bg-blue-500/10 active"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
+                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/50"
                 }`}
               >
                 {item.label}
                 {item.id === "issues" && (
-                  <span className="ml-1.5 text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded-full">
+                  <span className="ml-1.5 text-[10px] font-mono bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full">
                     {report.issues.length}
                   </span>
                 )}
@@ -410,19 +410,19 @@ export default function App() {
             <HomeState onAudit={handleRunAudit} isLoading={loading} />
             
             {/* Interactive saved queries, personalized diagnostic badges and previous audit logs */}
-            <div className="max-w-4xl mx-auto bg-[#0a0a0a] border border-[#222]/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+            <div className="max-w-4xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
               <div className="absolute top-0 left-0 w-44 h-44 bg-gradient-to-tr from-blue-500/5 to-transparent blur-[40px] pointer-events-none rounded-full" />
               
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-900 pb-4 gap-4 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 gap-4 mb-4">
                 <div className="flex items-center gap-2.5">
                   <div className="h-8 w-8 text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center">
                     <History className="h-4 w-4" />
                   </div>
                   <div className="text-left">
-                    <h3 className="font-display font-extrabold text-[#e0e0e0] text-sm leading-tight">
+                    <h3 className="font-display font-extrabold text-slate-900 text-sm leading-tight">
                       {currUser ? `${currUser.name}'s Search Logbook` : "Interactive Workspace History"}
                     </h3>
-                    <p className="text-[10px] text-zinc-500">
+                    <p className="text-[10px] text-slate-500">
                       Fast recall of previously parsed domains and evaluation indexes
                     </p>
                   </div>
@@ -431,12 +431,12 @@ export default function App() {
                 {!currUser ? (
                   <button
                     onClick={() => setShowAuthModal(true)}
-                    className="text-xs bg-zinc-900 hover:bg-[#161616] border border-zinc-800 text-blue-400 font-bold px-3 py-1.5 rounded-lg cursor-pointer transition self-start"
+                    className="text-xs bg-slate-100 hover:bg-[#161616] border border-slate-200 text-blue-400 font-bold px-3 py-1.5 rounded-lg cursor-pointer transition self-start"
                   >
                     🔐 Unlock Sync Settings
                   </button>
                 ) : (
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1">
+                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest flex items-center gap-1">
                     <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Premium Local Engine Active
                   </span>
                 )}
@@ -447,13 +447,13 @@ export default function App() {
                   <div
                     key={hidx}
                     onClick={() => handleRunAudit(hist.url)}
-                    className="bg-[#121212]/40 hover:bg-[#141414] border border-[#1e1e1e] hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-sm relative group text-left"
+                    className="bg-slate-50/40 hover:bg-slate-50 border border-slate-200 hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-sm relative group text-left"
                   >
                     <div className="space-y-1">
-                      <p className="font-mono text-xs font-bold text-zinc-300 truncate max-w-[155px] group-hover:text-blue-400 transition">
+                      <p className="font-mono text-xs font-bold text-slate-900 truncate max-w-[155px] group-hover:text-blue-400 transition">
                         {hist.url}
                       </p>
-                      <p className="text-[9px] text-zinc-500 font-mono tracking-tight flex items-center gap-1 leading-none">
+                      <p className="text-[9px] text-slate-500 font-mono tracking-tight flex items-center gap-1 leading-none">
                         <Clock className="h-3 w-3 inline shrink-0 text-zinc-600" />
                         Scanned {hist.date}
                       </p>
@@ -476,7 +476,7 @@ export default function App() {
         {report && !loading && !errorMsg && (
           <div className="space-y-10 animate-fade-in">
             {/* Report Jumbotron Header */}
-            <div className="bg-[#0a0a0a] rounded-xl border border-[#222] shadow-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-2 max-w-full">
                 <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded">
                   DIAGNOSIS COMPLETE
@@ -489,7 +489,7 @@ export default function App() {
                     href={report.website_url}
                     target="_blank"
                     referrerPolicy="no-referrer"
-                    className="p-1 text-slate-500 hover:text-white hover:bg-zinc-800 rounded transition"
+                    className="p-1 text-slate-500 hover:text-black hover:bg-slate-100 rounded transition"
                   >
                     <ExternalLink className="h-4 w-4" />
                   </a>
@@ -501,7 +501,7 @@ export default function App() {
                 {currUser && (
                   <div className="mt-4 flex items-center gap-2.5 p-2.5 px-3.5 bg-blue-950/15 border border-blue-900/30 rounded-xl text-left max-w-xl">
                     <Briefcase className="h-4 w-4 text-blue-400 shrink-0" />
-                    <p className="text-xs text-zinc-300 font-sans leading-relaxed">
+                    <p className="text-xs text-slate-900 font-sans leading-relaxed">
                       <span className="font-bold text-white">Advisory Tip ({currUser.role}):</span> Prioritizing {
                         currUser.role === "Developer" 
                           ? "code structure semantics, layout parameters and responsive script payloads"
@@ -527,10 +527,10 @@ export default function App() {
               </div>
 
               {/* Overall circular rating */}
-              <div className="flex items-center gap-4 bg-[#141414] p-3.5 rounded-xl border border-[#222]">
+              <div className="flex items-center gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                 <CircularProgress score={report.overall_score} size={88} strokeWidth={8} label="Rating" />
                 <div className="space-y-1">
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">Scale Grade</span>
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Scale Grade</span>
                   <span className="text-lg font-bold text-white block">
                     {report.overall_score >= 90 ? "Excellent / Robust" : report.overall_score >= 55 ? "Needs Remediation" : "Critical Repair"}
                   </span>
@@ -542,19 +542,19 @@ export default function App() {
             </div>
 
             {/* ── Quick Stats — Severity Badge Strip ── */}
-            <div className="flex flex-wrap items-center gap-3 bg-[#0a0a0a] border border-[#1e1e1e] rounded-xl p-4 shadow-md">
-              <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mr-1">Quick Filter:</span>
+            <div className="flex flex-wrap items-center gap-3 bg-white border border-slate-200 rounded-xl p-4 shadow-md">
+              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-1">Quick Filter:</span>
 
               <button
                 onClick={() => { setSelectedSeverity("all"); setSelectedCategory("all"); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "all"
                     ? "bg-blue-600/15 border-blue-500/30 text-blue-400"
-                    : "bg-[#141414] border-[#222] text-zinc-400 hover:text-zinc-200 hover:border-zinc-600"
+                    : "bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:border-zinc-600"
                 }`}
               >
                 All Issues
-                <span className="font-mono text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full">
                   {report.issues.length}
                 </span>
               </button>
@@ -564,12 +564,12 @@ export default function App() {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "High"
                     ? "bg-rose-950/30 border-rose-900/50 text-rose-400"
-                    : "bg-[#141414] border-[#222] text-zinc-400 hover:text-rose-400 hover:border-rose-900/40"
+                    : "bg-slate-50 border-slate-200 text-slate-600 hover:text-rose-400 hover:border-rose-900/40"
                 }`}
               >
                 <XCircle className="h-3.5 w-3.5" />
                 High
-                <span className="font-mono text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full">
                   {severityCounts.high}
                 </span>
               </button>
@@ -579,12 +579,12 @@ export default function App() {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "Medium"
                     ? "bg-amber-950/30 border-amber-900/50 text-amber-400"
-                    : "bg-[#141414] border-[#222] text-zinc-400 hover:text-amber-400 hover:border-amber-900/40"
+                    : "bg-slate-50 border-slate-200 text-slate-600 hover:text-amber-400 hover:border-amber-900/40"
                 }`}
               >
                 <AlertTriangle className="h-3.5 w-3.5" />
                 Medium
-                <span className="font-mono text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full">
                   {severityCounts.medium}
                 </span>
               </button>
@@ -593,13 +593,13 @@ export default function App() {
                 onClick={() => { setSelectedSeverity("Low"); setSelectedCategory("all"); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "Low"
-                    ? "bg-zinc-800/60 border-zinc-600/50 text-zinc-300"
-                    : "bg-[#141414] border-[#222] text-zinc-400 hover:text-zinc-200 hover:border-zinc-600"
+                    ? "bg-slate-100/60 border-zinc-600/50 text-slate-900"
+                    : "bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:border-zinc-600"
                 }`}
               >
                 <HelpCircle className="h-3.5 w-3.5" />
                 Low
-                <span className="font-mono text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-full">
                   {severityCounts.low}
                 </span>
               </button>
@@ -610,11 +610,11 @@ export default function App() {
               {scoreCards.map((card, idx) => (
                 <div
                   key={card.label}
-                  className="bg-[#0a0a0a] p-4 rounded-xl border border-[#222] shadow-sm flex flex-col justify-between space-y-3 hover:border-[#444] hover:shadow-md transition-all duration-200 animate-fade-in-up group"
+                  className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-3 hover:border-[#444] hover:shadow-md transition-all duration-200 animate-fade-in-up group"
                   style={{ animationDelay: `${idx * 80}ms` }}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{card.label}</span>
+                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{card.label}</span>
                     <div className="group-hover:scale-110 transition-transform duration-200">
                       {card.icon}
                     </div>
@@ -622,11 +622,11 @@ export default function App() {
                   <div>
                     <div className="flex items-end gap-1.5">
                       <span className="text-2xl font-bold tracking-tight text-white font-mono block">{card.score}</span>
-                      <span className="text-[10px] font-semibold text-zinc-500 mb-1">{getScoreLabel(card.score)}</span>
+                      <span className="text-[10px] font-semibold text-slate-500 mb-1">{getScoreLabel(card.score)}</span>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="w-full bg-zinc-800/60 h-1.5 rounded-full overflow-hidden mt-2">
+                    <div className="w-full bg-slate-100/60 h-1.5 rounded-full overflow-hidden mt-2">
                       <div
                         className={`h-full rounded-full score-progress-bar ${getProgressBarColor(card.score)}`}
                         style={{ width: `${card.score}%`, animationDelay: `${idx * 80 + 300}ms` }}
@@ -642,7 +642,7 @@ export default function App() {
             </div>
 
             {/* Executive Summary Card from Gemini */}
-            <div id="summary" className="bg-[#0a0a0a] border border-[#222] rounded-xl p-6 text-[#e0e0e0] shadow-xl relative overflow-hidden">
+            <div id="summary" className="bg-white border border-slate-200 rounded-xl p-6 text-slate-900 shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 text-indigo-500/10 pointer-events-none">
                 <Sparkles className="h-36 w-36" style={{ transform: "rotate(15deg)" }} />
               </div>
@@ -673,7 +673,7 @@ export default function App() {
                   {report.priority_fixes.map((fixString, fixIdx) => (
                     <li
                       key={fixIdx}
-                      className="bg-[#0e0e0e] p-3.5 rounded-lg border border-[#222] flex items-start gap-2.5 shadow-sm hover:border-amber-950/50 transition animate-fade-in"
+                      className="bg-slate-50 p-3.5 rounded-lg border border-slate-200 flex items-start gap-2.5 shadow-sm hover:border-amber-950/50 transition animate-fade-in"
                     >
                       <span className="h-5 w-5 rounded-full bg-amber-950/30 border border-amber-900/50 text-amber-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
                         {fixIdx + 1}
@@ -694,25 +694,25 @@ export default function App() {
 
             {/* Main Issue Listing & Categories */}
             <div id="issues" className="space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#222] pb-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
                 <div>
                   <h3 className="text-lg font-bold text-white font-display">
                     Audit Findings ({filteredIssues.length} found)
                   </h3>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-slate-500">
                     Click any issue to expand details · Filter by category and severity
                   </p>
                 </div>
 
                 {/* Filters Row */}
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
                     <Filter className="h-3.5 w-3.5" /> Category:
                   </div>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value as CategoryFilter)}
-                    className="text-xs bg-[#0f0f0f] border border-[#292929] rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-zinc-900 transition"
+                    className="text-xs bg-slate-50 border border-[#292929] rounded-lg px-2.5 py-1.5 text-slate-900 focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-slate-100 transition"
                   >
                     <option value="all">All Categories</option>
                     <option value="Code Quality">Code Quality</option>
@@ -724,13 +724,13 @@ export default function App() {
                     <option value="Accessibility">Accessibility</option>
                   </select>
 
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
                     Severity:
                   </div>
                   <select
                     value={selectedSeverity}
                     onChange={(e) => setSelectedSeverity(e.target.value as SeverityFilter)}
-                    className="text-xs bg-[#0f0f0f] border border-[#292929] rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-zinc-900 transition"
+                    className="text-xs bg-slate-50 border border-[#292929] rounded-lg px-2.5 py-1.5 text-slate-900 focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-slate-100 transition"
                   >
                     <option value="all">All Severities</option>
                     <option value="High">High Severity</option>
@@ -742,10 +742,10 @@ export default function App() {
 
               {/* Grid of Results */}
               {filteredIssues.length === 0 ? (
-                <div className="text-center p-12 bg-[#0a0a0a] rounded-lg border border-[#222] shadow-lg max-w-xl mx-auto space-y-3">
+                <div className="text-center p-12 bg-white rounded-lg border border-slate-200 shadow-lg max-w-xl mx-auto space-y-3">
                   <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
                   <h4 className="text-base font-bold text-white">Clear Scan Diagnostic</h4>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-slate-500">
                     Zero flagged issues found for this specific category matching combination. Give yourself a high-five or loosen filters!
                   </p>
                 </div>

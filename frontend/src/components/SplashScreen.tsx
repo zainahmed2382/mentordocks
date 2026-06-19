@@ -48,7 +48,7 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
   }, [progress]);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#030303] flex flex-col items-center justify-between p-6 overflow-hidden md:p-12">
+    <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-between p-6 overflow-hidden md:p-12">
       {/* Grid Mesh Asset Background */}
       <div 
         className="absolute inset-0 bg-transparent opacity-20 pointer-events-none -z-10" 
@@ -68,11 +68,11 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
       <div className="w-full flex justify-between items-center max-w-5xl">
         <div className="flex items-center gap-2">
           <Zap className="h-5 w-5 text-blue-500 animate-pulse" />
-          <span className="text-xs font-mono text-zinc-500 tracking-widest uppercase">System Core Boot</span>
+          <span className="text-xs font-mono text-slate-500 tracking-widest uppercase">System Core Boot</span>
         </div>
         <button
           onClick={onDismiss}
-          className="text-xs font-mono text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-800 hover:border-zinc-700 px-3 py-1 rounded transition cursor-pointer"
+          className="text-xs font-mono text-slate-600 hover:text-black bg-slate-100 border border-slate-200 hover:border-slate-300 px-3 py-1 rounded transition cursor-pointer"
         >
           Skip Boot [Esc]
         </button>
@@ -90,7 +90,7 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
             <Zap className="h-10 w-10 text-blue-400 relative z-10 animate-bounce" />
             
             {/* Absolute side micro sparkles */}
-            <div className="absolute top-1 right-1 p-1 bg-zinc-900 rounded-full border border-zinc-800">
+            <div className="absolute top-1 right-1 p-1 bg-slate-100 rounded-full border border-slate-200">
               <Sparkles className="h-3 w-3 text-amber-400 animate-pulse" />
             </div>
           </div>
@@ -100,24 +100,24 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
           <h1 className="text-3xl font-display font-black text-white tracking-widest">
             MENTOR <span className="text-blue-500">DOCKS</span>
           </h1>
-          <p className="text-xs text-zinc-400 uppercase tracking-[0.25em] font-mono">
+          <p className="text-xs text-slate-600 uppercase tracking-[0.25em] font-mono">
             Professional Web & SEO Audit Suite
           </p>
         </div>
 
         {/* Dynamic Log Line Console Screen */}
-        <div className="w-full bg-[#0a0a0a] border border-[#222]/80 rounded-xl p-3 text-left font-mono text-[11px] h-12 flex items-center gap-2.5 overflow-hidden shadow-inner text-zinc-400">
+        <div className="w-full bg-white border border-slate-200/80 rounded-xl p-3 text-left font-mono text-[11px] h-12 flex items-center gap-2.5 overflow-hidden shadow-inner text-slate-600">
           <Terminal className="h-4 w-4 text-blue-500 shrink-0 animate-pulse" />
           <span className="truncate">{BOOT_LOGS[statusIdx]}</span>
         </div>
 
         {/* Big visual progress percentage bar */}
         <div className="w-full space-y-2">
-          <div className="flex justify-between items-center font-mono text-[10px] text-zinc-500 px-1">
+          <div className="flex justify-between items-center font-mono text-[10px] text-slate-500 px-1">
             <span>AUDIT_CRAWL_STABLE_V2</span>
             <span>{progress}%</span>
           </div>
-          <div className="w-full bg-zinc-900/80 h-1.5 rounded-full overflow-hidden border border-zinc-950">
+          <div className="w-full bg-slate-100/80 h-1.5 rounded-full overflow-hidden border border-zinc-950">
             <div 
               className="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
