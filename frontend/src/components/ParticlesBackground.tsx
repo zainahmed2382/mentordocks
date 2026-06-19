@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 
 export const ParticlesBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // Use a mutable ref to track mouse position for the animation loop
   const mouseRef = useRef({ x: -1000, y: -1000 });
 
   useEffect(() => {
@@ -45,13 +44,16 @@ export const ParticlesBackground: React.FC = () => {
       constructor() {
         this.x = Math.random() * canvas!.width;
         this.y = Math.random() * canvas!.height;
-        this.size = Math.random() * 2 + 1; // 1 to 3 px
-        this.speedX = (Math.random() - 0.5) * 0.6;
-        this.speedY = (Math.random() - 0.5) * 0.6;
-        this.opacity = Math.random() * 0.5 + 0.1; 
+        this.size = Math.random() * 2 + 1.5; // 1.5 to 3.5 px
+        this.speedX = (Math.random() - 0.5) * 0.8;
+        this.speedY = (Math.random() - 0.5) * 0.8;
+        this.opacity = Math.random() * 0.6 + 0.2; 
         
-        // Earthy brand colors for particles
-        const colors = ["209, 162, 33", "226, 174, 158", "250, 246, 242"];
+        // AI Theme Brand Colors
+        // Primary: 59, 130, 246
+        // Secondary: 99, 102, 241
+        // Accent: 6, 182, 212
+        const colors = ["59, 130, 246", "99, 102, 241", "6, 182, 212"];
         this.color = colors[Math.floor(Math.random() * colors.length)];
       }
 
@@ -69,15 +71,14 @@ export const ParticlesBackground: React.FC = () => {
         const dx = mouseRef.current.x - this.x;
         const dy = mouseRef.current.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 180;
+        const maxDistance = 200;
 
         if (distance < maxDistance) {
           const forceDirectionX = dx / distance;
           const forceDirectionY = dy / distance;
-          // Force pushes particles away from mouse
           const force = (maxDistance - distance) / maxDistance;
-          this.x -= forceDirectionX * force * 2;
-          this.y -= forceDirectionY * force * 2;
+          this.x -= forceDirectionX * force * 3;
+          this.y -= forceDirectionY * force * 3;
         }
       }
 
@@ -86,8 +87,8 @@ export const ParticlesBackground: React.FC = () => {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = `rgba(${this.color}, 0.8)`;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = `rgba(${this.color}, 0.9)`;
         ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
         
         ctx.fill();
@@ -97,14 +98,14 @@ export const ParticlesBackground: React.FC = () => {
 
     const initParticles = () => {
       particles = [];
-      const particleCount = Math.floor((canvas.width * canvas.height) / 10000); 
+      const particleCount = Math.floor((canvas.width * canvas.height) / 9000); 
       for (let i = 0; i < particleCount; i++) {
         particles.push(new Particle());
       }
     };
 
     const drawLines = () => {
-      let connectDistance = 140;
+      let connectDistance = 150;
       for (let a = 0; a < particles.length; a++) {
         for (let b = a; b < particles.length; b++) {
           let dx = particles[a].x - particles[b].x;
@@ -113,9 +114,9 @@ export const ParticlesBackground: React.FC = () => {
 
           if (distance < connectDistance) {
             let opacityValue = 1 - (distance / connectDistance);
-            // Draw subtle connecting lines (neural network effect)
-            ctx.strokeStyle = `rgba(209, 162, 33, ${opacityValue * 0.15})`;
-            ctx.lineWidth = 0.8;
+            // Draw subtle connecting lines (neural network effect) using Primary Color
+            ctx.strokeStyle = `rgba(59, 130, 246, ${opacityValue * 0.25})`;
+            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particles[a].x, particles[a].y);
             ctx.lineTo(particles[b].x, particles[b].y);
@@ -125,7 +126,7 @@ export const ParticlesBackground: React.FC = () => {
       }
 
       // Connect to mouse cursor
-      const mouseMaxDistance = 180;
+      const mouseMaxDistance = 200;
       for (let a = 0; a < particles.length; a++) {
         let dx = particles[a].x - mouseRef.current.x;
         let dy = particles[a].y - mouseRef.current.y;
@@ -133,8 +134,9 @@ export const ParticlesBackground: React.FC = () => {
 
         if (distance < mouseMaxDistance) {
           let opacityValue = 1 - (distance / mouseMaxDistance);
-          ctx.strokeStyle = `rgba(226, 174, 158, ${opacityValue * 0.3})`;
-          ctx.lineWidth = 1;
+          // Highlight connection to mouse with Accent Color
+          ctx.strokeStyle = `rgba(6, 182, 212, ${opacityValue * 0.4})`;
+          ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
           ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
@@ -144,7 +146,11 @@ export const ParticlesBackground: React.FC = () => {
     };
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Light trails logic: Fade out existing pixels slightly instead of clearing completely
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // 0.2 controls the trail length
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'source-over';
       
       particles.forEach((particle) => {
         particle.update();
@@ -174,17 +180,17 @@ export const ParticlesBackground: React.FC = () => {
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `
-            linear-gradient(to right, #FAF6F2 1px, transparent 1px),
-            linear-gradient(to bottom, #FAF6F2 1px, transparent 1px)
+            linear-gradient(to right, #F9FAFB 1px, transparent 1px),
+            linear-gradient(to bottom, #F9FAFB 1px, transparent 1px)
           `,
           backgroundSize: '40px 40px'
         }}
       />
       
-      {/* Layer 2: Moving Soft Glowing Orbs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full opacity-20 blur-[120px] bg-custom-ochre animate-pulse" style={{ animationDuration: '8s' }} />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full opacity-20 blur-[150px] bg-custom-rose animate-pulse" style={{ animationDuration: '12s' }} />
-      <div className="absolute top-[30%] left-[40%] w-[30%] h-[30%] rounded-full opacity-[0.15] blur-[100px] bg-blue-500/30 animate-pulse" style={{ animationDuration: '10s' }} />
+      {/* Layer 2: Moving Soft Glowing Orbs (Primary & Accent) */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full opacity-20 blur-[150px] bg-blue-600 animate-pulse" style={{ animationDuration: '8s' }} />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full opacity-20 blur-[180px] bg-cyan-600 animate-pulse" style={{ animationDuration: '12s' }} />
+      <div className="absolute top-[30%] left-[40%] w-[30%] h-[30%] rounded-full opacity-[0.15] blur-[120px] bg-indigo-600 animate-pulse" style={{ animationDuration: '10s' }} />
 
       {/* Layer 3: The Canvas Particles & AI Neural Lines */}
       <canvas
@@ -194,7 +200,7 @@ export const ParticlesBackground: React.FC = () => {
       />
       
       {/* Layer 4: Subtle Glassmorphism Overlay */}
-      <div className="absolute inset-0 backdrop-blur-[1px] opacity-30" />
+      <div className="absolute inset-0 backdrop-blur-[1px] opacity-40" />
     </div>
   );
 };

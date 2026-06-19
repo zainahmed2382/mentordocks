@@ -1,34 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  /* Dark mode (earthy dark) */
-  --theme-ochre: #D1A221;
-  --theme-rose: #E2AE9E;
-  --theme-sand: #3D261D;
-  --theme-cream: #2A1A14;
-  --theme-choco: #FAF6F2;
-  --theme-yellow: #fbbf24;
+  /* Modern AI Dark Mode */
+  --bg-background: #0B1120;
+  --bg-surface: #111827;
+  
+  --color-primary: #3B82F6;
+  --color-secondary: #6366F1;
+  --color-accent: #06B6D4;
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #94A3B8;
+
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
 }
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-custom-ochre: var(--theme-ochre);
-  --color-custom-rose: var(--theme-rose);
-  --color-custom-sand: var(--theme-sand);
-  --color-custom-cream: var(--theme-cream);
-  --color-custom-choco: var(--theme-choco);
-  --color-custom-yellow: var(--theme-yellow);
-
-  --color-brand-50: #121212;
-  --color-brand-100: #222222;
-  --color-brand-500: #B08401;
-  --color-brand-600: #B08401;
-  --color-brand-750: #936F01;
-  --color-brand-900: #0a0a0a;
+  /* Brand colors mapping */
+  --color-background: var(--bg-background);
+  --color-surface: var(--bg-surface);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+  
+  /* Retain for older references until fully purged */
+  --color-custom-ochre: var(--color-warning);
+  --color-custom-rose: var(--color-error);
+  --color-custom-sand: var(--bg-surface);
+  --color-custom-cream: var(--bg-background);
+  --color-custom-choco: var(--text-primary);
+  --color-custom-yellow: var(--color-accent);
 }
 
 html {
@@ -37,8 +48,35 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-custom-cream);
-  color: var(--color-custom-choco);
+  background-color: var(--bg-background);
+  color: var(--text-primary);
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-navbar {
+  background: rgba(11, 17, 32, 0.7);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-primary-gradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-accent));
 }
 
 /* Custom styles for animations & layout details */
@@ -49,51 +87,45 @@ body {
 }
 
 .animate-bg-gradient {
-  background: linear-gradient(-45deg, var(--theme-cream), #3d2217, var(--theme-sand), #20110a);
+  background: linear-gradient(-45deg, #0B1120, #080C17, #111827, #060913);
   background-size: 400% 400%;
   animation: earthyGradient 15s ease infinite;
 }
 
 @keyframes pulseGlow {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.3;
     transform: scale(1);
   }
   50% {
-    opacity: 0.6;
-    transform: scale(1.03);
+    opacity: 0.5;
+    transform: scale(1.05);
   }
 }
 
 .ambient-glow {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, rgba(5,5,5,0) 80%);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(5,5,5,0) 80%);
   filter: blur(50px);
   animation: pulseGlow 8s infinite ease-in-out;
 }
 
-/* Beautiful custom indicator widgets */
-.custom-progress-circle {
-  transition: stroke-dashoffset 0.8s ease-out;
-}
-
-/* Fade-in animation for modal elements */
+/* Fade-in animation */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Staggered fade-in-up for grid children (score cards) */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.5s ease-out forwards;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
@@ -140,48 +172,17 @@ body {
 }
 
 .score-progress-bar {
-  animation: progressFill 1s ease-out forwards;
-  transition: width 0.8s ease-out;
+  animation: progressFill 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Sticky section navigation bar */
-.section-nav {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.custom-progress-circle {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.section-nav-item {
-  transition: all 0.2s ease;
-  position: relative;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
-
-.section-nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 2px;
-  background: #3b82f6;
-  border-radius: 1px;
-}
-
-/* Back-to-top button */
-@keyframes fadeInScale {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-.back-to-top-btn {
-  animation: fadeInScale 0.25s ease-out forwards;
-}
-
-/* Hide scrollbar but keep scroll functionality */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
 }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Zap, Sparkles, ShieldCheck, Terminal, Disc, ArrowRight } from "lucide-react";
+import { ParticlesBackground } from "./ParticlesBackground";
+
 
 interface SplashScreenProps {
   onDismiss: () => void;
@@ -49,17 +51,10 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
 
   return (
     <div className="fixed inset-0 z-[100] bg-custom-cream flex flex-col items-center justify-between p-6 overflow-hidden md:p-12">
-      {/* Grid Mesh Asset Background */}
-      <div 
-        className="absolute inset-0 bg-transparent opacity-20 pointer-events-none -z-10" 
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #1f2937 1px, transparent 1px),
-            linear-gradient(to bottom, #1f2937 1px, transparent 1px)
-          `,
-          backgroundSize: "4rem 4rem"
-        }}
-      />
+      {/* Dynamic Particles Background Layer */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <ParticlesBackground />
+      </div>
 
       {/* Decorative Radial Spotlight */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-custom-ochre/10 blur-[120px] pointer-events-none -z-10 animate-pulse" />
