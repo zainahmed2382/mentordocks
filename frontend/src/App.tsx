@@ -616,7 +616,7 @@ export default function App() {
               {scoreCards.map((card, idx) => (
                 <div
                   key={card.label}
-                  className="bg-background p-4 rounded-xl border border-white/10 shadow-md shadow-black/40 flex flex-col justify-between space-y-3 hover:border-[#444] hover:shadow-lg shadow-primary/20 transition-all duration-200 animate-fade-in-up group"
+                  className="glass-panel p-4 rounded-2xl flex flex-col justify-between space-y-3 hover:-translate-y-1 hover:border-white/20 hover:shadow-primary/30 transition-all duration-300 animate-fade-in-up group"
                   style={{ animationDelay: `${idx * 80}ms` }}
                 >
                   <div className="flex items-center justify-between">
