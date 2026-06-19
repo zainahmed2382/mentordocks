@@ -3,8 +3,8 @@
 
 :root {
   /* Modern AI Dark Mode */
-  --bg-background: #0B1120;
-  --bg-surface: #111827;
+  --bg-background: #000000;
+  --bg-surface: #0a0a0a;
   
   --color-primary: #3B82F6;
   --color-secondary: #6366F1;
@@ -54,7 +54,7 @@ body {
 
 /* Glassmorphism Utilities */
 .glass-panel {
-  background: rgba(17, 24, 39, 0.6);
+  background: rgba(10, 10, 10, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -62,7 +62,7 @@ body {
 }
 
 .glass-navbar {
-  background: rgba(11, 17, 32, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -87,7 +87,7 @@ body {
 }
 
 .animate-bg-gradient {
-  background: linear-gradient(-45deg, #0B1120, #080C17, #111827, #060913);
+  background: linear-gradient(-45deg, #000000, #050505, #0a0a0a, #020202);
   background-size: 400% 400%;
   animation: earthyGradient 15s ease infinite;
 }
