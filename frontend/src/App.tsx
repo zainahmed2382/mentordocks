@@ -261,7 +261,7 @@ export default function App() {
   ] : [];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e0e0e0] selection:bg-brand-500 selection:text-white pb-20">
+    <div className="min-h-screen bg-white text-black selection:bg-brand-500 selection:text-white pb-20">
       {/* 1. Header Navigation */}
       <header className="sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur border-b border-[#222] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
