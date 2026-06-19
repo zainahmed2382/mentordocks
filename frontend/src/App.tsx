@@ -36,6 +36,7 @@ import { exportReportToPDF } from "./utils/pdfGenerator";
 import { SplashScreen } from "./components/SplashScreen";
 import { AuthScreen, UserProfile } from "./components/AuthScreen";
 import { SEOToolsHub } from "./components/SEOToolsHub";
+import { HistoryDashboard } from "./pages/HistoryDashboard";
 
 export default function App() {
   const [report, setReport] = useState<AuditReport | null>(null);
@@ -58,6 +59,7 @@ export default function App() {
     }
   });
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   // Saved Audits History
   const [auditHistory, setAuditHistory] = useState<Array<{ url: string; date: string; score: number }>>(() => {
@@ -86,6 +88,15 @@ export default function App() {
   const handleLogout = () => {
     setCurrUser(null);
     localStorage.removeItem("ms_user_profile");
+  };
+
+  const handleDeleteEntry = (url: string) => {
+    setAuditHistory((prev) => prev.filter((item) => item.url !== url));
+  };
+
+  const handleClearHistory = () => {
+    setAuditHistory([]);
+    localStorage.removeItem("ms_audit_history");
   };
 
   // Filters State
@@ -174,6 +185,22 @@ export default function App() {
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest hidden md:inline">
               PRO DIAGNOSTICS
             </span>
+
+            {/* History Dashboard Toggle */}
+            <button
+              id="open-history-dashboard"
+              onClick={() => setShowHistory(true)}
+              title="View Search History"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a] text-zinc-400 hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+            >
+              <History className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">History</span>
+              {auditHistory.length > 0 && (
+                <span className="bg-blue-600/20 border border-blue-500/30 text-blue-400 font-mono font-bold text-[10px] px-1.5 rounded-full leading-none py-0.5">
+                  {auditHistory.length}
+                </span>
+              )}
+            </button>
 
             {/* Authentication user profile pill */}
             {currUser ? (
@@ -620,6 +647,18 @@ export default function App() {
         <AuthScreen 
           onClose={() => setShowAuthModal(false)} 
           onLoginSuccess={handleLoginSuccess} 
+        />
+      )}
+
+      {/* Full Search History Dashboard */}
+      {showHistory && (
+        <HistoryDashboard
+          history={auditHistory}
+          currUser={currUser}
+          onReaudit={handleRunAudit}
+          onDeleteEntry={handleDeleteEntry}
+          onClearAll={handleClearHistory}
+          onClose={() => setShowHistory(false)}
         />
       )}
     </div>
