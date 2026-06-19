@@ -52,7 +52,7 @@ function ScoreBar({ score }: { score: number }) {
   const { color } = getScoreLabel(score);
   const barColor = score >= 90 ? "bg-emerald-500" : score >= 70 ? "bg-blue-500" : score >= 50 ? "bg-amber-500" : "bg-rose-500";
   return (
-    <div className="relative h-1.5 w-full bg-custom-sand/60 rounded-full overflow-hidden">
+    <div className="relative h-1.5 w-full bg-surface/60 rounded-full overflow-hidden">
       <div
         className={`absolute left-0 top-0 h-full rounded-full transition-all duration-700 ${barColor}`}
         style={{ width: `${score}%` }}
@@ -75,15 +75,15 @@ function StatCard({
   colorClass: string;
 }) {
   return (
-    <div className="bg-custom-sand border border-custom-choco/20 rounded-2xl p-5 flex flex-col gap-3 hover:border-[#2a2a2a] transition group relative overflow-hidden">
+    <div className="bg-surface border border-white/10 rounded-2xl p-5 flex flex-col gap-3 hover:border-[#2a2a2a] transition group relative overflow-hidden">
       <div className={`absolute top-0 right-0 w-28 h-28 rounded-full blur-[60px] opacity-20 pointer-events-none ${colorClass}`} />
       <div className={`h-9 w-9 rounded-xl flex items-center justify-center ${colorClass} bg-current/10 border border-current/20`}>
         <Icon className={`h-4.5 w-4.5 text-current`} style={{ opacity: 1 }} />
       </div>
       <div className="relative z-10">
-        <p className="text-[10px] font-mono uppercase tracking-widest text-custom-choco/60 mb-1">{label}</p>
+        <p className="text-[10px] font-mono uppercase tracking-widest text-secondary mb-1">{label}</p>
         <p className="text-2xl font-extrabold font-display text-white tracking-tight leading-none">{value}</p>
-        {sub && <p className="text-[11px] text-custom-choco/60 mt-1">{sub}</p>}
+        {sub && <p className="text-[11px] text-secondary mt-1">{sub}</p>}
       </div>
     </div>
   );
@@ -157,22 +157,22 @@ export function HistoryDashboard({
 
   return (
     <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden">
-      <div className="w-full max-w-5xl bg-custom-cream border border-[#1c1c1c] rounded-3xl shadow-2xl relative flex flex-col" style={{ maxHeight: "90vh" }}>
+      <div className="w-full max-w-5xl bg-background border border-[#1c1c1c] rounded-3xl shadow-2xl relative flex flex-col" style={{ maxHeight: "90vh" }}>
         {/* Decorative ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-48 bg-blue-500/6 blur-[80px] pointer-events-none rounded-full" />
         <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500/4 blur-[80px] pointer-events-none rounded-full" />
 
         {/* Header */}
-        <div className="relative z-10 border-b border-custom-choco/20 px-6 py-5 flex items-center justify-between">
+        <div className="relative z-10 border-b border-white/10 px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-custom-ochre/30 to-custom-rose/20 border border-custom-ochre/20 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-custom-ochre/30 to-custom-rose/20 border border-accent/30 flex items-center justify-center">
               <History className="h-5 w-5 text-blue-400" />
             </div>
             <div>
               <h2 className="font-display font-extrabold text-white text-lg tracking-tight leading-none">
                 {currUser ? `${currUser.name}'s` : "Your"} Audit History
               </h2>
-              <p className="text-[11px] text-custom-choco/60 mt-0.5 font-mono">
+              <p className="text-[11px] text-secondary mt-0.5 font-mono">
                 {history.length} total scan{history.length !== 1 ? "s" : ""} · Local workspace engine
               </p>
             </div>
@@ -190,7 +190,7 @@ export function HistoryDashboard({
             <button
               onClick={onClose}
               id="history-dashboard-close"
-              className="h-8 w-8 flex items-center justify-center rounded-xl bg-custom-sand border border-[#2a2a2a] text-custom-choco/80 hover:text-custom-choco hover:border-[#3a3a3a] transition cursor-pointer"
+              className="h-8 w-8 flex items-center justify-center rounded-xl bg-surface border border-[#2a2a2a] text-secondary hover:text-primary hover:border-[#3a3a3a] transition cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -211,7 +211,7 @@ export function HistoryDashboard({
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => setConfirmClear(false)}
-                  className="px-4 py-1.5 text-xs font-semibold text-custom-choco bg-custom-sand/60 border border-custom-choco/30/50 rounded-lg hover:bg-zinc-700/50 transition cursor-pointer"
+                  className="px-4 py-1.5 text-xs font-semibold text-primary bg-surface/60 border border-white/10/50 rounded-lg hover:bg-zinc-700/50 transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -228,18 +228,18 @@ export function HistoryDashboard({
           {history.length === 0 ? (
             /* Empty State */
             <div className="text-center py-20 space-y-4">
-              <div className="mx-auto h-16 w-16 rounded-2xl bg-custom-sand border border-custom-choco/20 flex items-center justify-center">
+              <div className="mx-auto h-16 w-16 rounded-2xl bg-surface border border-white/10 flex items-center justify-center">
                 <History className="h-7 w-7 text-zinc-600" />
               </div>
               <div>
-                <h3 className="text-base font-display font-bold text-custom-choco">No Audit History Yet</h3>
+                <h3 className="text-base font-display font-bold text-primary">No Audit History Yet</h3>
                 <p className="text-xs text-zinc-600 mt-1 max-w-xs mx-auto">
                   Run your first website scan and it will appear here with scores and metrics.
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-custom-ochre hover:bg-custom-yellow text-white font-bold text-xs rounded-xl transition cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-secondary text-white font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 <Zap className="h-3.5 w-3.5" />
                 Run First Audit
@@ -276,17 +276,17 @@ export function HistoryDashboard({
                     label="Score Trend"
                     value={stats.trend > 0 ? `+${stats.trend}` : stats.trend === 0 ? "—" : `${stats.trend}`}
                     sub="vs previous audit"
-                    colorClass={stats.trend > 0 ? "text-emerald-400" : stats.trend < 0 ? "text-rose-400" : "text-custom-choco/80"}
+                    colorClass={stats.trend > 0 ? "text-emerald-400" : stats.trend < 0 ? "text-rose-400" : "text-secondary"}
                   />
                 </div>
               )}
 
               {/* Score Sparkline Chart */}
               {sparkData.length > 1 && (
-                <div className="bg-custom-sand border border-custom-choco/20 rounded-2xl p-5">
+                <div className="bg-surface border border-white/10 rounded-2xl p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <TrendingUp className="h-4 w-4 text-indigo-400" />
-                    <h3 className="text-xs font-mono font-bold text-custom-choco uppercase tracking-widest">Score Trend (Last {sparkData.length} Audits)</h3>
+                    <h3 className="text-xs font-mono font-bold text-primary uppercase tracking-widest">Score Trend (Last {sparkData.length} Audits)</h3>
                   </div>
                   <div className="flex items-end gap-2 h-20">
                     {sparkData.map((entry, idx) => {
@@ -296,7 +296,7 @@ export function HistoryDashboard({
                       return (
                         <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group relative">
                           {/* Tooltip */}
-                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 bg-custom-cream border border-[#2a2a2a] rounded-lg px-2 py-1 text-[10px] font-mono text-custom-choco whitespace-nowrap shadow-xl">
+                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 bg-background border border-[#2a2a2a] rounded-lg px-2 py-1 text-[10px] font-mono text-primary whitespace-nowrap shadow-xl">
                             {entry.url.slice(0, 14)}… · {entry.score}
                           </div>
                           <div
@@ -304,7 +304,7 @@ export function HistoryDashboard({
                             style={{ height: `${heightPct}%`, minHeight: "6px" }}
                           >
                             {isLast && (
-                              <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full border-2 border-custom-choco/20 bg-blue-400 animate-pulse" />
+                              <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full border-2 border-white/10 bg-blue-400 animate-pulse" />
                             )}
                           </div>
                           <p className="text-[8px] font-mono text-zinc-600 truncate w-full text-center">{entry.date.slice(5)}</p>
@@ -319,19 +319,19 @@ export function HistoryDashboard({
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search input */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-custom-choco/60" />
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary" />
                   <input
                     id="history-search-input"
                     type="text"
                     placeholder="Search scanned domains…"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-custom-cream border border-custom-choco/20 hover:border-[#2a2a2a] focus:border-blue-500/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-custom-choco placeholder-zinc-600 focus:outline-none transition font-mono"
+                    className="w-full bg-background border border-white/10 hover:border-[#2a2a2a] focus:border-blue-500/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-primary placeholder-zinc-600 focus:outline-none transition font-mono"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-custom-choco/60 hover:text-custom-choco transition cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition cursor-pointer"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
@@ -340,12 +340,12 @@ export function HistoryDashboard({
 
                 {/* Score Filter */}
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-custom-choco/60 pointer-events-none" />
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-secondary pointer-events-none" />
                   <select
                     id="history-score-filter"
                     value={scoreFilter}
                     onChange={(e) => setScoreFilter(e.target.value as typeof scoreFilter)}
-                    className="bg-custom-cream border border-custom-choco/20 rounded-xl py-2.5 pl-9 pr-4 text-xs text-custom-choco focus:outline-none focus:border-blue-500/60 transition cursor-pointer appearance-none font-mono"
+                    className="bg-background border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-xs text-primary focus:outline-none focus:border-blue-500/60 transition cursor-pointer appearance-none font-mono"
                   >
                     <option value="all">All Scores</option>
                     <option value="excellent">Excellent (90+)</option>
@@ -361,7 +361,7 @@ export function HistoryDashboard({
                     id="history-sort-select"
                     value={sortMode}
                     onChange={(e) => setSortMode(e.target.value as SortMode)}
-                    className="bg-custom-cream border border-custom-choco/20 rounded-xl py-2.5 px-4 text-xs text-custom-choco focus:outline-none focus:border-blue-500/60 transition cursor-pointer appearance-none font-mono"
+                    className="bg-background border border-white/10 rounded-xl py-2.5 px-4 text-xs text-primary focus:outline-none focus:border-blue-500/60 transition cursor-pointer appearance-none font-mono"
                   >
                     <option value="date_desc">Newest First</option>
                     <option value="date_asc">Oldest First</option>
@@ -373,9 +373,9 @@ export function HistoryDashboard({
 
               {/* Results count */}
               <div className="flex items-center justify-between">
-                <p className="text-[11px] text-custom-choco/60 font-mono">
-                  Showing <span className="text-custom-choco font-bold">{filtered.length}</span> of{" "}
-                  <span className="text-custom-choco font-bold">{history.length}</span> records
+                <p className="text-[11px] text-secondary font-mono">
+                  Showing <span className="text-primary font-bold">{filtered.length}</span> of{" "}
+                  <span className="text-primary font-bold">{history.length}</span> records
                 </p>
                 {(searchQuery || scoreFilter !== "all") && (
                   <button
@@ -400,7 +400,7 @@ export function HistoryDashboard({
                     return (
                       <div
                         key={`${entry.url}-${idx}`}
-                        className="group bg-custom-sand hover:bg-custom-yellow/20 border border-[#1c1c1c] hover:border-custom-ochre/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all duration-200 relative overflow-hidden"
+                        className="group bg-surface hover:bg-white/5 border border-[#1c1c1c] hover:border-accent/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center gap-4 transition-all duration-200 relative overflow-hidden"
                       >
                         {/* Hover glow accent */}
                         <div className="absolute left-0 top-0 h-full w-0.5 bg-gradient-to-b from-blue-500/0 via-blue-500/60 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl" />
@@ -417,19 +417,19 @@ export function HistoryDashboard({
                         <div className="flex-1 min-w-0 space-y-2">
                           <div className="flex items-center gap-2 flex-wrap">
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <Globe className="h-3.5 w-3.5 text-custom-choco/60 shrink-0" />
-                              <p className="font-mono text-sm font-bold text-custom-choco truncate group-hover:text-blue-300 transition">
+                              <Globe className="h-3.5 w-3.5 text-secondary shrink-0" />
+                              <p className="font-mono text-sm font-bold text-primary truncate group-hover:text-blue-300 transition">
                                 {entry.url}
                               </p>
                             </div>
                             {isRecent && (
-                              <span className="text-[9px] font-bold font-mono bg-custom-ochre/10 border border-custom-ochre/20 text-blue-400 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
+                              <span className="text-[9px] font-bold font-mono bg-primary/10 border border-accent/30 text-blue-400 px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
                                 Latest
                               </span>
                             )}
                           </div>
                           <ScoreBar score={entry.score} />
-                          <div className="flex items-center gap-1.5 text-[10px] text-custom-choco/60">
+                          <div className="flex items-center gap-1.5 text-[10px] text-secondary">
                             <Calendar className="h-3 w-3 shrink-0" />
                             <span>Scanned {entry.date}</span>
                           </div>
@@ -440,7 +440,7 @@ export function HistoryDashboard({
                           <button
                             onClick={() => { onReaudit(entry.url); onClose(); }}
                             title="Re-run audit"
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-ochre/10 hover:bg-custom-ochre/20 border border-custom-ochre/20 hover:border-blue-500/40 text-blue-400 text-xs font-bold rounded-xl transition cursor-pointer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 border border-accent/30 hover:border-blue-500/40 text-blue-400 text-xs font-bold rounded-xl transition cursor-pointer"
                           >
                             <RotateCcw className="h-3.5 w-3.5" />
                             <span className="hidden sm:inline">Re-audit</span>
@@ -450,14 +450,14 @@ export function HistoryDashboard({
                             target="_blank"
                             rel="noreferrer"
                             title="Open site"
-                            className="p-1.5 bg-custom-sand hover:bg-[#222] border border-[#2a2a2a] text-custom-choco/60 hover:text-custom-choco rounded-xl transition"
+                            className="p-1.5 bg-surface hover:bg-[#222] border border-[#2a2a2a] text-secondary hover:text-primary rounded-xl transition"
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                           <button
                             onClick={() => onDeleteEntry(entry.url)}
                             title="Remove from history"
-                            className="p-1.5 bg-custom-sand hover:bg-rose-950/30 border border-[#2a2a2a] hover:border-rose-900/40 text-zinc-600 hover:text-rose-400 rounded-xl transition cursor-pointer"
+                            className="p-1.5 bg-surface hover:bg-rose-950/30 border border-[#2a2a2a] hover:border-rose-900/40 text-zinc-600 hover:text-rose-400 rounded-xl transition cursor-pointer"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
@@ -469,13 +469,13 @@ export function HistoryDashboard({
               )}
 
               {/* Footer info strip */}
-              <div className="flex items-center justify-between pt-2 border-t border-custom-choco/20">
+              <div className="flex items-center justify-between pt-2 border-t border-white/10">
                 <p className="text-[10px] text-zinc-600 font-mono flex items-center gap-1.5">
                   <Clock className="h-3 w-3" />
                   All data stored locally in your browser session.
                 </p>
                 <div className="flex items-center gap-1 text-[10px] text-zinc-600 font-mono">
-                  <Zap className="h-3 w-3 text-custom-ochre" />
+                  <Zap className="h-3 w-3 text-accent" />
                   MentorDocks PRO Engine
                 </div>
               </div>

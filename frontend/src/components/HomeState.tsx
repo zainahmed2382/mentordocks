@@ -40,26 +40,26 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
     <div className="space-y-12">
       {/* 1. Hero text section */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-custom-cream border border-custom-ochre/30 rounded-full text-custom-ochre text-xs font-semibold uppercase tracking-wider animate-bounce shadow-sm">
-          <Sparkles className="h-3.5 w-3.5 text-custom-ochre" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-background border border-accent/30 rounded-full text-accent text-xs font-semibold uppercase tracking-wider animate-bounce shadow-md shadow-black/40">
+          <Sparkles className="h-3.5 w-3.5 text-accent" />
           Next-Gen Website Analyzer
         </div>
-        <h1 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-custom-choco leading-[1.15]">
+        <h1 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-primary leading-[1.15]">
           Inspect Website Design, UX, <span className="text-transparent bg-clip-text bg-gradient-to-r from-custom-ochre to-custom-rose">Accessibility & Performance</span>
         </h1>
-        <p className="text-base md:text-lg text-custom-choco/80 max-w-xl mx-auto leading-relaxed">
+        <p className="text-base md:text-lg text-secondary max-w-xl mx-auto leading-relaxed">
           Provide any website link to initiate an advanced technical audit. Get actionable grading results, WCAG reports, performance insights, and copy-paste remediation formulas.
         </p>
       </div>
 
       {/* 2. URL search bar container */}
-      <div className="max-w-2xl mx-auto bg-custom-cream p-4 rounded-2xl border border-custom-choco/20 shadow-2xl relative">
+      <div className="max-w-2xl mx-auto bg-background p-4 rounded-2xl border border-white/10 shadow-2xl relative">
         <div className="absolute inset-0 ambient-glow -z-10 rounded-2xl" />
 
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-grow">
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-custom-choco/40" />
+              <Search className="h-5 w-5 text-secondary" />
             </div>
             <input
               type="text"
@@ -70,13 +70,13 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
                 if (error) setError("");
               }}
               disabled={isLoading}
-              className="w-full pl-11 pr-4 py-3.5 bg-custom-sand border border-custom-choco/20 focus:border-brand-500 focus:bg-custom-cream rounded-xl text-custom-choco placeholder-slate-400 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
+              className="w-full pl-11 pr-4 py-3.5 bg-surface border border-white/10 focus:border-brand-500 focus:bg-background rounded-xl text-primary placeholder-slate-400 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-3.5 bg-custom-ochre text-white hover:bg-custom-yellow font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+            className="px-6 py-3.5 bg-primary text-white hover:bg-secondary font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20 disabled:opacity-50"
           >
             {isLoading ? "Auditing..." : "Run Free Audit"}
             <Zap className="h-4 w-4 text-white" />
@@ -90,14 +90,14 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         )}
 
         {/* Preset pill list */}
-        <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-3.5 border-t border-custom-choco/20">
+        <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-3.5 border-t border-white/10">
           <span className="text-xs text-[#555] font-semibold uppercase tracking-wider">Try Demo:</span>
           {PRESETS.map((preset) => (
             <button
               key={preset.name}
               onClick={() => handleSelectPreset(preset.url)}
               disabled={isLoading}
-              className="text-xs bg-custom-sand hover:bg-custom-yellow/20 text-[#888] font-medium px-3 py-1 rounded-full border border-custom-choco/20 cursor-pointer transition"
+              className="text-xs bg-surface hover:bg-white/5 text-[#888] font-medium px-3 py-1 rounded-full border border-white/10 cursor-pointer transition"
             >
               {preset.name}
             </button>
@@ -108,8 +108,8 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
       {/* 3. Marketing features/checks grids */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pt-4">
         {/* Card 1 */}
-        <div className="bg-custom-cream/80 backdrop-blur p-6 rounded-2xl border border-custom-choco/20 shadow-sm space-y-3">
-          <div className="h-10 w-10 rounded-xl bg-custom-ochre/10 flex items-center justify-center border border-custom-ochre/20">
+        <div className="glass-navbar p-6 rounded-2xl border border-white/10 shadow-md shadow-black/40 space-y-3">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-accent/30">
             <Code className="h-5 w-5 text-blue-400" />
           </div>
           <h3 className="text-base font-bold text-white font-display">HTML & SEO Standards</h3>
@@ -119,7 +119,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         </div>
 
         {/* Card 2 */}
-        <div className="bg-custom-cream/80 backdrop-blur p-6 rounded-2xl border border-custom-choco/20 shadow-sm space-y-3">
+        <div className="glass-navbar p-6 rounded-2xl border border-white/10 shadow-md shadow-black/40 space-y-3">
           <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
             <Palette className="h-5 w-5 text-indigo-400" />
           </div>
@@ -130,7 +130,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         </div>
 
         {/* Card 3 */}
-        <div className="bg-custom-cream/80 backdrop-blur p-6 rounded-2xl border border-custom-choco/20 shadow-sm space-y-3">
+        <div className="glass-navbar p-6 rounded-2xl border border-white/10 shadow-md shadow-black/40 space-y-3">
           <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
             <Monitor className="h-5 w-5 text-purple-400" />
           </div>

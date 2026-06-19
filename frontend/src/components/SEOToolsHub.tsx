@@ -97,12 +97,12 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
 </urlset>`;
 
   return (
-    <div className="bg-custom-cream border border-custom-choco/20/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+    <div className="bg-background border border-white/10/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
       {/* Decorative SEO grid elements */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 blur-[80px] pointer-events-none rounded-full" />
 
       {/* Segment Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-custom-choco/20 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Layers className="h-5 w-5 text-blue-400" />
@@ -110,19 +110,19 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
               Interactive SEO Developer Sandbox
             </h3>
           </div>
-          <p className="text-xs text-custom-choco/80">
+          <p className="text-xs text-secondary">
             Simulate metadata performance, analyze tag tree parameters, and generate files for {fallbackDomain}.
           </p>
         </div>
 
         {/* Small internal Navigation */}
-        <div className="flex flex-wrap gap-1 bg-custom-sand p-1 border border-custom-choco/20 rounded-xl self-start">
+        <div className="flex flex-wrap gap-1 bg-surface p-1 border border-white/10 rounded-xl self-start">
           <button
             onClick={() => setActiveSubTab("serp")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition ${
               activeSubTab === "serp"
-                ? "bg-custom-ochre text-white shadow-sm"
-                : "text-custom-choco/80 hover:text-custom-choco"
+                ? "bg-primary text-white shadow-md shadow-black/40"
+                : "text-secondary hover:text-primary"
             }`}
           >
             <Eye className="h-3.5 w-3.5 inline mr-1" /> SERP Preview
@@ -131,8 +131,8 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
             onClick={() => setActiveSubTab("keywords")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition ${
               activeSubTab === "keywords"
-                ? "bg-custom-ochre text-white shadow-sm"
-                : "text-custom-choco/80 hover:text-custom-choco"
+                ? "bg-primary text-white shadow-md shadow-black/40"
+                : "text-secondary hover:text-primary"
             }`}
           >
             <Search className="h-3.5 w-3.5 inline mr-1" /> keyword density
@@ -141,8 +141,8 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
             onClick={() => setActiveSubTab("structures")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition ${
               activeSubTab === "structures"
-                ? "bg-custom-ochre text-white shadow-sm"
-                : "text-custom-choco/80 hover:text-custom-choco"
+                ? "bg-primary text-white shadow-md shadow-black/40"
+                : "text-secondary hover:text-primary"
             }`}
           >
             <Globe className="h-3.5 w-3.5 inline mr-1" /> tag indexer
@@ -151,8 +151,8 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
             onClick={() => setActiveSubTab("robots")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition ${
               activeSubTab === "robots"
-                ? "bg-custom-ochre text-white shadow-sm"
-                : "text-custom-choco/80 hover:text-custom-choco"
+                ? "bg-primary text-white shadow-md shadow-black/40"
+                : "text-secondary hover:text-primary"
             }`}
           >
             <Terminal className="h-3.5 w-3.5 inline mr-1" /> robots.txt / maps
@@ -166,12 +166,12 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Form Fields controls */}
             <div className="space-y-4">
-              <h4 className="text-custom-choco font-display font-extrabold text-sm uppercase tracking-wider">
+              <h4 className="text-primary font-display font-extrabold text-sm uppercase tracking-wider">
                 Edit Snippet Variables
               </h4>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[10px] font-mono text-custom-choco/80">
+                <div className="flex justify-between items-center text-[10px] font-mono text-secondary">
                   <label className="uppercase tracking-wider">Google Title Tag</label>
                   <span className={editedTitle.length > 60 || editedTitle.length < 45 ? "text-amber-400" : "text-emerald-400"}>
                     {editedTitle.length} / 60 Chars
@@ -181,15 +181,15 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                   type="text"
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
-                  className="w-full bg-custom-sand border border-custom-choco/20 rounded-xl px-4 py-2 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none text-white font-medium"
+                  className="w-full bg-surface border border-white/10 rounded-xl px-4 py-2 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none text-white font-medium"
                 />
-                <p className="text-[10px] text-custom-choco/60">
+                <p className="text-[10px] text-secondary">
                   Ideal length: 50-60 Characters. Longer titles are truncated in Google results.
                 </p>
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[10px] font-mono text-custom-choco/80">
+                <div className="flex justify-between items-center text-[10px] font-mono text-secondary">
                   <label className="uppercase tracking-wider">Meta Description snippet</label>
                   <span className={editedDesc.length > 160 || editedDesc.length < 110 ? "text-amber-400" : "text-emerald-400"}>
                     {editedDesc.length} / 160 Chars
@@ -199,14 +199,14 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                   value={editedDesc}
                   rows={3}
                   onChange={(e) => setEditedDesc(e.target.value)}
-                  className="w-full bg-custom-sand border border-custom-choco/20 rounded-xl px-4 py-2 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none text-white leading-relaxed resize-none font-medium"
+                  className="w-full bg-surface border border-white/10 rounded-xl px-4 py-2 text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none text-white leading-relaxed resize-none font-medium"
                 />
-                <p className="text-[10px] text-custom-choco/60">
+                <p className="text-[10px] text-secondary">
                   Ideal length: 110-160 Characters. Summarize page content explicitly to drive click-through rates.
                 </p>
               </div>
 
-              <div className="bg-custom-sand border border-blue-500/10 p-4 rounded-xl text-xs text-custom-choco/80 leading-relaxed text-left">
+              <div className="bg-surface border border-blue-500/10 p-4 rounded-xl text-xs text-secondary leading-relaxed text-left">
                 <span className="font-semibold text-blue-400 block mb-1">SEO Checklist Assessment:</span>
                 • Your page title is <span className="text-white font-bold">{editedTitle.length} characters</span>.{" "}
                 {editedTitle.length > 60 ? (
@@ -221,13 +221,13 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
 
             {/* Simulated Google Search cards preview */}
             <div className="space-y-4">
-              <div className="flex justify-between items-center bg-custom-sand border border-custom-choco/20 p-2 rounded-xl">
-                <span className="text-xs font-bold text-custom-choco px-2 font-display">SERP Layout Preview</span>
-                <div className="flex gap-1.5 bg-custom-cream border border-custom-choco/20 p-1 rounded-lg">
+              <div className="flex justify-between items-center bg-surface border border-white/10 p-2 rounded-xl">
+                <span className="text-xs font-bold text-primary px-2 font-display">SERP Layout Preview</span>
+                <div className="flex gap-1.5 bg-background border border-white/10 p-1 rounded-lg">
                   <button
                     onClick={() => setSerpViewFlag("desktop")}
                     className={`px-3 py-1 text-[10px] font-mono tracking-wider uppercase rounded-md cursor-pointer ${
-                      serpViewFlag === "desktop" ? "bg-custom-sand text-white" : "text-custom-choco/60 hover:text-custom-choco"
+                      serpViewFlag === "desktop" ? "bg-surface text-white" : "text-secondary hover:text-primary"
                     }`}
                   >
                     Desktop
@@ -235,7 +235,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                   <button
                     onClick={() => setSerpViewFlag("mobile")}
                     className={`px-3 py-1 text-[10px] font-mono tracking-wider uppercase rounded-md cursor-pointer ${
-                      serpViewFlag === "mobile" ? "bg-custom-sand text-white" : "text-custom-choco/60 hover:text-custom-choco"
+                      serpViewFlag === "mobile" ? "bg-surface text-white" : "text-secondary hover:text-primary"
                     }`}
                   >
                     Mobile
@@ -245,7 +245,7 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
 
               {serpViewFlag === "desktop" ? (
                 // Google Desktop View Card
-                <div className="bg-custom-cream text-[#1a0dab] p-6 rounded-2xl shadow-md border border-zinc-200 text-left font-sans space-y-2">
+                <div className="bg-background text-[#1a0dab] p-6 rounded-2xl shadow-lg shadow-primary/20 border border-zinc-200 text-left font-sans space-y-2">
                   <div className="flex items-center gap-1 text-[12px] text-[#202124]">
                     <Globe className="h-4 w-4 text-[#5f6368] shrink-0" />
                     <span className="truncate">https://{fallbackDomain}</span>
@@ -263,14 +263,14 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 </div>
               ) : (
                 // Google Mobile View Card
-                <div className="bg-custom-cream text-[#1a0dab] p-4.5 rounded-2xl shadow-md border border-zinc-200 text-left font-sans space-y-1.5 w-full max-w-[370px] mx-auto">
+                <div className="bg-background text-[#1a0dab] p-4.5 rounded-2xl shadow-lg shadow-primary/20 border border-zinc-200 text-left font-sans space-y-1.5 w-full max-w-[370px] mx-auto">
                   <div className="flex items-center gap-2 text-xs text-[#202124]">
                     <div className="h-6 w-6 rounded-full bg-zinc-100 flex items-center justify-center border border-zinc-200 text-[#202124] text-[10px] font-bold font-mono">
                       MD
                     </div>
                     <div>
                       <p className="text-xs font-bold text-zinc-900 leading-none truncate">{fallbackDomain}</p>
-                      <p className="text-[10px] text-custom-choco/60 leading-normal truncate">https://{fallbackDomain}</p>
+                      <p className="text-[10px] text-secondary leading-normal truncate">https://{fallbackDomain}</p>
                     </div>
                   </div>
                   <div>
@@ -291,10 +291,10 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
           <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1 text-left">
-                <h4 className="text-custom-choco font-display font-extrabold text-sm uppercase tracking-wider">
+                <h4 className="text-primary font-display font-extrabold text-sm uppercase tracking-wider">
                   Target Keyword Density Scanner
                 </h4>
-                <p className="text-xs text-custom-choco/80">
+                <p className="text-xs text-secondary">
                   Search keyword frequencies in crawled text parameters. Standard optimal density is around 1% to 3.5%.
                 </p>
               </div>
@@ -305,11 +305,11 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                   placeholder="e.g. metadata, react, design"
                   value={keywordInput}
                   onChange={(e) => setKeywordInput(e.target.value)}
-                  className="bg-custom-sand border border-custom-choco/20 text-custom-choco px-3.5 py-1.5 rounded-xl text-xs focus:outline-none focus:border-blue-500 flex-grow"
+                  className="bg-surface border border-white/10 text-primary px-3.5 py-1.5 rounded-xl text-xs focus:outline-none focus:border-blue-500 flex-grow"
                 />
                 <button
                   type="submit"
-                  className="bg-custom-ochre hover:bg-custom-yellow text-white text-xs font-bold px-4 py-1.5 rounded-xl cursor-pointer transition shrink-0"
+                  className="bg-primary hover:bg-secondary text-white text-xs font-bold px-4 py-1.5 rounded-xl cursor-pointer transition shrink-0"
                 >
                   Analyze
                 </button>
@@ -317,10 +317,10 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
             </div>
 
             {/* Grid keyword elements */}
-            <div className="overflow-x-auto border border-custom-choco/20 rounded-xl">
+            <div className="overflow-x-auto border border-white/10 rounded-xl">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-custom-sand border-b border-custom-choco/20 text-custom-choco/80 uppercase tracking-widest font-mono text-[10px]">
+                  <tr className="bg-surface border-b border-white/10 text-secondary uppercase tracking-widest font-mono text-[10px]">
                     <th className="p-3">Matched Keyword Keyword</th>
                     <th className="p-3">Frequency Count</th>
                     <th className="p-3">Calculated Density</th>
@@ -329,13 +329,13 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
                 </thead>
                 <tbody className="divide-y divide-[#222]">
                   {scannedKeywords.map((k, idx) => (
-                    <tr key={idx} className="hover:bg-custom-yellow/20/40 text-custom-choco font-medium">
+                    <tr key={idx} className="hover:bg-white/5/40 text-primary font-medium">
                       <td className="p-3 font-mono font-bold text-blue-400">{k.word}</td>
                       <td className="p-3 text-white">{k.count} times</td>
                       <td className="p-3">
                         <div className="flex items-center gap-2">
                           <span className="font-mono">{k.density}%</span>
-                          <div className="w-16 bg-custom-sand h-1.5 rounded-full overflow-hidden">
+                          <div className="w-16 bg-surface h-1.5 rounded-full overflow-hidden">
                             <div 
                               className={`h-full rounded-full ${k.density > 4.0 ? "bg-rose-500" : "bg-emerald-500"}`}
                               style={{ width: `${Math.min(k.density * 20, 100)}%` }}
@@ -370,55 +370,55 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
         {activeSubTab === "structures" && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-left items-start">
             <div className="space-y-4">
-              <h4 className="text-custom-choco font-display font-extrabold text-sm uppercase tracking-wider">
+              <h4 className="text-primary font-display font-extrabold text-sm uppercase tracking-wider">
                 Heading Tag Structural Hierarchy
               </h4>
-              <p className="text-xs text-custom-choco/80 leading-relaxed">
+              <p className="text-xs text-secondary leading-relaxed">
                 Page structures should mimic logical outlines. Missing primary H1 tags, duplicated primary titles, or broken skipping (e.g. jumping from H1 directly to H3) impacts both accessibility screen readers and crawling spiders.
               </p>
 
-              <div className="space-y-2 border border-custom-choco/20 p-4 rounded-xl bg-custom-sand">
+              <div className="space-y-2 border border-white/10 p-4 rounded-xl bg-surface">
                 <h5 className="text-xs font-bold text-white uppercase tracking-wider">Crawl Tags Stats</h5>
                 <div className="grid grid-cols-4 gap-4 pt-2 text-center">
-                  <div className="bg-custom-cream p-2 border border-custom-choco/20/80 rounded-lg">
-                    <span className="block text-2xl font-bold font-mono text-custom-choco">
+                  <div className="bg-background p-2 border border-white/10/80 rounded-lg">
+                    <span className="block text-2xl font-bold font-mono text-primary">
                       {report.h1Count !== undefined ? report.h1Count : 1}
                     </span>
-                    <span className="text-[10px] font-mono text-custom-choco/60 uppercase">H1</span>
+                    <span className="text-[10px] font-mono text-secondary uppercase">H1</span>
                   </div>
-                  <div className="bg-custom-cream p-2 border border-custom-choco/20/80 rounded-lg">
-                    <span className="block text-2xl font-bold font-mono text-custom-choco">
+                  <div className="bg-background p-2 border border-white/10/80 rounded-lg">
+                    <span className="block text-2xl font-bold font-mono text-primary">
                       {report.h2Count !== undefined ? report.h2Count : 4}
                     </span>
-                    <span className="text-[10px] font-mono text-custom-choco/60 uppercase">H2</span>
+                    <span className="text-[10px] font-mono text-secondary uppercase">H2</span>
                   </div>
-                  <div className="bg-custom-cream p-2 border border-custom-choco/20/80 rounded-lg">
-                    <span className="block text-2xl font-bold font-mono text-custom-choco">
+                  <div className="bg-background p-2 border border-white/10/80 rounded-lg">
+                    <span className="block text-2xl font-bold font-mono text-primary">
                       {report.h3Count !== undefined ? report.h3Count : 7}
                     </span>
-                    <span className="text-[10px] font-mono text-custom-choco/60 uppercase">H3</span>
+                    <span className="text-[10px] font-mono text-secondary uppercase">H3</span>
                   </div>
-                  <div className="bg-custom-cream p-2 border border-custom-choco/20/80 rounded-lg">
-                    <span className="block text-2xl font-bold font-mono text-custom-choco">
+                  <div className="bg-background p-2 border border-white/10/80 rounded-lg">
+                    <span className="block text-2xl font-bold font-mono text-primary">
                       {report.h4Count !== undefined ? report.h4Count : 2}
                     </span>
-                    <span className="text-[10px] font-mono text-custom-choco/60 uppercase">H4</span>
+                    <span className="text-[10px] font-mono text-secondary uppercase">H4</span>
                   </div>
                 </div>
               </div>
 
               {/* Tag Rule Diagnostic */}
-              <div className="p-4 rounded-xl text-xs space-y-2.5 bg-custom-sand/40 border border-custom-choco/20">
-                <span className="font-bold text-custom-choco/80 block uppercase tracking-wider text-[10px]">Tag Diagnosis Logs:</span>
+              <div className="p-4 rounded-xl text-xs space-y-2.5 bg-surface/40 border border-white/10">
+                <span className="font-bold text-secondary block uppercase tracking-wider text-[10px]">Tag Diagnosis Logs:</span>
                 <div className="flex items-start gap-2.5">
                   <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <p className="text-custom-choco">
+                  <p className="text-primary">
                     <span className="font-bold text-white">W3C Nesting Standard:</span> Checked hierarchy. H2 headers adequately precede H3 nested segments.
                   </p>
                 </div>
                 <div className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
-                  <p className="text-custom-choco">
+                  <p className="text-primary">
                     <span className="font-bold text-white">Title Count Limit:</span> Crawled domain carries multiple redundant headings. Keep exactly one &lt;h1&gt; block on focus targets.
                   </p>
                 </div>
@@ -427,37 +427,37 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
 
             {/* Tree Map Representation */}
             <div className="space-y-4">
-              <h4 className="text-custom-choco font-display font-extrabold text-sm uppercase tracking-wider">
+              <h4 className="text-primary font-display font-extrabold text-sm uppercase tracking-wider">
                 Visual DOM Heading Schema Tree Map
               </h4>
 
-              <div className="bg-custom-sand/60 border border-custom-choco/20 rounded-xl p-4 font-mono text-xs space-y-3 shadow-inner">
+              <div className="bg-surface/60 border border-white/10 rounded-xl p-4 font-mono text-xs space-y-3 shadow-inner">
                 {/* H1 Node */}
                 <div className="flex items-center gap-2 pl-1 border-l-2 border-blue-500">
-                  <span className="text-[10px] bg-custom-ochre/10 border border-blue-500/30 text-blue-400 font-bold px-1.5 rounded uppercase">H1</span>
-                  <span className="text-custom-choco font-bold truncate max-w-sm">Landing Hub of {fallbackDomain}</span>
+                  <span className="text-[10px] bg-primary/10 border border-blue-500/30 text-blue-400 font-bold px-1.5 rounded uppercase">H1</span>
+                  <span className="text-primary font-bold truncate max-w-sm">Landing Hub of {fallbackDomain}</span>
                 </div>
 
                 {/* H2 Node */}
                 <div className="flex items-center gap-2 pl-6 border-l-2 border-indigo-500/50">
                   <span className="text-[10px] bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold px-1.5 rounded uppercase">H2</span>
-                  <span className="text-custom-choco truncate max-w-[280px]">Core Capabilities & Toolsets</span>
+                  <span className="text-primary truncate max-w-[280px]">Core Capabilities & Toolsets</span>
                 </div>
 
                 {/* H3 Nodes */}
                 <div className="flex items-center gap-2 pl-11 border-l-2 border-purple-500/30">
                   <span className="text-[10px] bg-purple-500/10 border border-purple-500/30 text-purple-400 font-bold px-1.5 rounded uppercase">H3</span>
-                  <span className="text-custom-choco/80 truncate max-w-[240px]">Search Engine Optimization API</span>
+                  <span className="text-secondary truncate max-w-[240px]">Search Engine Optimization API</span>
                 </div>
                 <div className="flex items-center gap-2 pl-11 border-l-2 border-purple-500/30">
                   <span className="text-[10px] bg-purple-500/10 border border-purple-500/30 text-purple-400 font-bold px-1.5 rounded uppercase">H3</span>
-                  <span className="text-custom-choco/80 truncate max-w-[240px]">WCAG 2.1 Spatial Contrast Engine</span>
+                  <span className="text-secondary truncate max-w-[240px]">WCAG 2.1 Spatial Contrast Engine</span>
                 </div>
 
                 {/* Another H2 Node */}
                 <div className="flex items-center gap-2 pl-6 border-l-2 border-indigo-500/50">
                   <span className="text-[10px] bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold px-1.5 rounded uppercase">H2</span>
-                  <span className="text-custom-choco truncate max-w-[280px]">Developer Testimonials & Integration Logs</span>
+                  <span className="text-primary truncate max-w-[280px]">Developer Testimonials & Integration Logs</span>
                 </div>
               </div>
             </div>
@@ -467,41 +467,41 @@ Sitemap: https://${fallbackDomain}/sitemap.xml`;
         {activeSubTab === "robots" && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-left items-start">
             <div className="space-y-4">
-              <div className="flex justify-between items-center bg-custom-sand border border-custom-choco/20 p-2.5 rounded-xl">
+              <div className="flex justify-between items-center bg-surface border border-white/10 p-2.5 rounded-xl">
                 <div>
-                  <span className="text-xs font-bold text-custom-choco px-2 font-display">robots.txt</span>
-                  <span className="text-[10px] text-custom-choco/60 uppercase font-mono block px-2">Crawl Control Instruction Set</span>
+                  <span className="text-xs font-bold text-primary px-2 font-display">robots.txt</span>
+                  <span className="text-[10px] text-secondary uppercase font-mono block px-2">Crawl Control Instruction Set</span>
                 </div>
                 <button
                   onClick={() => triggerCopy(generatedRobotsTxt, "robots")}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream border border-custom-choco/20 text-xs font-mono text-custom-choco/80 rounded-lg hover:text-custom-choco transition hover:bg-custom-yellow/20 cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-background border border-white/10 text-xs font-mono text-secondary rounded-lg hover:text-primary transition hover:bg-white/5 cursor-pointer"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   {copiedText === "robots" ? "Copied!" : "Copy"}
                 </button>
               </div>
 
-              <pre className="bg-custom-sand border border-custom-choco/20 rounded-xl p-4 font-mono text-xs text-emerald-400 overflow-x-auto shadow-inner leading-relaxed">
+              <pre className="bg-surface border border-white/10 rounded-xl p-4 font-mono text-xs text-emerald-400 overflow-x-auto shadow-inner leading-relaxed">
                 {generatedRobotsTxt}
               </pre>
             </div>
 
             <div className="space-y-4">
-              <div className="flex justify-between items-center bg-custom-sand border border-custom-choco/20 p-2.5 rounded-xl">
+              <div className="flex justify-between items-center bg-surface border border-white/10 p-2.5 rounded-xl">
                 <div>
-                  <span className="text-xs font-bold text-custom-choco px-2 font-display">sitemap.xml</span>
-                  <span className="text-[10px] text-custom-choco/60 uppercase font-mono block px-2">Structured XML Node Index Map</span>
+                  <span className="text-xs font-bold text-primary px-2 font-display">sitemap.xml</span>
+                  <span className="text-[10px] text-secondary uppercase font-mono block px-2">Structured XML Node Index Map</span>
                 </div>
                 <button
                   onClick={() => triggerCopy(generatedSitemapXml, "sitemap")}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream border border-custom-choco/20 text-xs font-mono text-custom-choco/80 rounded-lg hover:text-custom-choco transition hover:bg-custom-yellow/20 cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-background border border-white/10 text-xs font-mono text-secondary rounded-lg hover:text-primary transition hover:bg-white/5 cursor-pointer"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   {copiedText === "sitemap" ? "Copied!" : "Copy"}
                 </button>
               </div>
 
-              <pre className="bg-custom-sand border border-custom-choco/20 rounded-xl p-4 font-mono text-xs text-sky-400 overflow-x-auto shadow-inner leading-relaxed">
+              <pre className="bg-surface border border-white/10 rounded-xl p-4 font-mono text-xs text-sky-400 overflow-x-auto shadow-inner leading-relaxed">
                 {generatedSitemapXml}
               </pre>
             </div>

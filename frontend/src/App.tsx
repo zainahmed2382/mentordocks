@@ -264,26 +264,26 @@ export default function App() {
   ] : [];
 
   return (
-    <div className="min-h-screen animate-bg-gradient text-custom-choco selection:bg-brand-500 selection:text-white pb-20 relative">
+    <div className="min-h-screen animate-bg-gradient text-primary selection:bg-primary selection:text-white pb-20 relative">
       {/* Background Particles */}
       <ParticlesBackground />
       {/* 1. Header Navigation */}
-      <header className="sticky top-0 z-50 bg-custom-cream/90 backdrop-blur border-b border-custom-choco/20 px-6 py-4">
+      <header className="sticky top-0 z-50 glass-navbar border-b border-white/10 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleReset}>
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-600 to-custom-rose flex items-center justify-center shadow-md">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <span className="font-display font-extrabold text-lg text-custom-choco tracking-tight">
-                Mentor<span className="font-medium text-custom-ochre">Docks</span>
+              <span className="font-display font-extrabold text-lg text-primary tracking-tight">
+                Mentor<span className="font-medium text-accent">Docks</span>
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
 
-            <span className="text-xs font-semibold text-custom-choco/60 uppercase tracking-widest hidden md:inline">
+            <span className="text-xs font-semibold text-secondary uppercase tracking-widest hidden md:inline">
               PRO DIAGNOSTICS
             </span>
 
@@ -292,12 +292,12 @@ export default function App() {
               id="open-history-dashboard"
               onClick={() => setShowHistory(true)}
               title="View Search History"
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-custom-choco/20 hover:border-custom-choco/30 hover:bg-custom-yellow/20 text-custom-choco/80 hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-white/10 hover:border-white/10 hover:bg-white/5 text-secondary hover:text-blue-400 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
             >
               <History className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">History</span>
               {auditHistory.length > 0 && (
-                <span className="bg-custom-ochre/20 border border-blue-500/30 text-blue-400 font-mono font-bold text-[10px] px-1.5 rounded-full leading-none py-0.5">
+                <span className="bg-primary/20 border border-blue-500/30 text-blue-400 font-mono font-bold text-[10px] px-1.5 rounded-full leading-none py-0.5">
                   {auditHistory.length}
                 </span>
               )}
@@ -305,18 +305,18 @@ export default function App() {
 
             {/* Authentication user profile pill */}
             {currUser ? (
-              <div className="flex items-center gap-2 bg-custom-sand border border-custom-choco/20 p-1 pr-3 rounded-full text-xs">
-                <div className="h-6 w-6 rounded-full bg-custom-ochre/10 border border-custom-ochre/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
+              <div className="flex items-center gap-2 bg-surface border border-white/10 p-1 pr-3 rounded-full text-xs">
+                <div className="h-6 w-6 rounded-full bg-primary/10 border border-accent/30 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
                   {currUser.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="font-bold leading-none text-custom-choco text-[11px] truncate max-w-[90px]">{currUser.name}</p>
-                  <p className="text-[8px] font-mono font-semibold text-custom-choco/60 tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
+                  <p className="font-bold leading-none text-primary text-[11px] truncate max-w-[90px]">{currUser.name}</p>
+                  <p className="text-[8px] font-mono font-semibold text-secondary tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
                 </div>
                 <button
                   onClick={handleLogout}
                   title="Sign Out"
-                  className="p-1 hover:bg-custom-yellow/20 rounded text-custom-choco/80 hover:text-custom-choco cursor-pointer transition ml-1 shrink-0"
+                  className="p-1 hover:bg-white/5 rounded text-secondary hover:text-primary cursor-pointer transition ml-1 shrink-0"
                 >
                   <LogOut className="h-3 w-3" />
                 </button>
@@ -324,7 +324,7 @@ export default function App() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-custom-choco/20 hover:border-custom-choco/30 hover:bg-custom-yellow/20 text-custom-choco text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-white/10 hover:border-white/10 hover:bg-white/5 text-primary text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
               >
                 <User className="h-3.5 w-3.5" />
                 Sign In
@@ -335,7 +335,7 @@ export default function App() {
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => exportReportToPDF(report)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-cream text-custom-choco hover:bg-custom-yellow/20 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-background text-primary hover:bg-white/5 rounded-lg text-xs font-bold cursor-pointer transition shadow-md shadow-black/40"
                   title="Download PDF Report"
                 >
                   <Download className="h-3.5 w-3.5" />
@@ -343,7 +343,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-custom-sand border border-[#2c2c2c] hover:bg-custom-yellow/20 rounded-lg text-xs font-semibold text-custom-choco cursor-pointer transition shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-[#2c2c2c] hover:bg-white/5 rounded-lg text-xs font-semibold text-primary cursor-pointer transition shadow-md shadow-black/40"
                   title="Audit New URL"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -357,7 +357,7 @@ export default function App() {
 
       {/* ── Sticky Section Navigation (only when report visible) ── */}
       {report && !loading && !errorMsg && (
-        <nav className="sticky top-[65px] z-40 section-nav bg-custom-cream/80 border-b border-custom-choco/20 px-6 py-0">
+        <nav className="sticky top-[65px] z-40 section-nav bg-background/80 border-b border-white/10 px-6 py-0">
           <div className="max-w-7xl mx-auto flex items-center gap-1 overflow-x-auto scrollbar-hide py-2">
             {sectionNavItems.map((item) => (
               <button
@@ -365,13 +365,13 @@ export default function App() {
                 onClick={() => scrollToSection(item.id)}
                 className={`section-nav-item px-3.5 py-2 rounded-lg text-xs font-semibold cursor-pointer transition-all whitespace-nowrap ${
                   activeSection === item.id
-                    ? "text-blue-400 bg-custom-ochre/10 active"
-                    : "text-custom-choco/60 hover:text-custom-choco hover:bg-custom-yellow/20/50"
+                    ? "text-blue-400 bg-primary/10 active"
+                    : "text-secondary hover:text-primary hover:bg-white/5/50"
                 }`}
               >
                 {item.label}
                 {item.id === "issues" && (
-                  <span className="ml-1.5 text-[10px] font-mono bg-custom-sand border border-custom-choco/20 px-1.5 py-0.5 rounded-full">
+                  <span className="ml-1.5 text-[10px] font-mono bg-surface border border-white/10 px-1.5 py-0.5 rounded-full">
                     {report.issues.length}
                   </span>
                 )}
@@ -388,7 +388,7 @@ export default function App() {
 
         {/* Error States */}
         {errorMsg && (
-          <div className="max-w-xl mx-auto bg-rose-50 border border-rose-100 text-rose-800 rounded-2xl p-6 shadow-sm space-y-4">
+          <div className="max-w-xl mx-auto bg-rose-50 border border-rose-100 text-rose-800 rounded-2xl p-6 shadow-md shadow-black/40 space-y-4">
             <div className="flex items-start gap-3">
               <XCircle className="h-6 w-6 text-rose-500 shrink-0 mt-0.5" />
               <div>
@@ -403,7 +403,7 @@ export default function App() {
             </div>
             <button
               onClick={handleReset}
-              className="w-full py-2 bg-custom-cream border border-rose-200 text-rose-700 rounded-xl hover:bg-rose-100/50 transition font-semibold text-xs shrink-0 cursor-pointer"
+              className="w-full py-2 bg-background border border-rose-200 text-rose-700 rounded-xl hover:bg-rose-100/50 transition font-semibold text-xs shrink-0 cursor-pointer"
             >
               Back to Home State
             </button>
@@ -416,19 +416,19 @@ export default function App() {
             <HomeState onAudit={handleRunAudit} isLoading={loading} />
             
             {/* Interactive saved queries, personalized diagnostic badges and previous audit logs */}
-            <div className="max-w-4xl mx-auto bg-custom-cream border border-custom-choco/20/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+            <div className="max-w-4xl mx-auto bg-background border border-white/10/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
               <div className="absolute top-0 left-0 w-44 h-44 bg-gradient-to-tr from-blue-500/5 to-transparent blur-[40px] pointer-events-none rounded-full" />
               
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-custom-choco/20 pb-4 gap-4 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/10 pb-4 gap-4 mb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="h-8 w-8 text-blue-400 bg-custom-ochre/10 border border-custom-ochre/20 rounded-lg flex items-center justify-center">
+                  <div className="h-8 w-8 text-blue-400 bg-primary/10 border border-accent/30 rounded-lg flex items-center justify-center">
                     <History className="h-4 w-4" />
                   </div>
                   <div className="text-left">
-                    <h3 className="font-display font-extrabold text-custom-choco text-sm leading-tight">
+                    <h3 className="font-display font-extrabold text-primary text-sm leading-tight">
                       {currUser ? `${currUser.name}'s Search Logbook` : "Interactive Workspace History"}
                     </h3>
-                    <p className="text-[10px] text-custom-choco/60">
+                    <p className="text-[10px] text-secondary">
                       Fast recall of previously parsed domains and evaluation indexes
                     </p>
                   </div>
@@ -437,12 +437,12 @@ export default function App() {
                 {!currUser ? (
                   <button
                     onClick={() => setShowAuthModal(true)}
-                    className="text-xs bg-custom-sand hover:bg-[#161616] border border-custom-choco/20 text-blue-400 font-bold px-3 py-1.5 rounded-lg cursor-pointer transition self-start"
+                    className="text-xs bg-surface hover:bg-[#161616] border border-white/10 text-blue-400 font-bold px-3 py-1.5 rounded-lg cursor-pointer transition self-start"
                   >
                     🔐 Unlock Sync Settings
                   </button>
                 ) : (
-                  <span className="text-[10px] font-mono text-custom-choco/60 uppercase tracking-widest flex items-center gap-1">
+                  <span className="text-[10px] font-mono text-secondary uppercase tracking-widest flex items-center gap-1">
                     <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Premium Local Engine Active
                   </span>
                 )}
@@ -453,13 +453,13 @@ export default function App() {
                   <div
                     key={hidx}
                     onClick={() => handleRunAudit(hist.url)}
-                    className="bg-custom-sand/40 hover:bg-custom-yellow/20 border border-custom-choco/20 hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-sm relative group text-left"
+                    className="bg-surface/40 hover:bg-white/5 border border-white/10 hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-md shadow-black/40 relative group text-left"
                   >
                     <div className="space-y-1">
-                      <p className="font-mono text-xs font-bold text-custom-choco truncate max-w-[155px] group-hover:text-blue-400 transition">
+                      <p className="font-mono text-xs font-bold text-primary truncate max-w-[155px] group-hover:text-blue-400 transition">
                         {hist.url}
                       </p>
-                      <p className="text-[9px] text-custom-choco/60 font-mono tracking-tight flex items-center gap-1 leading-none">
+                      <p className="text-[9px] text-secondary font-mono tracking-tight flex items-center gap-1 leading-none">
                         <Clock className="h-3 w-3 inline shrink-0 text-zinc-600" />
                         Scanned {hist.date}
                       </p>
@@ -482,9 +482,9 @@ export default function App() {
         {report && !loading && !errorMsg && (
           <div className="space-y-10 animate-fade-in">
             {/* Report Jumbotron Header */}
-            <div className="bg-custom-cream rounded-xl border border-custom-choco/20 shadow-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="bg-background rounded-xl border border-white/10 shadow-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-2 max-w-full">
-                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-custom-ochre/10 border border-custom-ochre/20 px-2.5 py-1 rounded">
+                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-primary/10 border border-accent/30 px-2.5 py-1 rounded">
                   DIAGNOSIS COMPLETE
                 </span>
                 <div className="flex items-center gap-2 flex-wrap max-w-full">
@@ -495,7 +495,7 @@ export default function App() {
                     href={report.website_url}
                     target="_blank"
                     referrerPolicy="no-referrer"
-                    className="p-1 text-custom-choco/60 hover:text-custom-choco hover:bg-custom-yellow/20 rounded transition"
+                    className="p-1 text-secondary hover:text-primary hover:bg-white/5 rounded transition"
                   >
                     <ExternalLink className="h-4 w-4" />
                   </a>
@@ -507,7 +507,7 @@ export default function App() {
                 {currUser && (
                   <div className="mt-4 flex items-center gap-2.5 p-2.5 px-3.5 bg-blue-950/15 border border-blue-900/30 rounded-xl text-left max-w-xl">
                     <Briefcase className="h-4 w-4 text-blue-400 shrink-0" />
-                    <p className="text-xs text-custom-choco font-sans leading-relaxed">
+                    <p className="text-xs text-primary font-sans leading-relaxed">
                       <span className="font-bold text-white">Advisory Tip ({currUser.role}):</span> Prioritizing {
                         currUser.role === "Developer" 
                           ? "code structure semantics, layout parameters and responsive script payloads"
@@ -524,7 +524,7 @@ export default function App() {
                 <div className="pt-2">
                   <button
                     onClick={() => exportReportToPDF(report)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-custom-ochre hover:bg-custom-yellow text-white font-bold text-xs uppercase tracking-wider rounded transition cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-secondary text-white font-bold text-xs uppercase tracking-wider rounded transition cursor-pointer"
                   >
                     <Download className="h-4 w-4" />
                     Export PDF Report
@@ -533,10 +533,10 @@ export default function App() {
               </div>
 
               {/* Overall circular rating */}
-              <div className="flex items-center gap-4 bg-custom-sand p-3.5 rounded-xl border border-custom-choco/20">
+              <div className="flex items-center gap-4 bg-surface p-3.5 rounded-xl border border-white/10">
                 <CircularProgress score={report.overall_score} size={88} strokeWidth={8} label="Rating" />
                 <div className="space-y-1">
-                  <span className="text-xs font-semibold text-custom-choco/60 uppercase tracking-wider block">Scale Grade</span>
+                  <span className="text-xs font-semibold text-secondary uppercase tracking-wider block">Scale Grade</span>
                   <span className="text-lg font-bold text-white block">
                     {report.overall_score >= 90 ? "Excellent / Robust" : report.overall_score >= 55 ? "Needs Remediation" : "Critical Repair"}
                   </span>
@@ -548,19 +548,19 @@ export default function App() {
             </div>
 
             {/* ── Quick Stats — Severity Badge Strip ── */}
-            <div className="flex flex-wrap items-center gap-3 bg-custom-cream border border-custom-choco/20 rounded-xl p-4 shadow-md">
-              <span className="text-xs font-semibold text-custom-choco/60 uppercase tracking-wider mr-1">Quick Filter:</span>
+            <div className="flex flex-wrap items-center gap-3 bg-background border border-white/10 rounded-xl p-4 shadow-lg shadow-primary/20">
+              <span className="text-xs font-semibold text-secondary uppercase tracking-wider mr-1">Quick Filter:</span>
 
               <button
                 onClick={() => { setSelectedSeverity("all"); setSelectedCategory("all"); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "all"
-                    ? "bg-custom-ochre/15 border-blue-500/30 text-blue-400"
-                    : "bg-custom-sand border-custom-choco/20 text-custom-choco/80 hover:text-custom-choco hover:border-zinc-600"
+                    ? "bg-primary/15 border-blue-500/30 text-blue-400"
+                    : "bg-surface border-white/10 text-secondary hover:text-primary hover:border-zinc-600"
                 }`}
               >
                 All Issues
-                <span className="font-mono text-[10px] bg-custom-sand border border-custom-choco/20 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-surface border border-white/10 px-1.5 py-0.5 rounded-full">
                   {report.issues.length}
                 </span>
               </button>
@@ -570,12 +570,12 @@ export default function App() {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "High"
                     ? "bg-rose-950/30 border-rose-900/50 text-rose-400"
-                    : "bg-custom-sand border-custom-choco/20 text-custom-choco/80 hover:text-rose-400 hover:border-rose-900/40"
+                    : "bg-surface border-white/10 text-secondary hover:text-rose-400 hover:border-rose-900/40"
                 }`}
               >
                 <XCircle className="h-3.5 w-3.5" />
                 High
-                <span className="font-mono text-[10px] bg-custom-sand border border-custom-choco/20 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-surface border border-white/10 px-1.5 py-0.5 rounded-full">
                   {severityCounts.high}
                 </span>
               </button>
@@ -585,12 +585,12 @@ export default function App() {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "Medium"
                     ? "bg-amber-950/30 border-amber-900/50 text-amber-400"
-                    : "bg-custom-sand border-custom-choco/20 text-custom-choco/80 hover:text-amber-400 hover:border-amber-900/40"
+                    : "bg-surface border-white/10 text-secondary hover:text-amber-400 hover:border-amber-900/40"
                 }`}
               >
                 <AlertTriangle className="h-3.5 w-3.5" />
                 Medium
-                <span className="font-mono text-[10px] bg-custom-sand border border-custom-choco/20 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-surface border border-white/10 px-1.5 py-0.5 rounded-full">
                   {severityCounts.medium}
                 </span>
               </button>
@@ -599,13 +599,13 @@ export default function App() {
                 onClick={() => { setSelectedSeverity("Low"); setSelectedCategory("all"); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
                   selectedSeverity === "Low"
-                    ? "bg-custom-sand/60 border-zinc-600/50 text-custom-choco"
-                    : "bg-custom-sand border-custom-choco/20 text-custom-choco/80 hover:text-custom-choco hover:border-zinc-600"
+                    ? "bg-surface/60 border-zinc-600/50 text-primary"
+                    : "bg-surface border-white/10 text-secondary hover:text-primary hover:border-zinc-600"
                 }`}
               >
                 <HelpCircle className="h-3.5 w-3.5" />
                 Low
-                <span className="font-mono text-[10px] bg-custom-sand border border-custom-choco/20 px-1.5 py-0.5 rounded-full">
+                <span className="font-mono text-[10px] bg-surface border border-white/10 px-1.5 py-0.5 rounded-full">
                   {severityCounts.low}
                 </span>
               </button>
@@ -616,11 +616,11 @@ export default function App() {
               {scoreCards.map((card, idx) => (
                 <div
                   key={card.label}
-                  className="bg-custom-cream p-4 rounded-xl border border-custom-choco/20 shadow-sm flex flex-col justify-between space-y-3 hover:border-[#444] hover:shadow-md transition-all duration-200 animate-fade-in-up group"
+                  className="bg-background p-4 rounded-xl border border-white/10 shadow-md shadow-black/40 flex flex-col justify-between space-y-3 hover:border-[#444] hover:shadow-lg shadow-primary/20 transition-all duration-200 animate-fade-in-up group"
                   style={{ animationDelay: `${idx * 80}ms` }}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-custom-choco/60 uppercase tracking-wider">{card.label}</span>
+                    <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{card.label}</span>
                     <div className="group-hover:scale-110 transition-transform duration-200">
                       {card.icon}
                     </div>
@@ -628,11 +628,11 @@ export default function App() {
                   <div>
                     <div className="flex items-end gap-1.5">
                       <span className="text-2xl font-bold tracking-tight text-white font-mono block">{card.score}</span>
-                      <span className="text-[10px] font-semibold text-custom-choco/60 mb-1">{getScoreLabel(card.score)}</span>
+                      <span className="text-[10px] font-semibold text-secondary mb-1">{getScoreLabel(card.score)}</span>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="w-full bg-custom-sand/60 h-1.5 rounded-full overflow-hidden mt-2">
+                    <div className="w-full bg-surface/60 h-1.5 rounded-full overflow-hidden mt-2">
                       <div
                         className={`h-full rounded-full score-progress-bar ${getProgressBarColor(card.score)}`}
                         style={{ width: `${card.score}%`, animationDelay: `${idx * 80 + 300}ms` }}
@@ -648,7 +648,7 @@ export default function App() {
             </div>
 
             {/* Executive Summary Card from Gemini */}
-            <div id="summary" className="bg-custom-cream border border-custom-choco/20 rounded-xl p-6 text-custom-choco shadow-xl relative overflow-hidden">
+            <div id="summary" className="bg-background border border-white/10 rounded-xl p-6 text-primary shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 text-indigo-500/10 pointer-events-none">
                 <Sparkles className="h-36 w-36" style={{ transform: "rotate(15deg)" }} />
               </div>
@@ -679,7 +679,7 @@ export default function App() {
                   {report.priority_fixes.map((fixString, fixIdx) => (
                     <li
                       key={fixIdx}
-                      className="bg-custom-sand p-3.5 rounded-lg border border-custom-choco/20 flex items-start gap-2.5 shadow-sm hover:border-amber-950/50 transition animate-fade-in"
+                      className="bg-surface p-3.5 rounded-lg border border-white/10 flex items-start gap-2.5 shadow-md shadow-black/40 hover:border-amber-950/50 transition animate-fade-in"
                     >
                       <span className="h-5 w-5 rounded-full bg-amber-950/30 border border-amber-900/50 text-amber-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
                         {fixIdx + 1}
@@ -700,25 +700,25 @@ export default function App() {
 
             {/* Main Issue Listing & Categories */}
             <div id="issues" className="space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-custom-choco/20 pb-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
                 <div>
                   <h3 className="text-lg font-bold text-white font-display">
                     Audit Findings ({filteredIssues.length} found)
                   </h3>
-                  <p className="text-xs text-custom-choco/60">
+                  <p className="text-xs text-secondary">
                     Click any issue to expand details · Filter by category and severity
                   </p>
                 </div>
 
                 {/* Filters Row */}
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-custom-choco/60">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-secondary">
                     <Filter className="h-3.5 w-3.5" /> Category:
                   </div>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value as CategoryFilter)}
-                    className="text-xs bg-custom-sand border border-[#292929] rounded-lg px-2.5 py-1.5 text-custom-choco focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-custom-yellow/20 transition"
+                    className="text-xs bg-surface border border-[#292929] rounded-lg px-2.5 py-1.5 text-primary focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-white/5 transition"
                   >
                     <option value="all">All Categories</option>
                     <option value="Code Quality">Code Quality</option>
@@ -730,13 +730,13 @@ export default function App() {
                     <option value="Accessibility">Accessibility</option>
                   </select>
 
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-custom-choco/60">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-secondary">
                     Severity:
                   </div>
                   <select
                     value={selectedSeverity}
                     onChange={(e) => setSelectedSeverity(e.target.value as SeverityFilter)}
-                    className="text-xs bg-custom-sand border border-[#292929] rounded-lg px-2.5 py-1.5 text-custom-choco focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-custom-yellow/20 transition"
+                    className="text-xs bg-surface border border-[#292929] rounded-lg px-2.5 py-1.5 text-primary focus:outline-none focus:border-brand-500 font-medium cursor-pointer hover:bg-white/5 transition"
                   >
                     <option value="all">All Severities</option>
                     <option value="High">High Severity</option>
@@ -748,10 +748,10 @@ export default function App() {
 
               {/* Grid of Results */}
               {filteredIssues.length === 0 ? (
-                <div className="text-center p-12 bg-custom-cream rounded-lg border border-custom-choco/20 shadow-lg max-w-xl mx-auto space-y-3">
+                <div className="text-center p-12 bg-background rounded-lg border border-white/10 shadow-lg max-w-xl mx-auto space-y-3">
                   <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
                   <h4 className="text-base font-bold text-white">Clear Scan Diagnostic</h4>
-                  <p className="text-xs text-custom-choco/60">
+                  <p className="text-xs text-secondary">
                     Zero flagged issues found for this specific category matching combination. Give yourself a high-five or loosen filters!
                   </p>
                 </div>
@@ -771,7 +771,7 @@ export default function App() {
       {report && showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="back-to-top-btn fixed bottom-8 right-8 z-50 h-11 w-11 rounded-full bg-custom-ochre hover:bg-custom-yellow text-white shadow-lg hover:shadow-xl flex items-center justify-center cursor-pointer transition-all duration-200 border border-blue-400/20"
+          className="back-to-top-btn fixed bottom-8 right-8 z-50 h-11 w-11 rounded-full bg-primary hover:bg-secondary text-white shadow-lg hover:shadow-xl flex items-center justify-center cursor-pointer transition-all duration-200 border border-blue-400/20"
           title="Back to top"
         >
           <ChevronUp className="h-5 w-5" />
