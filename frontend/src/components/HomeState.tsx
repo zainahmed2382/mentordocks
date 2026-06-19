@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Sparkles, Code, Monitor, Palette, Type, Zap, ShieldCheck } from "lucide-react";
+import { Search, Sparkles, Code, Monitor, Palette, Zap, ArrowRight, Globe, ShieldCheck } from "lucide-react";
 
 interface HomeStateProps {
   onAudit: (url: string) => void;
@@ -13,6 +13,27 @@ const PRESETS = [
   { name: "Tailwind CSS", url: "tailwindcss.com" },
 ];
 
+const FEATURE_CARDS = [
+  {
+    icon: <Code className="h-5 w-5 text-blue-400" />,
+    iconBg: "bg-blue-500/10 border-blue-500/20",
+    title: "HTML & SEO Standards",
+    desc: "Crawls parsed document metadata, page titles, descriptions, heading hierarchies, and indexing variables automatically.",
+  },
+  {
+    icon: <Palette className="h-5 w-5 text-violet-400" />,
+    iconBg: "bg-violet-500/10 border-violet-500/20",
+    title: "Contrast & Typography",
+    desc: "Measures typeface hierarchies, copy size balances, and checks compliance for WCAG 2.1 color contrasts.",
+  },
+  {
+    icon: <Monitor className="h-5 w-5 text-cyan-400" />,
+    iconBg: "bg-cyan-500/10 border-cyan-500/20",
+    title: "UX & Responsiveness",
+    desc: "Examines layout structures across screen sizes, mobile viewports, interactive scaling, and visual alignment.",
+  },
+];
+
 export function HomeState({ onAudit, isLoading }: HomeStateProps) {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +44,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
 
     const targetUrl = url.trim();
     if (!targetUrl) {
-      setError("Please key in a URL first.");
+      setError("Please enter a URL first.");
       return;
     }
 
@@ -37,108 +58,169 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
   };
 
   return (
-    <div className="space-y-12">
-      {/* 1. Hero text section */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-background border border-accent/30 rounded-full text-accent text-xs font-semibold uppercase tracking-wider animate-bounce shadow-md shadow-black/40">
-          <Sparkles className="h-3.5 w-3.5 text-accent" />
-          Next-Gen Website Analyzer
+    <div className="space-y-16 pb-8">
+      {/* ── Hero Section ── */}
+      <div className="text-center max-w-3xl mx-auto space-y-6 pt-4 animate-fade-in">
+
+        {/* Eyebrow Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/5 text-cyan-400 text-xs font-semibold uppercase tracking-widest">
+          <Sparkles className="h-3.5 w-3.5" />
+          Next‑Gen Website Analyzer
         </div>
-        <h1 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-primary leading-[1.15]">
-          Inspect Website Design, UX, <span className="text-transparent bg-clip-text bg-primary-gradient">Accessibility & Performance</span>
-        </h1>
-        <p className="text-base md:text-lg text-secondary max-w-xl mx-auto leading-relaxed">
-          Provide any website link to initiate an advanced technical audit. Get actionable grading results, WCAG reports, performance insights, and copy-paste remediation formulas.
-        </p>
-      </div>
 
-      {/* 2. URL search bar container */}
-      <div className="max-w-2xl mx-auto glass-panel p-4 rounded-2xl relative transition-all duration-300 hover:shadow-primary/30">
-        <div className="absolute inset-0 ambient-glow -z-10 rounded-2xl" />
-
-        <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3">
-          <div className="relative flex-grow">
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-secondary" />
-            </div>
-            <input
-              type="text"
-              placeholder="e.g. wikipedia.org or https://mywebsite.com"
-              value={url}
-              onChange={(e) => {
-                setUrl(e.target.value);
-                if (error) setError("");
-              }}
-              disabled={isLoading}
-              className="w-full pl-11 pr-4 py-3.5 bg-surface/50 border border-white/10 focus:ring-2 focus:ring-accent focus:border-transparent focus:bg-background rounded-xl text-primary placeholder-slate-400 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner backdrop-blur-sm"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="px-6 py-3.5 bg-primary-gradient text-white hover:scale-[1.02] hover:shadow-accent/40 font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20 disabled:opacity-50"
+        {/* Headline — fixed: gradient applied via inline style to avoid Tailwind class conflicts */}
+        <h1 className="text-4xl md:text-6xl font-display font-extrabold tracking-tight leading-[1.1] text-white">
+          Inspect Website{" "}
+          <span
+            style={{
+              background: "linear-gradient(135deg, #3B82F6, #6366F1, #06B6D4)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
           >
-            {isLoading ? "Scanning..." : "AI Scan Engine"}
-            <Zap className="h-4 w-4 text-white" />
-          </button>
-        </form>
+            Design, UX &amp; Performance
+          </span>
+        </h1>
 
-        {error && (
-          <p className="text-xs font-semibold text-rose-500 mt-2 px-1">
-            {error}
-          </p>
-        )}
+        {/* Subheadline */}
+        <p className="text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          Enter any website URL to trigger a comprehensive AI audit — scoring design, accessibility, SEO, typography, responsiveness, and performance.
+        </p>
 
-        {/* Preset pill list */}
-        <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-3.5 border-t border-white/10">
-          <span className="text-xs text-[#555] font-semibold uppercase tracking-wider">Try Demo:</span>
-          {PRESETS.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => handleSelectPreset(preset.url)}
-              disabled={isLoading}
-              className="text-xs bg-surface hover:bg-white/5 text-[#888] font-medium px-3 py-1 rounded-full border border-white/10 cursor-pointer transition"
-            >
-              {preset.name}
-            </button>
+        {/* Stats row */}
+        <div className="flex items-center justify-center gap-6 pt-2">
+          {[
+            { label: "Checks Run", value: "50+" },
+            { label: "Avg Scan Time", value: "~8s" },
+            { label: "WCAG Standards", value: "2.1 AA" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-lg font-bold font-mono text-white">{stat.value}</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider">{stat.label}</div>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* 3. Marketing features/checks grids */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pt-4">
-        {/* Card 1 */}
-        <div className="glass-navbar p-6 rounded-2xl border border-white/10 shadow-md shadow-black/40 space-y-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-accent/30">
-            <Code className="h-5 w-5 text-blue-400" />
-          </div>
-          <h3 className="text-base font-bold text-white font-display">HTML & SEO Standards</h3>
-          <p className="text-xs text-[#888] leading-relaxed">
-            Crawls parsed document metadata, page titles, descriptions, heading arrangements, tag nestings, and indexing variables automatically.
-          </p>
-        </div>
+      {/* ── Search Bar ── */}
+      <div className="max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+        {/* Glowing border container */}
+        <div
+          className="relative rounded-2xl p-[1px]"
+          style={{
+            background: "linear-gradient(135deg, rgba(59,130,246,0.4), rgba(99,102,241,0.2), rgba(6,182,212,0.4))",
+          }}
+        >
+          <div className="bg-[#0a0a0a] rounded-2xl p-4">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3">
+              <div className="relative flex-grow">
+                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                  <Globe className="h-4.5 w-4.5 text-slate-500" />
+                </div>
+                <input
+                  type="text"
+                  id="audit-url-input"
+                  placeholder="e.g. wikipedia.org or https://mywebsite.com"
+                  value={url}
+                  onChange={(e) => {
+                    setUrl(e.target.value);
+                    if (error) setError("");
+                  }}
+                  disabled={isLoading}
+                  className="w-full pl-11 pr-4 py-3.5 bg-white/5 border border-white/8 focus:ring-2 focus:ring-cyan-500 focus:border-transparent rounded-xl text-white placeholder-slate-600 focus:outline-none transition-all duration-200 text-sm disabled:opacity-50"
+                />
+              </div>
+              <button
+                type="submit"
+                id="audit-submit-btn"
+                disabled={isLoading}
+                className="px-6 py-3.5 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 shrink-0 text-sm"
+                style={{
+                  background: "linear-gradient(135deg, #3B82F6, #6366F1, #06B6D4)",
+                  boxShadow: "0 0 20px rgba(59,130,246,0.3)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 30px rgba(59,130,246,0.5)";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 20px rgba(59,130,246,0.3)";
+                  (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                }}
+              >
+                {isLoading ? (
+                  <>
+                    <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    Scanning...
+                  </>
+                ) : (
+                  <>
+                    AI Scan Engine
+                    <Zap className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+            </form>
 
-        {/* Card 2 */}
-        <div className="glass-navbar p-6 rounded-2xl border border-white/10 shadow-md shadow-black/40 space-y-3">
-          <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-            <Palette className="h-5 w-5 text-indigo-400" />
-          </div>
-          <h3 className="text-base font-bold text-white font-display">Contrast & Typography</h3>
-          <p className="text-xs text-[#888] leading-relaxed">
-            Measures line intervals, typeface hierarchic arrangements, copy size balances, and checks compliance for relative WCAG 2.1 color contrasts.
-          </p>
-        </div>
+            {error && (
+              <p className="text-xs font-medium text-red-400 mt-2 px-1 flex items-center gap-1">
+                <span>⚠</span> {error}
+              </p>
+            )}
 
-        {/* Card 3 */}
-        <div className="glass-navbar p-6 rounded-2xl border border-white/10 shadow-md shadow-black/40 space-y-3">
-          <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
-            <Monitor className="h-5 w-5 text-purple-400" />
+            {/* Preset pills */}
+            <div className="mt-4 flex flex-wrap items-center gap-2 pt-3.5 border-t border-white/5">
+              <span className="text-[10px] text-slate-600 font-semibold uppercase tracking-widest mr-1">Try Demo:</span>
+              {PRESETS.map((preset) => (
+                <button
+                  key={preset.name}
+                  id={`preset-${preset.name.toLowerCase().replace(/\s/g, "-")}`}
+                  onClick={() => handleSelectPreset(preset.url)}
+                  disabled={isLoading}
+                  className="text-xs text-slate-400 hover:text-white font-medium px-3 py-1 rounded-full border border-white/10 hover:border-white/20 bg-white/3 hover:bg-white/8 cursor-pointer transition-all duration-200 disabled:opacity-40"
+                >
+                  {preset.name}
+                </button>
+              ))}
+            </div>
           </div>
-          <h3 className="text-base font-bold text-white font-display">UX & Responsiveness</h3>
-          <p className="text-[#888] text-xs leading-relaxed">
-            Examines layout structures across screen sizes, mobile viewports setup, interactive scaling factors, and visual alignment guides.
-          </p>
         </div>
+      </div>
+
+      {/* ── Feature Cards ── */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+        {FEATURE_CARDS.map((card, i) => (
+          <div
+            key={card.title}
+            id={`feature-card-${i}`}
+            className="group relative p-6 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:-translate-y-1 transition-all duration-300"
+            style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+          >
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center border mb-4 ${card.iconBg}`}>
+              {card.icon}
+            </div>
+            <h3 className="text-sm font-bold text-white font-display mb-2">{card.title}</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">{card.desc}</p>
+
+            {/* Subtle hover glow line at bottom */}
+            <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-blue-500/0 to-transparent group-hover:via-blue-500/40 transition-all duration-500 rounded-full" />
+          </div>
+        ))}
+      </div>
+
+      {/* ── Trust Strip ── */}
+      <div className="flex flex-wrap items-center justify-center gap-6 max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+        {[
+          { icon: <ShieldCheck className="h-4 w-4 text-emerald-400" />, label: "WCAG 2.1 Compliant" },
+          { icon: <Zap className="h-4 w-4 text-amber-400" />, label: "Sub-10s Analysis" },
+          { icon: <Globe className="h-4 w-4 text-blue-400" />, label: "Any Public URL" },
+        ].map((item) => (
+          <div key={item.label} className="flex items-center gap-1.5 text-xs text-slate-500">
+            {item.icon}
+            <span>{item.label}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
