@@ -93,7 +93,17 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
 
         <div className="space-y-2">
           <h1 className="text-3xl font-display font-black text-white tracking-widest">
-            MENTOR <span className="text-accent">DOCKS</span>
+            MENTOR{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #3B82F6, #06B6D4)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              DOCKS
+            </span>
           </h1>
           <p className="text-xs text-secondary uppercase tracking-[0.25em] font-mono">
             Professional Web & SEO Audit Suite
@@ -112,10 +122,10 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
             <span>AUDIT_CRAWL_STABLE_V2</span>
             <span>{progress}%</span>
           </div>
-          <div className="w-full bg-surface/80 h-1.5 rounded-full overflow-hidden border border-zinc-950">
-            <div 
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
+          <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-300"
+              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #3B82F6, #6366F1, #06B6D4)" }}
             />
           </div>
         </div>
@@ -125,7 +135,8 @@ export function SplashScreen({ onDismiss }: SplashScreenProps) {
           {isFinished ? (
             <button
               onClick={onDismiss}
-              className="px-6 py-2.5 bg-primary text-white hover:bg-secondary text-xs font-mono tracking-wider font-bold rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg shadow-blue-900/40 animate-bounce cursor-pointer"
+              className="px-6 py-2.5 text-white text-xs font-mono tracking-wider font-bold rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg cursor-pointer"
+              style={{ background: "linear-gradient(135deg, #3B82F6, #6366F1, #06B6D4)", boxShadow: "0 0 24px rgba(59,130,246,0.4)" }}
             >
               ACCESS DIAGNOSTIC SUITE
               <ArrowRight className="h-3.5 w-3.5" />
