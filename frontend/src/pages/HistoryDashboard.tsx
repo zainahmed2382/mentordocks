@@ -197,7 +197,7 @@ export function HistoryDashboard({
           </div>
         </div>
 
-        <div className="relative z-10 p-6 space-y-6 flex-1 overflow-y-auto">
+        <div className="relative z-10 p-6 space-y-6 flex-1 overflow-y-auto scrollbar-hide">
           {/* Confirm Clear Banner */}
           {confirmClear && (
             <div className="bg-rose-950/20 border border-rose-900/40 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in">
