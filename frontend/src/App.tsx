@@ -270,13 +270,23 @@ export default function App() {
       {/* 1. Header Navigation */}
       <header className="sticky top-0 z-50 glass-navbar border-b border-white/10 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleReset}>
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+          <div className="flex items-center gap-2.5 cursor-pointer group" onClick={handleReset}>
+            <div
+              className="h-9 w-9 rounded-xl flex items-center justify-center shadow-lg"
+              style={{ background: "linear-gradient(135deg, #3B82F6, #6366F1, #06B6D4)", boxShadow: "0 0 16px rgba(59,130,246,0.35)" }}
+            >
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <span className="font-display font-extrabold text-lg text-primary tracking-tight">
-                Mentor<span className="font-medium text-accent">Docks</span>
+              <span className="font-display font-extrabold text-lg text-white tracking-tight">
+                Mentor<span
+                  style={{
+                    background: "linear-gradient(135deg, #3B82F6, #06B6D4)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >Docks</span>
               </span>
             </div>
           </div>
