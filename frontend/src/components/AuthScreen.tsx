@@ -52,7 +52,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
   return (
     <div className="fixed inset-0 z-[110] bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
       {/* Container Card */}
-      <div className="w-full max-w-md bg-white border border-slate-200/90 rounded-2xl p-6 md:p-8 relative shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md bg-custom-cream border border-custom-choco/20/90 rounded-2xl p-6 md:p-8 relative shadow-2xl overflow-hidden">
         {/* Decorative Grid Mesh overlay inside login */}
         <div className="absolute inset-0 bg-transparent opacity-[0.03] pointer-events-none" 
           style={{
@@ -62,18 +62,18 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
         />
         
         {/* Top absolute light flare decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-blue-500/10 blur-[50px] pointer-events-none rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-custom-ochre/10 blur-[50px] pointer-events-none rounded-full" />
 
         <div className="flex justify-between items-center relative z-10 mb-6">
           <div className="flex items-center gap-1.5">
             <Sparkles className="h-4.5 w-4.5 text-blue-400" />
-            <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest bg-custom-ochre/10 px-2 py-0.5 rounded">
               Mentor Docks Account Gate
             </span>
           </div>
           <button 
             onClick={onClose}
-            className="text-slate-500 hover:text-black p-1 hover:bg-slate-50 rounded-lg transition overflow-hidden h-7 w-7 flex items-center justify-center cursor-pointer"
+            className="text-custom-choco/60 hover:text-custom-choco p-1 hover:bg-custom-sand rounded-lg transition overflow-hidden h-7 w-7 flex items-center justify-center cursor-pointer"
           >
             <X className="h-4 bg-transparent" />
           </button>
@@ -88,12 +88,12 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
               <h3 className="font-display font-extrabold text-white text-lg tracking-tight">
                 {isSignUp ? "Account Standardized!" : "Verification Confirmed"}
               </h3>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-custom-choco/80">
                 Signing you into your live web-diagnostic workspace...
               </p>
             </div>
             {/* Pulsating fake indicator */}
-            <div className="w-20 bg-slate-100 h-1 mx-auto rounded-full overflow-hidden">
+            <div className="w-20 bg-custom-sand h-1 mx-auto rounded-full overflow-hidden">
               <div className="h-full bg-emerald-500 animate-pulse w-full" />
             </div>
           </div>
@@ -103,7 +103,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
               <h2 className="text-xl font-display font-extrabold text-white tracking-tight">
                 {isSignUp ? "Initiate Your Profile" : "Access Professional Suite"}
               </h2>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-custom-choco/80">
                 {isSignUp 
                   ? "Build a dedicated digital locker to bookmark crawls & premium tests" 
                   : "Welcome back! Enter credentials to continue saved url diagnostics"
@@ -120,57 +120,57 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
               {isSignUp && (
                 <div className="space-y-1">
-                  <label className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Full Name</label>
+                  <label className="text-[10px] font-mono text-custom-choco/80 uppercase tracking-wider">Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-custom-choco/60" />
                     <input
                       type="text"
                       placeholder="e.g. Alexis Carter"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
+                      className="w-full bg-custom-sand border border-custom-choco/20/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
                     />
                   </div>
                 </div>
               )}
 
               <div className="space-y-1">
-                <label className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Email Address</label>
+                <label className="text-[10px] font-mono text-custom-choco/80 uppercase tracking-wider">Email Address</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-custom-choco/60" />
                   <input
                     type="email"
                     placeholder="e.g. alexis@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
+                    className="w-full bg-custom-sand border border-custom-choco/20/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Password</label>
+                <label className="text-[10px] font-mono text-custom-choco/80 uppercase tracking-wider">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-custom-choco/60" />
                   <input
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
+                    className="w-full bg-custom-sand border border-custom-choco/20/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
                   />
                 </div>
               </div>
 
               {isSignUp && (
                 <div className="space-y-1">
-                  <label className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">Professional Role Focus</label>
+                  <label className="text-[10px] font-mono text-custom-choco/80 uppercase tracking-wider">Professional Role Focus</label>
                   <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 pointer-events-none" />
+                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-custom-choco/60 pointer-events-none" />
                     <select
                       value={role}
                       onChange={(e) => setRole(e.target.value as UserProfile["role"])}
-                      className="w-full bg-slate-50 border border-slate-200/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-slate-900 appearance-none font-sans"
+                      className="w-full bg-custom-sand border border-custom-choco/20/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-custom-choco appearance-none font-sans"
                     >
                       <option value="Developer">Developer (Focus on Code Quality & Fixes)</option>
                       <option value="UI/UX Designer">UI/UX Designer (Focus on Styling & Contrast)</option>
@@ -183,7 +183,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-white text-black font-bold rounded-xl text-xs uppercase tracking-wider transition hover:bg-zinc-200 mt-2 cursor-pointer"
+                className="w-full py-3 bg-custom-cream text-custom-choco font-bold rounded-xl text-xs uppercase tracking-wider transition hover:bg-zinc-200 mt-2 cursor-pointer"
               >
                 {isSignUp ? "Create Workspace Key" : "Access Workspace Core"}
               </button>
@@ -204,7 +204,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
               </button>
             </div>
 
-            <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-500 pt-2 border-t border-slate-200">
+            <div className="flex items-center justify-center gap-1.5 text-[10px] text-custom-choco/60 pt-2 border-t border-custom-choco/20">
               <ShieldCheck className="h-3.5 w-3.5 text-zinc-600" />
               <span>Encrypted local session token active.</span>
             </div>

@@ -6,11 +6,17 @@
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
+  --color-custom-ochre: #B08401;
+  --color-custom-rose: #D49E8D;
+  --color-custom-sand: #DED1BD;
+  --color-custom-cream: #FAF6F2;
+  --color-custom-choco: #683B2B;
+
   --color-brand-50: #121212;
   --color-brand-100: #222222;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-750: #1d4ed8;
+  --color-brand-500: #B08401;
+  --color-brand-600: #B08401;
+  --color-brand-750: #936F01;
   --color-brand-900: #0a0a0a;
 }
 
@@ -20,8 +26,8 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: #ffffff;
-  color: #121212;
+  background-color: var(--color-custom-cream);
+  color: var(--color-custom-choco);
 }
 
 /* Custom styles for animations & layout details */
