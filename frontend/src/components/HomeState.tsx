@@ -45,7 +45,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
           Next-Gen Website Analyzer
         </div>
         <h1 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-primary leading-[1.15]">
-          Inspect Website Design, UX, <span className="text-transparent bg-clip-text bg-gradient-to-r from-custom-ochre to-custom-rose">Accessibility & Performance</span>
+          Inspect Website Design, UX, <span className="text-transparent bg-clip-text bg-primary-gradient">Accessibility & Performance</span>
         </h1>
         <p className="text-base md:text-lg text-secondary max-w-xl mx-auto leading-relaxed">
           Provide any website link to initiate an advanced technical audit. Get actionable grading results, WCAG reports, performance insights, and copy-paste remediation formulas.
@@ -53,7 +53,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
       </div>
 
       {/* 2. URL search bar container */}
-      <div className="max-w-2xl mx-auto bg-background p-4 rounded-2xl border border-white/10 shadow-2xl relative">
+      <div className="max-w-2xl mx-auto glass-panel p-4 rounded-2xl relative transition-all duration-300 hover:shadow-primary/30">
         <div className="absolute inset-0 ambient-glow -z-10 rounded-2xl" />
 
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3">
@@ -70,15 +70,15 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
                 if (error) setError("");
               }}
               disabled={isLoading}
-              className="w-full pl-11 pr-4 py-3.5 bg-surface border border-white/10 focus:border-brand-500 focus:bg-background rounded-xl text-primary placeholder-slate-400 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
+              className="w-full pl-11 pr-4 py-3.5 bg-surface/50 border border-white/10 focus:ring-2 focus:ring-accent focus:border-transparent focus:bg-background rounded-xl text-primary placeholder-slate-400 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner backdrop-blur-sm"
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-3.5 bg-primary text-white hover:bg-secondary font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20 disabled:opacity-50"
+            className="px-6 py-3.5 bg-primary-gradient text-white hover:scale-[1.02] hover:shadow-accent/40 font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20 disabled:opacity-50"
           >
-            {isLoading ? "Auditing..." : "Run Free Audit"}
+            {isLoading ? "Scanning..." : "AI Scan Engine"}
             <Zap className="h-4 w-4 text-white" />
           </button>
         </form>
