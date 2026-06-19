@@ -40,14 +40,14 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
     <div className="space-y-12">
       {/* 1. Hero text section */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-blue-500/20 rounded-full text-blue-400 text-xs font-semibold uppercase tracking-wider animate-bounce">
-          <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-blue-300 rounded-full text-blue-600 text-xs font-semibold uppercase tracking-wider animate-bounce shadow-sm">
+          <Sparkles className="h-3.5 w-3.5 text-blue-600" />
           Next-Gen Website Analyzer
         </div>
-        <h1 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-white leading-[1.15]">
-          Inspect Website Design, UX, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Accessibility & Performance</span>
+        <h1 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+          Inspect Website Design, UX, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Accessibility & Performance</span>
         </h1>
-        <p className="text-base md:text-lg text-[#aaa] max-w-xl mx-auto leading-relaxed">
+        <p className="text-base md:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
           Provide any website link to initiate an advanced technical audit. Get actionable grading results, WCAG reports, performance insights, and copy-paste remediation formulas.
         </p>
       </div>
@@ -59,7 +59,7 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-grow">
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-[#555]" />
+              <Search className="h-5 w-5 text-slate-400" />
             </div>
             <input
               type="text"
@@ -70,16 +70,16 @@ export function HomeState({ onAudit, isLoading }: HomeStateProps) {
                 if (error) setError("");
               }}
               disabled={isLoading}
-              className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-brand-500 focus:bg-slate-50 rounded-xl text-slate-900 placeholder-gray-500 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
+              className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:border-brand-500 focus:bg-white rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none transition-all text-base disabled:opacity-65 shadow-inner"
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-3.5 bg-white text-black hover:bg-gray-200 font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+            className="px-6 py-3.5 bg-blue-600 text-white hover:bg-blue-700 font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
           >
             {isLoading ? "Auditing..." : "Run Free Audit"}
-            <Zap className="h-4 w-4" />
+            <Zap className="h-4 w-4 text-white" />
           </button>
         </form>
 

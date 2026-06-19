@@ -270,8 +270,8 @@ export default function App() {
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <span className="font-display font-extrabold text-lg text-white tracking-tight">
-                Mentor<span className="font-medium text-blue-400">Docks</span>
+              <span className="font-display font-extrabold text-lg text-slate-900 tracking-tight">
+                Mentor<span className="font-medium text-blue-600">Docks</span>
               </span>
             </div>
           </div>
