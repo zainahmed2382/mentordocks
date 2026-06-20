@@ -36,6 +36,7 @@ import { exportReportToPDF } from "./utils/pdfGenerator";
 import { SplashScreen } from "./components/SplashScreen";
 import { AuthScreen, UserProfile } from "./components/AuthScreen";
 import { SEOToolsHub } from "./components/SEOToolsHub";
+import { getApiUrl } from "./utils/api";
 
 export default function App() {
   const [report, setReport] = useState<AuditReport | null>(null);
@@ -99,7 +100,7 @@ export default function App() {
     setCurrentUrl(targetUrl);
 
     try {
-      const response = await fetch("/api/audit", {
+      const response = await fetch(getApiUrl("/api/audit"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: targetUrl }),

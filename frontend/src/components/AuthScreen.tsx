@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Mail, Lock, User, Briefcase, Sparkles, CheckCircle2, ShieldCheck, X } from "lucide-react";
+import { getApiUrl } from "../utils/api";
 
 export interface UserProfile {
   name: string;
@@ -42,7 +43,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
         ? { name, email, password, role } 
         : { email, password };
 
-      const res = await fetch(endpoint, {
+      const res = await fetch(getApiUrl(endpoint), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
