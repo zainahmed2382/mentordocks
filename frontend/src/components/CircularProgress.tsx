@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 
 interface CircularProgressProps {
   score: number;
@@ -18,40 +18,6 @@ export function CircularProgress({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
-
-  // Animated count-up for the score number
-  const [displayScore, setDisplayScore] = useState(0);
-  const animationRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    setDisplayScore(0);
-    startTimeRef.current = null;
-
-    const duration = 1000; // 1 second
-
-    const animate = (timestamp: number) => {
-      if (!startTimeRef.current) startTimeRef.current = timestamp;
-      const elapsed = timestamp - startTimeRef.current;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Ease-out cubic for smooth deceleration
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayScore(Math.round(eased * score));
-
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
-      }
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [score]);
 
   // Color selection based on score tier
   let strokeColor = "stroke-emerald-400";
@@ -95,7 +61,7 @@ export function CircularProgress({
         {showText && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className={`text-3xl font-display font-bold tracking-tight ${textColor}`}>
-              {displayScore}
+              {score}
             </span>
             {label && <span className="text-[10px] font-medium text-[#777] uppercase tracking-wider">{label}</span>}
           </div>

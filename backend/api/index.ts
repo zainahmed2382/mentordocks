@@ -77,9 +77,7 @@ app.post("/api/audit", async (req: Request, res: Response) => {
     clearTimeout(timeoutId);
 
     if (!fetchRes.ok) {
-      return res.status(400).json({
-        error: `Website returned ${fetchRes.status} ${fetchRes.statusText || ""}`.trim()
-      });
+      throw new Error(`HTTP status response: ${fetchRes.status} ${fetchRes.statusText}`);
     }
 
     const contentType = fetchRes.headers.get("content-type") || "";
