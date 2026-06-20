@@ -2,9 +2,15 @@ import express, { Request, Response } from "express";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 import { analyzeHTML } from "../utils/parser.js";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // Load environment variables
 dotenv.config();
+
+const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET || "mentordocks_secret_session_key_2026";
 
 // Lazily initialize Gemini Client
 let aiClient: GoogleGenAI | null = null;
@@ -32,6 +38,104 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "5mb" }));
+
+// DB connection test endpoint
+app.get("/api/db-test", async (req: Request, res: Response) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return res.json({ status: "success", message: "Database connection successful!" });
+  } catch (error: any) {
+    console.error("Database connection test error:", error);
+    return res.status(500).json({ status: "error", message: "Database connection failed", error: error.message || error });
+  }
+});
+
+// Authentication - Signup endpoint
+app.post("/api/auth/signup", async (req: Request, res: Response) => {
+  const { name, email, password, role } = req.body;
+  
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: "Explicitly fill in all required account fields." });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ error: "Security credentials must feel sturdy (at least 6 characters)." });
+  }
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    });
+    
+    if (existingUser) {
+      return res.status(400).json({ error: "An account with this email address already exists." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        role: role || "Developer",
+      }
+    });
+
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    
+    return res.status(201).json({
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isLoggedIn: true,
+      }
+    });
+  } catch (error: any) {
+    console.error("Signup error:", error);
+    return res.status(500).json({ error: "Internal server error during registration." });
+  }
+});
+
+// Authentication - Login endpoint
+app.post("/api/auth/login", async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: "Explicitly fill in all required account fields." });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: "Invalid email or password credentials." });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Invalid email or password credentials." });
+    }
+
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+
+    return res.json({
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isLoggedIn: true,
+      }
+    });
+  } catch (error: any) {
+    console.error("Login error:", error);
+    return res.status(500).json({ error: "Internal server error during login." });
+  }
+});
 
 // 1. Audit Route
 app.post("/api/audit", async (req: Request, res: Response) => {
