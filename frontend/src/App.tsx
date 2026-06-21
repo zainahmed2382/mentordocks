@@ -25,7 +25,9 @@ import {
   LogOut,
   History,
   ShieldCheck,
-  Briefcase
+  Briefcase,
+  Settings,
+  X
 } from "lucide-react";
 import { AuditReport, CategoryFilter, SeverityFilter } from "./types";
 import { CircularProgress } from "./components/CircularProgress";
@@ -43,6 +45,10 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [customApiUrl, setCustomApiUrl] = useState(() => {
+    return localStorage.getItem("ms_custom_api_url") || "";
+  });
 
   // Splash Screen State
   const [showSplash, setShowSplash] = useState(() => {
@@ -176,6 +182,15 @@ export default function App() {
               PRO DIAGNOSTICS
             </span>
 
+            {/* API settings configuration button */}
+            <button
+              onClick={() => setShowSettingsModal(true)}
+              title="API Settings"
+              className="p-1.5 hover:bg-[#1a1a1a] border border-transparent hover:border-zinc-800 rounded-lg text-zinc-400 hover:text-white cursor-pointer transition shrink-0"
+            >
+              <Settings className="h-4 w-4" />
+            </button>
+
             {/* Authentication user profile pill */}
             {currUser ? (
               <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1 pr-3 rounded-full text-xs">
@@ -234,16 +249,42 @@ export default function App() {
         {/* Error States */}
         {errorMsg && (
           <div className="max-w-xl mx-auto bg-rose-50 border border-rose-100 text-rose-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-3 text-left">
               <XCircle className="h-6 w-6 text-rose-500 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="font-bold font-display text-base">Audit Operation Failed</h3>
-                <p className="text-sm text-rose-600 mt-1 leading-relaxed">
+              <div className="flex-1">
+                <h3 className="font-bold font-display text-base text-rose-900">Audit Operation Failed</h3>
+                <p className="text-sm text-rose-700 mt-1 leading-relaxed">
                   {errorMsg}
                 </p>
                 <p className="text-xs text-rose-500 mt-2 font-medium">
                   Tip: Confirm that the URL is valid, public-facing, and allows network connections. You can try a simplified domain format like "wikipedia.org".
                 </p>
+                {errorMsg.toLowerCase().includes("status 404") && (
+                  <div className="mt-4 p-4 bg-white/75 border border-rose-200/50 rounded-xl space-y-2">
+                    <p className="text-[11px] text-rose-900 font-semibold leading-relaxed">
+                      API Server returned 404. If your backend crawler is hosted on a custom domain or port (e.g., `http://localhost:3000`), specify it below:
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. http://localhost:3000"
+                        value={customApiUrl}
+                        onChange={(e) => setCustomApiUrl(e.target.value)}
+                        className="flex-1 bg-white border border-rose-200 focus:border-blue-500 rounded-lg px-2.5 py-1.5 text-xs text-zinc-800 font-mono focus:outline-none"
+                      />
+                      <button
+                        onClick={() => {
+                          localStorage.setItem("ms_custom_api_url", customApiUrl.trim());
+                          setErrorMsg("");
+                          handleRunAudit(currentUrl);
+                        }}
+                        className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition cursor-pointer shrink-0 shadow-sm"
+                      >
+                        Apply & Retry
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <button
@@ -620,6 +661,76 @@ export default function App() {
           onClose={() => setShowAuthModal(false)} 
           onLoginSuccess={handleLoginSuccess} 
         />
+      )}
+
+      {/* Settings Modal */}
+      {showSettingsModal && (
+        <div className="fixed inset-0 z-[110] bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0a0a0a] border border-[#222]/90 rounded-2xl p-6 relative shadow-2xl overflow-hidden text-left">
+            {/* Top absolute light flare decoration */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-blue-500/10 blur-[50px] pointer-events-none rounded-full" />
+            
+            <div className="flex justify-between items-center relative z-10 mb-6">
+              <div className="flex items-center gap-1.5">
+                <Settings className="h-4.5 w-4.5 text-blue-400" />
+                <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 px-2 py-0.5 rounded">
+                  API Workspace settings
+                </span>
+              </div>
+              <button 
+                onClick={() => setShowSettingsModal(false)}
+                className="text-zinc-500 hover:text-white p-1 hover:bg-[#141414] rounded-lg transition h-7 w-7 flex items-center justify-center cursor-pointer"
+              >
+                <X className="h-4" />
+              </button>
+            </div>
+            
+            <div className="space-y-4 relative z-10">
+              <div>
+                <h3 className="text-sm font-bold text-white mb-1">Backend API Endpoint</h3>
+                <p className="text-xs text-zinc-400 mb-3 leading-relaxed">
+                  Configure the API URL for your crawler backend. If empty, it defaults to relative paths or automatically detects running on localhost.
+                </p>
+                <input
+                  type="text"
+                  placeholder="e.g. http://localhost:3000"
+                  value={customApiUrl}
+                  onChange={(e) => setCustomApiUrl(e.target.value)}
+                  className="w-full bg-[#121212] border border-zinc-800 focus:border-blue-500 rounded-lg p-2.5 text-xs text-white focus:outline-none font-mono"
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-zinc-500 font-mono bg-zinc-950/50 p-2.5 rounded-lg border border-zinc-900">
+                <span>Active Target:</span>
+                <span className="text-blue-400 font-bold truncate max-w-[240px]">
+                  {getApiUrl("/api/audit").replace("/api/audit", "") || "(Relative Origin)"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => {
+                    localStorage.setItem("ms_custom_api_url", customApiUrl.trim());
+                    setShowSettingsModal(false);
+                  }}
+                  className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg cursor-pointer transition text-center"
+                >
+                  Save Configuration
+                </button>
+                <button
+                  onClick={() => {
+                    setCustomApiUrl("");
+                    localStorage.removeItem("ms_custom_api_url");
+                    setShowSettingsModal(false);
+                  }}
+                  className="px-3 py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white font-bold text-xs rounded-lg cursor-pointer transition"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
