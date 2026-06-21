@@ -39,6 +39,17 @@ const PORT = 3000;
 
 app.use(express.json({ limit: "5mb" }));
 
+// Enable CORS middleware for direct API calls (e.g. via VITE_API_URL env var)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // DB connection test endpoint
 app.get("/api/db-test", async (req: Request, res: Response) => {
   try {
