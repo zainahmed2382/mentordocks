@@ -112,12 +112,19 @@ export default function App() {
         body: JSON.stringify({ url: targetUrl }),
       });
 
+      let errJson: any = {};
+      let responseText = await response.text();
+
       if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.error || `Server responded with status ${response.status}`);
+        try {
+          errJson = JSON.parse(responseText);
+        } catch (e) {
+          errJson = { error: responseText || `Server responded with status ${response.status}` };
+        }
+        throw new Error(errJson.error);
       }
 
-      const data = await response.json();
+      const data = JSON.parse(responseText);
       setReport(data);
       
       // Append completed audit records to the interactive history matrix
