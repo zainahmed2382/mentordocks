@@ -9,11 +9,45 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int           @id @default(autoincrement())
+  email     String        @unique
   password  String
   name      String
-  role      String   @default("Developer") // "Developer" | "UI/UX Designer" | "SEO Architect" | "Project Lead"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      String        @default("Developer") // "Developer" | "UI/UX Designer" | "SEO Architect" | "Project Lead"
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  reports   AuditReport[]
+}
+
+model AuditReport {
+  id                  Int      @id @default(autoincrement())
+  userId              Int
+  websiteUrl          String
+  overallScore        Int
+  codeQualityScore    Int
+  designScore         Int
+  responsivenessScore Int
+  typographyScore     Int
+  colorThemeScore     Int
+  performanceScore    Int
+  accessibilityScore  Int
+  summary             String
+  priorityFixes       String[]
+  createdAt           DateTime @default(now())
+
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issues AuditIssue[]
+}
+
+model AuditIssue {
+  id             Int     @id @default(autoincrement())
+  reportId       Int
+  category       String
+  severity       String
+  problem        String
+  reason         String
+  recommendation String
+  exampleFix     String?
+
+  report AuditReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
 }
