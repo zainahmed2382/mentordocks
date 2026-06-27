@@ -1,16 +1,6 @@
-import express, { Request, Response } from "express";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GoogleGenAI, Type } from "@google/genai";
-import dotenv from "dotenv";
-import { analyzeHTML } from "../utils/parser.js";
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
-// Load environment variables
-dotenv.config();
-
-const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || "mentordocks_secret_session_key_2026";
+import { analyzeHTML } from "../utils/parser";
 
 // Lazily initialize Gemini Client
 let aiClient: GoogleGenAI | null = null;
@@ -18,7 +8,7 @@ function getGeminiClient(): GoogleGenAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new Error(
-      "GEMINI_API_KEY environment variable is not defined in Secrets panel. Please supply it in Settings."
+      "GEMINI_API_KEY environment variable is not defined. Please supply it in Settings."
     );
   }
   if (!aiClient) {
@@ -34,124 +24,36 @@ function getGeminiClient(): GoogleGenAI {
   return aiClient;
 }
 
-const app = express();
-const PORT = 3000;
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Enable CORS
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
 
-app.use(express.json({ limit: "5mb" }));
-
-// Enable CORS middleware for direct API calls (e.g. via VITE_API_URL env var)
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
-
-// DB connection test endpoint
-app.get("/api/db-test", async (req: Request, res: Response) => {
-  try {
-    await prisma.$queryRaw`SELECT 1`;
-    return res.json({ status: "success", message: "Database connection successful!" });
-  } catch (error: any) {
-    console.error("Database connection test error:", error);
-    return res.status(500).json({ status: "error", message: "Database connection failed", error: error.message || error });
-  }
-});
-
-// Authentication - Signup endpoint
-app.post("/api/auth/signup", async (req: Request, res: Response) => {
-  const { name, email, password, role } = req.body;
-  
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: "Explicitly fill in all required account fields." });
+    res.status(200).end();
+    return;
   }
 
-  if (password.length < 6) {
-    return res.status(400).json({ error: "Security credentials must feel sturdy (at least 6 characters)." });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  try {
-    const existingUser = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() }
-    });
-    
-    if (existingUser) {
-      return res.status(400).json({ error: "An account with this email address already exists." });
+  // Parse body if not already parsed (e.g. in some environments)
+  let body = req.body;
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch (e) {
+      return res.status(400).json({ error: "Invalid JSON body" });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email: email.toLowerCase(),
-        password: hashedPassword,
-        role: role || "Developer",
-      }
-    });
-
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
-    
-    return res.status(201).json({
-      token,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        isLoggedIn: true,
-      }
-    });
-  } catch (error: any) {
-    console.error("Signup error:", error);
-    return res.status(500).json({ error: "Internal server error during registration." });
-  }
-});
-
-// Authentication - Login endpoint
-app.post("/api/auth/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ error: "Explicitly fill in all required account fields." });
   }
 
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() }
-    });
-
-    if (!user) {
-      return res.status(400).json({ error: "Invalid email or password credentials." });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: "Invalid email or password credentials." });
-    }
-
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
-
-    return res.json({
-      token,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        isLoggedIn: true,
-      }
-    });
-  } catch (error: any) {
-    console.error("Login error:", error);
-    return res.status(500).json({ error: "Internal server error during login." });
-  }
-});
-
-// 1. Audit Route
-app.post("/api/audit", async (req: Request, res: Response) => {
-  let { url } = req.body;
-
+  const { url } = body || {};
   if (!url || typeof url !== "string") {
     return res.status(400).json({ error: "Please provide a valid website URL." });
   }
@@ -203,7 +105,7 @@ app.post("/api/audit", async (req: Request, res: Response) => {
     const rawHtml = await fetchRes.text();
     stats = analyzeHTML(rawHtml);
     // Keep raw HTML snippet to prevent breaking tokens
-    htmlPayload = rawHtml.slice(0, 15000); // Capture the first 15KB of HTML (contains head, metadata, body start)
+    htmlPayload = rawHtml.slice(0, 15000); // Capture the first 15KB of HTML
   } catch (err: any) {
     console.warn(`Direct fetch failed for ${targetUrl}: ${err.message || err}`);
     fetchError = err.message || JSON.stringify(err);
@@ -216,28 +118,28 @@ Your goal is to perform a meticulous audit of the website: ${targetUrl}.
 
 ${
   fetchError
-    ? `IMPORTANT: Direct crawling failed to retrieve content natively (Error: "${fetchError}").
-Please utilize your Google Search capabilities to find technical specifications, layout designs, performance reports, public reviews, or existing architectural assessments of "${targetUrl}".
-Formulate your entire audit specifically and accurately around this target domain's real identity.`
-    : `We have crawled the website successfully! 
+    ? \`IMPORTANT: Direct crawling failed to retrieve content natively (Error: "\${fetchError}").
+Please utilize your Google Search capabilities to find technical specifications, layout designs, performance reports, public reviews, or existing architectural assessments of "\${targetUrl}".
+Formulate your entire audit specifically and accurately around this target domain's real identity.\`
+    : \`We have crawled the website successfully! 
 Below are direct technical statistics extracted from the target website code during pre-analysis:
-- Page Title: "${stats.title || "Unknown"}"
-- Meta Description: "${stats.metaDescription || "Unknown"}"
-- Has <meta name="viewport">: ${stats.hasViewport}
-- Headings layout: H1: ${stats.h1Count}, H2: ${stats.h2Count}, H3: ${stats.h3Count}, H4: ${stats.h4Count}
-- Images total: ${stats.totalImages} (Images WITH alt tag: ${stats.imagesWithAlt}, WITHOUT alt tag: ${stats.imagesWithoutAlt})
-- Total styles: Links: ${stats.stylesheetCount}, Inline <style>: ${stats.inlineStylesCount}
-- Inline scripts / bundles: ${stats.scriptCount}
-- HTML weight size estimation: ${stats.totalHtmlSizeKb} KB
-- Landmark structures detected: Main Content Area: ${stats.hasMainLandmark}, Navigation: ${stats.hasNavLandmark}, Footer: ${stats.hasFooterLandmark}
-- Header Skip Link detected: ${stats.hasSkipLink}
-- Input controls total: ${stats.formInputCount} (Controls with associated <label for>: ${stats.formInputWithLabelId})
+- Page Title: "\${stats.title || "Unknown"}"
+- Meta Description: "\${stats.metaDescription || "Unknown"}"
+- Has <meta name="viewport">: \${stats.hasViewport}
+- Headings layout: H1: \${stats.h1Count}, H2: \${stats.h2Count}, H3: \${stats.h3Count}, H4: \${stats.h4Count}
+- Images total: \${stats.totalImages} (Images WITH alt tag: \${stats.imagesWithAlt}, WITHOUT alt tag: \${stats.imagesWithoutAlt})
+- Total styles: Links: \${stats.stylesheetCount}, Inline <style>: \${stats.inlineStylesCount}
+- Inline scripts / bundles: \${stats.scriptCount}
+- HTML weight size estimation: \${stats.totalHtmlSizeKb} KB
+- Landmark structures detected: Main Content Area: \${stats.hasMainLandmark}, Navigation: \${stats.hasNavLandmark}, Footer: \${stats.hasFooterLandmark}
+- Header Skip Link detected: \${stats.hasSkipLink}
+- Input controls total: \${stats.formInputCount} (Controls with associated <label for>: \${stats.formInputWithLabelId})
 
 Here is a portion of the original raw HTML code for code style and engineering quality scanning:
 \`\`\`html
-${htmlPayload}
+\${htmlPayload}
 \`\`\`
-`
+\`
 }
 
 Please formulate an in-depth audit covering:
@@ -263,7 +165,7 @@ Return the results matching the strict response schema structure. Be descriptive
         systemInstruction:
           "You are an objective expert website auditor. Provide real, specific criticisms and constructive suggestions. Never return generic praise. Ensure all scores on a scale of 0 to 100 are realistic (e.g. if issues are noticed, lower the relevant score appropriately). For 'example_fix', provide clear code snippets or system layout snippets matching HTML, CSS, or configurations.",
         responseMimeType: "application/json",
-        tools: [{ googleSearch: {} }], // Enable Search Grounding for highly specific domain updates
+        tools: [{ googleSearch: {} }], // Enable Search Grounding
         responseSchema: {
           type: Type.OBJECT,
           properties: {
@@ -335,13 +237,13 @@ Return the results matching the strict response schema structure. Be descriptive
       parsedData.website_url = targetUrl;
     }
 
-    res.json(parsedData);
+    res.status(200).json(parsedData);
   } catch (error: any) {
     console.warn("Gemini Generation Exception: falling back to high-fidelity local scanner.", error.message || error);
     
-    // Generate beautiful fallback report
+    // Generate fallback report
     const fallbackStats = stats || {
-      title: targetUrl.replace(/https?:\/\/(www\.)?/, ""),
+      title: targetUrl.replace(/https?:\\/\\/(www\\.)?/, ""),
       metaDescription: "",
       hasViewport: true,
       h1Count: 1,
@@ -366,28 +268,26 @@ Return the results matching the strict response schema structure. Be descriptive
     const issues: any[] = [];
     const priority_fixes: string[] = [];
 
-    // Code Quality Viewport
     if (!fallbackStats.hasViewport) {
       issues.push({
         category: "Code Quality",
         severity: "High",
         problem: "Missing responsive viewport scalability tag",
-        reason: "Without a defined viewport width instruction, mobile browsers render desktop resolutions, breaking readability and shrinking touch targets.",
+        reason: "Without a defined viewport width instruction, mobile browsers render desktop resolutions.",
         recommendation: "Embed a standard viewport meta element inside the page HTML <head> section.",
         example_fix: '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
       });
       priority_fixes.push("Add viewport scaling tag immediately to allow mobile responsiveness.");
     }
 
-    // Code Quality Meta description
     if (!fallbackStats.metaDescription) {
       issues.push({
         category: "Code Quality",
         severity: "High",
         problem: "HTML metadata is missing SEO description descriptor",
-        reason: "Search crawlers use <meta name=\"description\"> snippets to display summaries in SEO results. Leaving this blank damages search engine CTR.",
-        recommendation: "Provide a unique, relevant summary description (between 120 and 160 characters long) in the document header.",
-        example_fix: `<meta name="description" content="Discover professional resources, tools, and responsive layouts on ${targetUrl.replace(/https?:\/\/(www\.)?/, "")}.">`
+        reason: "Search crawlers use <meta name=\\"description\\"> snippets to display summaries in SEO results.",
+        recommendation: "Provide a unique, relevant summary description in the document header.",
+        example_fix: \`<meta name="description" content="Discover professional resources, tools, and responsive layouts on \${targetUrl.replace(/https?:\\/\\/(www\\.)?/, "")}.">\`
       });
       priority_fixes.push("Craft and apply an SEO-optimized meta description descriptor.");
     } else {
@@ -395,47 +295,44 @@ Return the results matching the strict response schema structure. Be descriptive
         category: "Code Quality",
         severity: "Low",
         problem: "Ensure rel='canonical' URL integrity is defined",
-        reason: "Duplicate page URLs can divide SEO indexing credit. Specifying canonical routes protects content uniqueness.",
+        reason: "Duplicate page URLs can divide SEO indexing credit.",
         recommendation: "Incorporate a rel='canonical' element within the page metadata head.",
-        example_fix: `<link rel="canonical" href="${targetUrl}" />`
+        example_fix: \`<link rel="canonical" href="\${targetUrl}" />\`
       });
     }
 
-    // Accessibility Images
     if (fallbackStats.imagesWithoutAlt > 0) {
       issues.push({
         category: "Accessibility",
         severity: "High",
-        problem: `Missing alternative alt attributes on ${fallbackStats.imagesWithoutAlt} media images`,
-        reason: "Visually impaired users rely on screen readers to understand media elements. Images without alt attributes fail WCAG 2.1 accessibility compliance.",
-        recommendation: "Audit every decorative and informative image. Inject valid alternative descriptions to describe image roles.",
+        problem: \`Missing alternative alt attributes on \${fallbackStats.imagesWithoutAlt} media images\`,
+        reason: "Visually impaired users rely on screen readers. Images without alt attributes fail WCAG 2.1.",
+        recommendation: "Audit every image and inject alternative alt descriptions.",
         example_fix: '<img src="/assets/hero_visual_graphic.png" alt="Informational layout schema for network audit" />'
       });
-      priority_fixes.push(`Remediate alternative descriptions for ${fallbackStats.imagesWithoutAlt} media elements.`);
+      priority_fixes.push(\`Remediate alternative descriptions for \${fallbackStats.imagesWithoutAlt} media elements.\`);
     }
 
-    // Accessibility Skip link
     if (!fallbackStats.hasSkipLink) {
       issues.push({
         category: "Accessibility",
         severity: "Medium",
         problem: "No Skip-to-Main keyboard bypass routing setup",
-        reason: "Keyboard-only visitors must tab recursively through full header menu trees to reach content. Bypass navigation streamlines flow.",
+        reason: "Keyboard-only visitors must tab recursively through full header menu trees.",
         recommendation: "Add a visible-on-focus skiplink as the absolute first node inside the <body> tag.",
-        example_fix: '<!-- Standard Accessibility skip-link -->\n<a href="#content-start" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-2 bg-black text-white">\n  Skip to Main\n</a>\n<main id="content-start">'
+        example_fix: '<!-- Standard Accessibility skip-link -->\\n<a href="#content-start" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-2 bg-black text-white">\\n  Skip to Main\\n</a>\\n<main id="content-start">'
       });
       priority_fixes.push("Define a hidden-on-default Skip-Link at the beginning of the viewport container.");
     }
 
-    // Typography
     if (fallbackStats.h1Count === 0) {
       issues.push({
         category: "Typography",
         severity: "High",
         problem: "Page lacks a major primary heading H1 typography block",
-        reason: "SEO parses and readers look for an initial primary H1 text element to grasp page topic. Absence ruins heading structure hierarchies.",
+        reason: "SEO parsers and readers look for an initial primary H1 text element to grasp page topic.",
         recommendation: "Introduce exactly one descriptive semantic <h1> element on the primary viewport view.",
-        example_fix: '<h1 class="text-4xl font-extrabold text-white tracking-tight">\n  Mentor Docks Directory Hub\n</h1>'
+        example_fix: '<h1 class="text-4xl font-extrabold text-white tracking-tight">\\n  Mentor Docks Directory Hub\\n</h1>'
       });
       priority_fixes.push("Declare a single, descriptive semantic heading H1 on the landing viewport.");
     } else if (fallbackStats.h1Count > 1) {
@@ -443,59 +340,46 @@ Return the results matching the strict response schema structure. Be descriptive
         category: "Typography",
         severity: "Medium",
         problem: "Multiple H1 typographic headings declared on a single page view",
-        reason: "Having more than one H1 violates standard hierarchical rules and confuses crawlers analyzing content relevance weights.",
+        reason: "Having more than one H1 violates standard hierarchical rules and confuses crawlers.",
         recommendation: "Consolidate downstream secondary headings to standard <h2> or <h3> levels.",
         example_fix: '<h2>Standard Subsection Header</h2>'
       });
     }
 
-    // Performance / Render Obstacles
     if (fallbackStats.scriptCount > 8 || fallbackStats.stylesheetCount > 2) {
       issues.push({
         category: "Performance",
         severity: "Medium",
-        problem: `Critical render blocking dependencies requested (${fallbackStats.scriptCount} scripts, ${fallbackStats.stylesheetCount} styles)`,
-        reason: "Synchronous page loaders freeze rendering of initial pixels for seconds. Delays cause increased bounce rates and high First Contentful Paint times.",
-        recommendation: "Integrate asynchronous scripts using 'defer' attributes. Preload or bundle redundant external stylesheet requirements.",
-        example_fix: '<script defer src="/modules/application-bundle.js"></script>\n<link rel="preload" href="/themes/styles.css" as="style" />'
+        problem: \`Critical render blocking dependencies requested (\${fallbackStats.scriptCount} scripts, \${fallbackStats.stylesheetCount} styles)\`,
+        reason: "Synchronous page loaders freeze rendering of initial pixels for seconds.",
+        recommendation: "Integrate asynchronous scripts using 'defer' attributes.",
+        example_fix: '<script defer src="/modules/application-bundle.js"></script>\\n<link rel="preload" href="/themes/styles.css" as="style" />'
       });
       priority_fixes.push("Apply async/defer attributes to secondary bundles and preloads.");
-    } else {
-      issues.push({
-        category: "Performance",
-        severity: "Low",
-        problem: "Optimize image sizes and consider lazy-loading placeholders",
-        reason: "Large, non-responsive media downloads occupy substantial network bandwidth.",
-        recommendation: "Utilize progressive lazy loading attributes on lower-screen media elements.",
-        example_fix: '<img src="/assets/footer_illustration.png" loading="lazy" width="400" height="300" />'
-      });
     }
 
-    // Accessibility / Forms
     if (fallbackStats.formInputCount > fallbackStats.formInputWithLabelId) {
       const unnamedCount = fallbackStats.formInputCount - fallbackStats.formInputWithLabelId;
       issues.push({
         category: "Accessibility",
         severity: "Medium",
-        problem: `Unlabeled form input controls detected (${unnamedCount} controls missing labels)`,
-        reason: "Input fields without associated label identifiers are invisible to screen readers, leaving users unable to complete form layouts confidently.",
+        problem: \`Unlabeled form input controls detected (\${unnamedCount} controls missing labels)\`,
+        reason: "Input fields without associated label identifiers are invisible to screen readers.",
         recommendation: "Connect every interactive input to an explicit label tag utilizing matching 'id' and 'for' tags.",
-        example_fix: '<label for="search-input">Search Domain:</label>\n<input id="search-input" type="search" />'
+        example_fix: '<label for="search-input">Search Domain:</label>\\n<input id="search-input" type="search" />'
       });
-      priority_fixes.push(`Associate explicit and semantic label fields for the ${unnamedCount} unlabeled interactive text inputs.`);
+      priority_fixes.push(\`Associate explicit and semantic label fields for the \${unnamedCount} unlabeled interactive text inputs.\`);
     }
 
-    // Design / UX layout
     issues.push({
       category: "UI/UX Design",
       severity: "Medium",
       problem: "Enforce standard component and section padding containers",
-      reason: "Consistent visual spacing prevents screen crowding on small devices and enhances spatial rhythm.",
-      recommendation: "Adopt standard tailwind intervals (such as px-6 py-12 md:px-12 md:py-20) instead of raw offsets.",
-      example_fix: '<section class="p-4 md:p-8 bg-zinc-950/20 rounded-xl">\n  ...\n</section>'
+      reason: "Consistent visual spacing prevents screen crowding and enhances spatial rhythm.",
+      recommendation: "Adopt standard tailwind intervals.",
+      example_fix: '<section class="p-4 md:p-8 bg-zinc-950/20 rounded-xl">\\n  ...\\n</section>'
     });
 
-    // Score calculations
     let code_quality_score = 95;
     if (!fallbackStats.hasViewport) code_quality_score -= 15;
     if (!fallbackStats.metaDescription) code_quality_score -= 10;
@@ -535,8 +419,8 @@ Return the results matching the strict response schema structure. Be descriptive
       (code_quality_score + design_score + responsiveness_score + typography_score + color_theme_score + performance_score + accessibility_score) / 7
     );
 
-    const domainClean = targetUrl.replace(/https?:\/\/(www\.)?/, "");
-    const summary = `The comprehensive audit of ${domainClean} reveals a technical framework characterized by notable strengths alongside critical remediation opportunities. Pre-analysis of crawled metadata suggests the platform is styled to support clear functional goals, but falls short in structural semantic accessibility, key SEO headers, and asset delivery pipelines.\n\nOur diagnosis highlighted key issues including undocumented meta data descriptions, missing skip-navigation components for keyboard-only visitors, and render-blocking external scripts that inflate initial page-paint times. Immediate deployment of the targeted remediation formulas appended below will considerably lower accessibility barrier states, elevate search ranking credit, and serialize core web vitals speed curves.`;
+    const domainClean = targetUrl.replace(/https?:\\/\\/(www\\.)?/, "");
+    const summary = \`The comprehensive audit of \${domainClean} reveals a technical framework characterized by notable strengths alongside critical remediation opportunities. Pre-analysis of crawled metadata suggests the platform is styled to support clear functional goals, but falls short in structural semantic accessibility, key SEO headers, and asset delivery pipelines.\\n\\nOur diagnosis highlighted key issues including undocumented meta data descriptions, missing skip-navigation components for keyboard-only visitors, and render-blocking external scripts that inflate initial page-paint times. Immediate deployment of the targeted remediation formulas appended below will considerably lower accessibility barrier states, elevate search ranking credit, and serialize core web vitals speed curves.\`;
 
     const parsedData = {
       website_url: targetUrl,
@@ -550,18 +434,11 @@ Return the results matching the strict response schema structure. Be descriptive
       accessibility_score,
       issues,
       summary,
-      priority_fixes: priority_fixes.length > 0 ? priority_fixes : ["Verify alternate alt descriptions for responsive graphic placements.", "Introduce cache control headers to maximize secondary visual asset speeds."]
+      priority_fixes,
+      isFallbackScanner: true,
+      fallbackReason: error.message || String(error)
     };
 
-    res.json(parsedData);
+    res.status(200).json(parsedData);
   }
-});
-
-// Start server locally (not in serverless environment)
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[backend-api] Server running at http://localhost:${PORT}`);
-  });
 }
-
-export default app;

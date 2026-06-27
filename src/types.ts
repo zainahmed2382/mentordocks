@@ -24,6 +24,8 @@ export interface AuditReport {
   h2Count?: number;
   h3Count?: number;
   h4Count?: number;
+  isFallbackScanner?: boolean;
+  fallbackReason?: string;
 }
 
 export type CategoryFilter = "all" | "Code Quality" | "UI/UX Design" | "Responsiveness" | "Typography" | "Color Theme" | "Performance" | "Accessibility";

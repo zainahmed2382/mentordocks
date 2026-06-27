@@ -74,7 +74,7 @@ export function analyzeHTML(html: string): HTMLDiagnostics {
 
     // If description not found, try a looser match
     if (!result.metaDescription) {
-      const descriptionMatch = html.match(/<meta[^+]+content=["']([^"']+)["'][^>]+name=["']description["']/i) || 
+      const descriptionMatch = html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']description["']/i) || 
                                html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i);
       if (descriptionMatch) {
         result.metaDescription = descriptionMatch[1].trim();
@@ -91,6 +91,7 @@ export function analyzeHTML(html: string): HTMLDiagnostics {
     const imgMatches = html.match(/<img[^>]*>/gi) || [];
     result.totalImages = imgMatches.length;
     for (const imgTag of imgMatches) {
+      // Check if alt attribute exists and is not empty or if it exists
       if (/alt\s*=\s*["']/i.test(imgTag)) {
         result.imagesWithAlt++;
       } else {
@@ -119,6 +120,7 @@ export function analyzeHTML(html: string): HTMLDiagnostics {
         const idMatch = inputTag.match(/id\s*=\s*["']([^"']+)["']/i);
         if (idMatch && idMatch[1]) {
           const inputId = idMatch[1];
+          // Check if there is a corresponding label with matching 'for' attribute
           const labelRegex = new RegExp(`for\\s*=\\s*["']${inputId}["']`, "i");
           if (labelRegex.test(html)) {
             result.formInputWithLabelId++;

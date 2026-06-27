@@ -56,9 +56,32 @@ export function SEOToolsHub({ report, targetUrl }: SEOToolsHubProps) {
   // 3. Robots / Sitemap Copy State
   const [copiedText, setCopiedText] = useState("");
 
-  const triggerCopy = (text: string, identifier: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedText(identifier);
+  const triggerCopy = async (text: string, identifier: string) => {
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        await navigator.clipboard.writeText(text);
+        setCopiedText(identifier);
+        setTimeout(() => setCopiedText(""), 2000);
+        return;
+      }
+    } catch (err) {
+      console.warn("Clipboard mapping exception fallback:", err);
+    }
+
+    // Fallback copy using traditional input select (safest iframe fallback)
+    try {
+      const tempTextArea = document.createElement("textarea");
+      tempTextArea.value = text;
+      tempTextArea.style.position = "fixed";
+      tempTextArea.style.opacity = "0";
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempTextArea);
+      setCopiedText(identifier);
+    } catch (innerErr) {
+      console.error("Critical copy fallback sequence exception:", innerErr);
+    }
     setTimeout(() => setCopiedText(""), 2000);
   };
 

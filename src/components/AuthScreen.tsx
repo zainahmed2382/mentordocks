@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Lock, User, Briefcase, Sparkles, CheckCircle2, ShieldCheck, X } from "lucide-react";
-import { getApiUrl } from "../utils/api";
+import { Mail, Lock, User, Briefcase, Sparkles, CheckCircle2, ShieldCheck, X, Code, Palette, Search } from "lucide-react";
 
 export interface UserProfile {
   name: string;
@@ -23,7 +22,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
 
@@ -37,43 +36,17 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
       return;
     }
 
-    try {
-      const endpoint = isSignUp ? "/api/auth/signup" : "/api/auth/login";
-      const payload = isSignUp 
-        ? { name, email, password, role } 
-        : { email, password };
-
-      const res = await fetch(getApiUrl(endpoint), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+    // Success Simulation
+    setSuccess(true);
+    setTimeout(() => {
+      onLoginSuccess({
+        name: isSignUp ? name : name || email.split("@")[0],
+        email,
+        role,
+        isLoggedIn: true,
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "An error occurred during authentication.");
-      }
-
-      if (data.token) {
-        localStorage.setItem("ms_auth_token", data.token);
-      }
-
-      setSuccess(true);
-      setTimeout(() => {
-        onLoginSuccess({
-          name: data.user.name,
-          email: data.user.email,
-          role: data.user.role,
-          isLoggedIn: true,
-        });
-        onClose();
-      }, 1200);
-    } catch (err: any) {
-      setErrorMsg(err.message || "Failed to authenticate. Please check connection and try again.");
-    }
+      onClose();
+    }, 1200);
   };
 
   return (
@@ -190,20 +163,55 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
               </div>
 
               {isSignUp && (
-                <div className="space-y-1">
-                  <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Professional Role Focus</label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" />
-                    <select
-                      value={role}
-                      onChange={(e) => setRole(e.target.value as UserProfile["role"])}
-                      className="w-full bg-[#141414] border border-[#222]/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-zinc-300 appearance-none font-sans"
-                    >
-                      <option value="Developer">Developer (Focus on Code Quality & Fixes)</option>
-                      <option value="UI/UX Designer">UI/UX Designer (Focus on Styling & Contrast)</option>
-                      <option value="SEO Architect">SEO Architect (Focus on SERP & Meta Indexes)</option>
-                      <option value="Project Lead">Project Lead (Focus on Performance & WCAG Compliances)</option>
-                    </select>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">
+                    Choose Your Professional Focus Role
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      {
+                        value: "Developer" as UserProfile["role"],
+                        desc: "Code Quality, Semantic Tags & Speeds",
+                        icon: <Code className="h-4 w-4 text-blue-400" />
+                      },
+                      {
+                        value: "UI/UX Designer" as UserProfile["role"],
+                        desc: "Typography, Styling & Contrast",
+                        icon: <Palette className="h-4 w-4 text-pink-400" />
+                      },
+                      {
+                        value: "SEO Architect" as UserProfile["role"],
+                        desc: "SERP Previews & Crawler Sync",
+                        icon: <Search className="h-4 w-4 text-amber-400" />
+                      },
+                      {
+                        value: "Project Lead" as UserProfile["role"],
+                        desc: "High-level Performance & Audits",
+                        icon: <Briefcase className="h-4 w-4 text-emerald-400" />
+                      }
+                    ].map((item) => {
+                      const isSelected = role === item.value;
+                      return (
+                        <button
+                          key={item.value}
+                          type="button"
+                          onClick={() => setRole(item.value)}
+                          className={`flex flex-col text-left p-3 rounded-xl border transition-all cursor-pointer ${
+                            isSelected
+                              ? "bg-blue-600/5 border-blue-500/50 text-white ring-1 ring-blue-500/20"
+                              : "bg-[#141414] border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800"
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5 mb-1">
+                            {item.icon}
+                            <span className="text-[11px] font-bold tracking-tight">{item.value}</span>
+                          </div>
+                          <p className="text-[9px] text-zinc-500 leading-snug">
+                            {item.desc}
+                          </p>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}

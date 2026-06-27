@@ -1,5 +1,5 @@
 import { jsPDF } from "jspdf";
-import { AuditReport } from "../types";
+import { AuditReport } from "../src/types";
 
 export function exportReportToPDF(report: AuditReport) {
   // Create PDF on A4 portrait (210mm x 297mm)
@@ -47,7 +47,9 @@ export function exportReportToPDF(report: AuditReport) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(170, 170, 170);
-    const dateStr = new Date().toLocaleDateString(undefined, { dateStyle: "long" });
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const d = new Date();
+    const dateStr = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
     doc.text(`DATE GENERATED: ${dateStr.toUpperCase()}`, pageWidth - margin - 85, 24, { align: "left" });
 
     // Header Overall Score Card inside dark banner
