@@ -36,7 +36,7 @@ import { CircularProgress } from "./components/CircularProgress";
 import { IssueItem } from "./components/IssueItem";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { HomeState } from "./components/HomeState";
-import { exportReportToPDF } from "../utils/pdfGenerator";
+import { exportReportToPDF } from "./utils/pdfGenerator";
 import { SplashScreen } from "./components/SplashScreen";
 import { AuthScreen, UserProfile } from "./components/AuthScreen";
 import { SEOToolsHub } from "./components/SEOToolsHub";
