@@ -281,39 +281,37 @@ export default function App() {
 
             {/* Visual View-Tab Controller */}
             <div className="flex items-center bg-zinc-950/80 border border-zinc-900 p-0.5 rounded-xl">
-              {!currUser && (
+              <button
+                onClick={() => {
+                  setActiveTab("scanner");
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  activeTab === "scanner"
+                    ? "bg-zinc-900 text-white border border-zinc-850 shadow-sm"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                <Search className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Audit Scanner</span>
+                <span className="sm:hidden">Scanner</span>
+              </button>
+              {currUser && (
                 <button
-                  onClick={() => {
-                    setActiveTab("scanner");
-                  }}
+                  onClick={() => setActiveTab("dashboard")}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                    activeTab === "scanner"
-                      ? "bg-zinc-900 text-white border border-zinc-850 shadow-sm"
+                    activeTab === "dashboard"
+                      ? "bg-zinc-900 text-white border border-zinc-500/20 shadow-sm"
                       : "text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
-                  <Search className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Audit Scanner</span>
-                  <span className="sm:hidden">Scanner</span>
-                </button>
-              )}
-              <button
-                onClick={() => setActiveTab("dashboard")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                  activeTab === "dashboard"
-                    ? "bg-zinc-900 text-white border border-zinc-500/20 shadow-sm"
-                    : "text-zinc-500 hover:text-zinc-300"
-                } ${currUser ? "cursor-default" : ""}`}
-              >
-                <BarChart3 className="h-3.5 w-3.5 text-emerald-400" />
-                <span className="hidden sm:inline">Compliance Dashboard</span>
-                <span className="sm:hidden">Dashboard</span>
-                {currUser && (
+                  <BarChart3 className="h-3.5 w-3.5 text-emerald-400" />
+                  <span className="hidden sm:inline">Compliance Dashboard</span>
+                  <span className="sm:hidden">Dashboard</span>
                   <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-mono rounded uppercase tracking-wider">
                     Active
                   </span>
-                )}
-              </button>
+                </button>
+              )}
             </div>
           </div>
 
