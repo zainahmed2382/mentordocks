@@ -207,6 +207,9 @@ export default function App() {
 
       if (!response.ok) {
         const errJson = await response.json().catch(() => ({}));
+        if (response.status === 404) {
+          throw new Error(errJson.error || "Audit API Endpoint not found (404). Please ensure the backend is deployed correctly.");
+        }
         throw new Error(errJson.error || `Server responded with status ${response.status}`);
       }
 
