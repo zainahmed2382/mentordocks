@@ -101,13 +101,45 @@ export default function App() {
     } catch {}
   }, [auditHistory]);
 
+  const fetchAuditHistory = async () => {
+    const token = localStorage.getItem("ms_auth_token");
+    if (!token) return;
+    
+    try {
+      const response = await fetch("/api/audits", {
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const audits = await response.json();
+        setAuditHistory(audits.map((a: any) => ({
+          url: a.url,
+          date: new Date(a.createdAt).toISOString().slice(0, 10),
+          score: a.score,
+        })));
+      }
+    } catch (err) {
+      console.error("Failed to fetch audit history:", err);
+    }
+  };
+
   const handleLoginSuccess = (profile: UserProfile) => {
     setCurrUser(profile);
     try {
       localStorage.setItem("ms_user_profile", JSON.stringify(profile));
     } catch {}
     setActiveTab("dashboard");
+    
+    if (!profile.isGuest) {
+      fetchAuditHistory();
+    }
   };
+
+  // Fetch audit history on initial load if user is logged in
+  useEffect(() => {
+    if (currUser && !currUser.isGuest) {
+      fetchAuditHistory();
+    }
+  }, [currUser?.email]);
 
   const handleLogout = () => {
     setCurrUser(null);
@@ -199,9 +231,15 @@ export default function App() {
     setCurrentUrl(targetUrl);
 
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      const token = localStorage.getItem("ms_auth_token");
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+      
       const response = await fetch("/api/audit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ url: targetUrl }),
       });
 

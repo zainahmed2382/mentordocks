@@ -4,8 +4,9 @@ import { Mail, Lock, User, Briefcase, Sparkles, CheckCircle2, ShieldCheck, X, Co
 export interface UserProfile {
   name: string;
   email: string;
-  role: "Developer" | "UI/UX Designer" | "SEO Architect" | "Project Lead";
+  role: "Developer" | "UI/UX Designer" | "SEO Architect" | "Project Lead" | "Guest";
   isLoggedIn: boolean;
+  isGuest?: boolean;
 }
 
 interface AuthScreenProps {
@@ -262,6 +263,24 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
             <div className="flex items-center justify-center gap-1.5 text-[10px] text-zinc-500 pt-2 border-t border-zinc-900">
               <ShieldCheck className="h-3.5 w-3.5 text-zinc-600" />
               <span>Encrypted local session token active.</span>
+            </div>
+            
+            <div className="mt-4 pt-3 border-t border-zinc-800">
+              <button
+                onClick={() => {
+                  onLoginSuccess({
+                    name: "Guest User",
+                    email: "guest@example.com",
+                    role: "Guest",
+                    isLoggedIn: true,
+                    isGuest: true,
+                  });
+                  onClose();
+                }}
+                className="w-full py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded-xl text-xs font-bold transition"
+              >
+                Continue as Guest
+              </button>
             </div>
           </div>
         )}
