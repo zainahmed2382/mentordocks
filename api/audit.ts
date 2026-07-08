@@ -2,12 +2,16 @@ import 'dotenv/config';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { GoogleGenAI } from '@google/genai';
+import OpenAI from 'openai';
 import { prisma } from './_prisma.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-default-key-for-dev';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 const genAI = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
+const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null;
 
 // Helper functions
 interface HTMLDiagnostics {
@@ -203,6 +207,48 @@ Return your response as valid JSON only (no extra text). The JSON should match t
   return JSON.parse(text);
 }
 
+async function generateReportWithOpenAI(url: string, html: string, diagnostics: HTMLDiagnostics): Promise<AuditReport> {
+  const prompt = `You are a senior web auditor. Analyze this website and provide a comprehensive audit report in JSON format.
+
+URL: ${url}
+HTML Diagnostics: ${JSON.stringify(diagnostics, null, 2)}
+
+Return your response as valid JSON only (no extra text). The JSON should match this structure:
+{
+  "website_url": "${url}",
+  "overall_score": 0-100,
+  "code_quality_score": 0-100,
+  "design_score": 0-100,
+  "responsiveness_score": 0-100,
+  "typography_score": 0-100,
+  "color_theme_score": 0-100,
+  "performance_score": 0-100,
+  "accessibility_score": 0-100,
+  "issues": [
+    {
+      "category": "Code Quality" | "UI/UX Design" | "Responsiveness" | "Typography" | "Color Theme" | "Performance" | "Accessibility",
+      "severity": "Low" | "Medium" | "High",
+      "problem": "Brief description of the issue",
+      "reason": "Why this is important",
+      "recommendation": "How to fix it",
+      "example_fix": "Optional code example"
+    }
+  ],
+  "summary": "Executive summary of the audit",
+  "priority_fixes": ["List of top 3-5 priority fixes"]
+}
+`;
+
+  const result = await openai!.chat.completions.create({
+    model: "gpt-4o",
+    messages: [{ role: "user", content: prompt }],
+    response_format: { type: "json_object" },
+  });
+
+  const text = result.choices[0].message.content || "";
+  return JSON.parse(text);
+}
+
 function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): AuditReport {
   const issues: AuditIssue[] = [];
   let codeQualityScore = 85;
@@ -358,7 +404,23 @@ router.post('/', async (req, res) => {
     const diagnostics = analyzeHTML(html);
 
     let report;
-    if (genAI) {
+    if (openai) {
+      try {
+        report = await generateReportWithOpenAI(targetUrl, html, diagnostics);
+      } catch (openaiError) {
+        console.warn('OpenAI API failed, trying Gemini:', openaiError);
+        if (genAI) {
+          try {
+            report = await generateReportWithGemini(targetUrl, html, diagnostics);
+          } catch (geminiError) {
+            console.warn('Gemini API failed, using fallback:', geminiError);
+            report = generateFallbackReport(targetUrl, diagnostics);
+          }
+        } else {
+          report = generateFallbackReport(targetUrl, diagnostics);
+        }
+      }
+    } else if (genAI) {
       try {
         report = await generateReportWithGemini(targetUrl, html, diagnostics);
       } catch (geminiError) {
