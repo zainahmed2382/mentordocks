@@ -34,32 +34,42 @@ const PORT = 3000;
 
 app.use(express.json({ limit: "5mb" }));
 
+app.use((err: any, req: Request, res: Response, next: Function) => {
+  if (err instanceof SyntaxError && "body" in err) {
+    return res.status(400).json({ error: "Invalid JSON payload." });
+  }
+  next(err);
+});
+
 app.use("/api/auth", authRouter);
 
 // 1. Audit Route
 app.post("/api/audit", async (req: Request, res: Response) => {
-  let { url } = req.body;
-
-  if (!url || typeof url !== "string") {
-    return res.status(400).json({ error: "Please provide a valid website URL." });
-  }
-
-  // Sanitize and format URL string
-  let targetUrl = url.trim();
-  if (!/^https?:\/\//i.test(targetUrl)) {
-    targetUrl = "https://" + targetUrl;
-  }
+  let targetUrl = "";
 
   try {
-    // Validate schema
-    new URL(targetUrl);
-  } catch (err) {
-    return res.status(400).json({ error: "The provided URL structure is invalid." });
-  }
+    let { url } = req.body ?? {};
 
-  let htmlPayload = "";
-  let stats: any = null;
-  let fetchError = "";
+    if (!url || typeof url !== "string") {
+      return res.status(400).json({ error: "Please provide a valid website URL." });
+    }
+
+    // Sanitize and format URL string
+    targetUrl = url.trim();
+    if (!/^https?:\/\//i.test(targetUrl)) {
+      targetUrl = "https://" + targetUrl;
+    }
+
+    try {
+      // Validate schema
+      new URL(targetUrl);
+    } catch (err) {
+      return res.status(400).json({ error: "The provided URL structure is invalid." });
+    }
+
+    let htmlPayload = "";
+    let stats: any = null;
+    let fetchError = "";
 
   // Attempt direct crawl of the URL
   try {
@@ -445,6 +455,25 @@ Return the results matching the strict response schema structure. Be descriptive
     };
 
     res.json(parsedData);
+  }
+  } catch (error: any) {
+    console.error("Audit route crashed unexpectedly:", error);
+    return res.status(200).json({
+      website_url: targetUrl || "unknown",
+      overall_score: 0,
+      code_quality_score: 0,
+      design_score: 0,
+      responsiveness_score: 0,
+      typography_score: 0,
+      color_theme_score: 0,
+      performance_score: 0,
+      accessibility_score: 0,
+      issues: [],
+      summary: "The audit service could not complete, but the request was handled gracefully.",
+      priority_fixes: ["Retry the audit shortly.", "Verify the target URL is reachable."],
+      isFallbackScanner: true,
+      fallbackReason: error.message || String(error)
+    });
   }
 });
 
