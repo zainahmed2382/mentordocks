@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import app from './api/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = process.env.PORT || 5173;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.static(path.join(__dirname, 'dist')));
 
