@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import path from "path";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
-import { analyzeHTML } from "./src/utils/parser";
-import authRouter from "./api/auth";
+import { analyzeHTML } from "./src/utils/parser.js";
+import authRouter from "./api/auth.js";
 // Load environment variables
 dotenv.config();
 
