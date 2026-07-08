@@ -1,10 +1,18 @@
+import 'dotenv/config';
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 const router = express.Router();
-const prisma = new PrismaClient();
+
+const connectionString = process.env.DATABASE_URL;
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
+
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-default-key-for-dev';
 
 router.post('/signup', async (req, res) => {
