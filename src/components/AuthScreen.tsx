@@ -22,7 +22,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
 
@@ -36,17 +36,37 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
       return;
     }
 
-    // Success Simulation
-    setSuccess(true);
-    setTimeout(() => {
-      onLoginSuccess({
-        name: isSignUp ? name : name || email.split("@")[0],
-        email,
-        role,
-        isLoggedIn: true,
+    try {
+      const endpoint = isSignUp ? "/api/auth/signup" : "/api/auth/login";
+      const payload = isSignUp ? { name, email, password, role } : { email, password };
+      
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-      onClose();
-    }, 1200);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(data.error || "Authentication failed.");
+        return;
+      }
+
+      localStorage.setItem("ms_auth_token", data.token);
+
+      setSuccess(true);
+      setTimeout(() => {
+        onLoginSuccess({
+          ...data.user,
+          isLoggedIn: true,
+        });
+        onClose();
+      }, 1200);
+
+    } catch (err: any) {
+      setErrorMsg(err.message || "Network error. Please try again.");
+    }
   };
 
   return (

@@ -3,7 +3,7 @@ import path from "path";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 import { analyzeHTML } from "./src/utils/parser";
-
+import authRouter from "./api/auth";
 // Load environment variables
 dotenv.config();
 
@@ -33,6 +33,8 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "5mb" }));
+
+app.use("/api/auth", authRouter);
 
 // 1. Audit Route
 app.post("/api/audit", async (req: Request, res: Response) => {
