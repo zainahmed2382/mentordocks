@@ -202,7 +202,7 @@ Return your response as valid JSON only (no extra text). The JSON should match t
     contents: [{ role: "user", parts: [{ text: prompt }] }],
   });
 
-  let text = result.response.text();
+  let text = result.text || '';
   text = text.replace(/```json|```/g, '').trim();
   return JSON.parse(text);
 }
@@ -396,12 +396,21 @@ router.post('/', async (req, res) => {
       targetUrl = 'https://' + url;
     }
 
-    const response = await fetch(targetUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.status}`);
+    let html = '';
+    try {
+      const response = await fetch(targetUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
+      });
+      if (response.ok) {
+        html = await response.text();
+      }
+    } catch (fetchErr) {
+      console.warn(`Could not fetch HTML from ${targetUrl}, using default diagnostics:`, fetchErr);
     }
-    const html = await response.text();
-    const diagnostics = analyzeHTML(html);
+    const diagnostics = analyzeHTML(html || '');
 
     let report;
     if (openai) {

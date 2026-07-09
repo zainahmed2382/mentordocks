@@ -47,10 +47,18 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data: any = {};
+      if (text && text.trim()) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = { error: text };
+        }
+      }
 
       if (!response.ok) {
-        setErrorMsg(data.error || "Authentication failed.");
+        setErrorMsg(data.error || `Authentication failed (Status ${response.status}). Please check your server connection.`);
         return;
       }
 

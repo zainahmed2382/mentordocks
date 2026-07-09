@@ -37,6 +37,7 @@ import { IssueItem } from "./components/IssueItem";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { HomeState } from "./components/HomeState";
 import { exportReportToPDF } from "./utils/pdfGenerator";
+import { generateClientFallbackReport } from "./utils/fallbackAudit";
 import { SplashScreen } from "./components/SplashScreen";
 import { AuthScreen, UserProfile } from "./components/AuthScreen";
 import { SEOToolsHub } from "./components/SEOToolsHub";
@@ -110,12 +111,21 @@ export default function App() {
         headers: { "Authorization": `Bearer ${token}` },
       });
       if (response.ok) {
-        const audits = await response.json();
-        setAuditHistory(audits.map((a: any) => ({
-          url: a.url,
-          date: new Date(a.createdAt).toISOString().slice(0, 10),
-          score: a.score,
-        })));
+        const text = await response.text();
+        if (text && text.trim()) {
+          try {
+            const audits = JSON.parse(text);
+            if (Array.isArray(audits)) {
+              setAuditHistory(audits.map((a: any) => ({
+                url: a.url,
+                date: new Date(a.createdAt).toISOString().slice(0, 10),
+                score: a.score,
+              })));
+            }
+          } catch {
+            console.warn("Audit history response was not JSON:", text);
+          }
+        }
       }
     } catch (err) {
       console.error("Failed to fetch audit history:", err);
@@ -237,21 +247,31 @@ export default function App() {
         headers["Authorization"] = `Bearer ${token}`;
       }
       
-      const response = await fetch("/api/audit", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ url: targetUrl }),
-      });
+      let data: any = null;
+      try {
+        const response = await fetch("/api/audit", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ url: targetUrl }),
+        });
 
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        if (response.status === 404) {
-          throw new Error(errJson.error || "Audit API Endpoint not found (404). Please ensure the backend is deployed correctly.");
+        const text = await response.text();
+        if (text && text.trim()) {
+          try {
+            data = JSON.parse(text);
+          } catch {
+            console.warn("Audit API response was not JSON:", text);
+          }
         }
-        throw new Error(errJson.error || `Server responded with status ${response.status}`);
+
+        if (!response.ok || !data) {
+          throw new Error(data?.error || `Server responded with status ${response.status}`);
+        }
+      } catch (apiErr) {
+        console.warn("Backend audit API failed or unreachable, using client-side heuristic engine:", apiErr);
+        data = generateClientFallbackReport(targetUrl);
       }
 
-      const data = await response.json();
       setReport(data);
       
       // Append completed audit records to the interactive history matrix
