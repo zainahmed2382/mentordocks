@@ -235,6 +235,11 @@ export default function App() {
   };
 
   const handleRunAudit = async (targetUrl: string) => {
+    if (!currUser || !currUser.isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setLoading(true);
     setErrorMsg("");
     setReport(null);
@@ -463,6 +468,9 @@ export default function App() {
               handleRunAudit(url);
             }}
             onClearHistory={() => setAuditHistory([])}
+            onDeleteAudit={(url) => {
+              setAuditHistory((prev) => prev.filter((item) => item.url !== url));
+            }}
             onAuditNew={() => {
               setActiveTab("scanner");
               handleReset();
