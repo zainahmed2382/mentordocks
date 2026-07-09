@@ -331,129 +331,153 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#e0e0e0] pb-20">
       {/* 1. Header Navigation */}
-      <header className="sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur border-b border-[#222] px-4 md:px-6 py-3.5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3.5">
-          <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-5 w-full md:w-auto justify-between md:justify-start">
-            <div className="flex items-center gap-2.5 cursor-pointer select-none" onClick={handleReset}>
-              <div className={`h-9 w-9 rounded-xl bg-gradient-to-tr ${BrandAccents[brandColor].gradient} flex items-center justify-center shadow-md transition-all duration-300`}>
-                <Zap className="h-5 w-5 text-white animate-pulse" />
+      <header className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#1c1c1c] px-3.5 sm:px-6 py-2.5 sm:py-3.5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 md:gap-4">
+          
+          {/* Top Bar on Mobile / Left Side on Desktop */}
+          <div className="flex items-center justify-between w-full md:w-auto">
+            {/* Brand Logo */}
+            <div className="flex items-center gap-2 cursor-pointer select-none" onClick={handleReset}>
+              <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-tr ${BrandAccents[brandColor].gradient} flex items-center justify-center shadow-md transition-all duration-300`}>
+                <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
-              <div className="text-left">
-                <span className="font-display font-extrabold text-lg text-white tracking-tight">
-                  Mentor<span className={`${BrandAccents[brandColor].headerSpan} transition-all duration-300`}>Docks</span>
-                </span>
-              </div>
+              <span className="font-display font-extrabold text-base sm:text-lg text-white tracking-tight">
+                Mentor<span className={`${BrandAccents[brandColor].headerSpan} transition-all duration-300`}>Docks</span>
+              </span>
             </div>
 
-            {/* Visual View-Tab Controller */}
-            <div className="flex items-center bg-zinc-950/80 border border-zinc-900 p-0.5 rounded-xl">
+            {/* Mobile Actions Right (User Profile / Sign In) */}
+            <div className="flex items-center gap-2 md:hidden">
+              {currUser ? (
+                <div className="flex items-center gap-1.5 bg-[#141414] border border-[#262626] py-1 px-2.5 rounded-full text-xs">
+                  <div className="h-5 w-5 rounded-full bg-blue-600/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
+                    {currUser.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <span className="font-bold text-zinc-300 text-xs max-w-[85px] truncate">{currUser.name}</span>
+                  <button
+                    onClick={handleLogout}
+                    title="Sign Out"
+                    className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-white transition cursor-pointer"
+                  >
+                    <LogOut className="h-3 w-3" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#161616] border border-[#2a2a2a] hover:border-zinc-700 text-zinc-200 text-xs font-semibold rounded-lg transition shadow-inner cursor-pointer"
+                >
+                  <User className="h-3.5 w-3.5" />
+                  Sign In
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Secondary Bar on Mobile / Middle & Right on Desktop */}
+          <div className="flex items-center justify-between md:justify-end gap-2 sm:gap-3 w-full md:w-auto pt-2.5 md:pt-0 border-t border-zinc-900/80 md:border-0">
+            {/* Segmented View-Tab Controller */}
+            <div className="flex items-center bg-zinc-950 border border-zinc-900 p-0.5 rounded-xl">
               <button
-                onClick={() => {
-                  setActiveTab("scanner");
-                }}
+                onClick={() => setActiveTab("scanner")}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   activeTab === "scanner"
-                    ? "bg-zinc-900 text-white border border-zinc-850 shadow-sm"
+                    ? "bg-zinc-900 text-white border border-zinc-800 shadow-sm"
                     : "text-zinc-500 hover:text-zinc-300"
                 }`}
               >
                 <Search className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Audit Scanner</span>
-                <span className="sm:hidden">Scanner</span>
+                <span>Scanner</span>
               </button>
               {currUser && (
                 <button
                   onClick={() => setActiveTab("dashboard")}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                     activeTab === "dashboard"
-                      ? "bg-zinc-900 text-white border border-zinc-500/20 shadow-sm"
+                      ? "bg-zinc-900 text-white border border-zinc-800 shadow-sm"
                       : "text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
                   <BarChart3 className="h-3.5 w-3.5 text-emerald-400" />
-                  <span className="hidden sm:inline">Compliance Dashboard</span>
-                  <span className="sm:hidden">Dashboard</span>
-                  <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-mono rounded uppercase tracking-wider">
-                    Active
-                  </span>
+                  <span>Dashboard</span>
                 </button>
+              )}
+            </div>
+
+            {/* Desktop Actions & Accent Controller */}
+            <div className="flex items-center gap-2">
+              {/* Accent Customizer Dot Set (Hidden on mobile for professional uncluttered view) */}
+              <div className="hidden sm:flex items-center gap-2 bg-[#121212] border border-[#222] rounded-xl px-2.5 py-1.5 shadow-sm">
+                <span className="text-[9px] font-bold font-mono text-zinc-500 uppercase tracking-widest hidden lg:block">BRAND VIBE:</span>
+                <div className="flex gap-1.5">
+                  {(Object.keys(BrandAccents) as Array<keyof typeof BrandAccents>).map((col) => (
+                    <button
+                      key={col}
+                      onClick={() => setBrandColor(col)}
+                      title={`Switch Accent to ${BrandAccents[col].name}`}
+                      className={`h-3 w-3 rounded-full cursor-pointer transition-all duration-200 ${
+                        col === "blue" ? "bg-blue-500" :
+                        col === "emerald" ? "bg-emerald-500" :
+                        col === "violet" ? "bg-[#c026d3]" : "bg-amber-500"
+                      } ${brandColor === col ? "ring-2 ring-white ring-offset-2 ring-offset-black scale-125" : "hover:scale-110 opacity-60 hover:opacity-100"}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Desktop Sign In / User Profile */}
+              <div className="hidden md:flex items-center gap-2">
+                {currUser ? (
+                  <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1 pr-3 rounded-full text-xs">
+                    <div className="h-6 w-6 rounded-full bg-blue-600/10 border border-blue-500/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
+                      {currUser.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold leading-none text-zinc-300 text-[11px] truncate max-w-[90px]">{currUser.name}</p>
+                      <p className="text-[8px] font-mono font-semibold text-zinc-500 tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      title="Sign Out"
+                      className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-white cursor-pointer transition ml-1 shrink-0"
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a] text-zinc-200 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
+                  >
+                    <User className="h-3.5 w-3.5" />
+                    Sign In
+                  </button>
+                )}
+              </div>
+
+              {report && (
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={() => exportReportToPDF(report)}
+                    className="flex items-center gap-1 px-2.5 py-1.5 bg-white text-black hover:bg-zinc-200 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm shrink-0"
+                    title="Download PDF Report"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline-block">PDF Report</span>
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    className="flex items-center gap-1 px-2.5 py-1.5 bg-[#141414] border border-[#2c2c2c] hover:bg-[#1f1f1f] rounded-lg text-xs font-semibold text-slate-300 cursor-pointer transition shadow-sm shrink-0"
+                    title="Audit New URL"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline-block">New Audit</span>
+                  </button>
+                </div>
               )}
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 w-full md:w-auto">
-            {/* Elegant Accent Customizer Dot Set */}
-            <div className="flex items-center gap-2 bg-[#121212] border border-[#222] rounded-xl px-2.5 py-1.5 shadow-sm">
-              <span className="text-[9px] font-bold font-mono text-zinc-500 uppercase tracking-widest hidden lg:block">BRAND VIBE:</span>
-              <div className="flex gap-1.5">
-                {(Object.keys(BrandAccents) as Array<keyof typeof BrandAccents>).map((col) => (
-                  <button
-                    key={col}
-                    onClick={() => setBrandColor(col)}
-                    title={`Switch Accent to ${BrandAccents[col].name}`}
-                    className={`h-3 w-3 rounded-full cursor-pointer transition-all duration-200 relative ${
-                      col === "blue" ? "bg-blue-500" :
-                      col === "emerald" ? "bg-emerald-500" :
-                      col === "violet" ? "bg-[#c026d3]" : "bg-amber-500"
-                    } ${brandColor === col ? "ring-2 ring-white ring-offset-2 ring-offset-black scale-125" : "hover:scale-110 opacity-60 hover:opacity-100"}`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest hidden xl:inline">
-              PRO DIAGNOSTICS
-            </span>
-
-            {/* Authentication user profile pill */}
-            {currUser ? (
-              <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1 pr-3 rounded-full text-xs">
-                <div className="h-6 w-6 rounded-full bg-blue-600/10 border border-blue-500/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
-                  {currUser.name.slice(0, 2).toUpperCase()}
-                </div>
-                <div className="hidden sm:block text-left">
-                  <p className="font-bold leading-none text-zinc-300 text-[11px] truncate max-w-[90px]">{currUser.name}</p>
-                  <p className="text-[8px] font-mono font-semibold text-zinc-500 tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  title="Sign Out"
-                  className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-white cursor-pointer transition ml-1 shrink-0"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a] text-zinc-200 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
-              >
-                <User className="h-3.5 w-3.5" />
-                Sign In
-              </button>
-            )}
-
-            {report && (
-              <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  onClick={() => exportReportToPDF(report)}
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-white text-black hover:bg-zinc-200 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm shrink-0"
-                  title="Download PDF Report"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline-block md:hidden lg:inline-block">PDF Report</span>
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#141414] border border-[#2c2c2c] hover:bg-[#1f1f1f] rounded-lg text-xs font-semibold text-slate-300 cursor-pointer transition shadow-sm shrink-0"
-                  title="Audit New URL"
-                >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline-block md:hidden lg:inline-block">New Audit</span>
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       </header>
 
