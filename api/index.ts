@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import express from 'express';
-import cors from 'cors';
 import authRouter from './_auth/index.js';
 import auditRouter from './audit.js';
 import auditsRouter from './audits.js';
@@ -8,7 +7,18 @@ import healthRouter from './_health.js';
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || true }));
+// Native zero-dependency CORS middleware (prevents Vercel Cannot find package 'cors' errors)
+app.use((req, res, next) => {
+  const origin = process.env.CORS_ORIGIN || '*';
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
+  next();
+});
 
 app.use(express.json());
 
