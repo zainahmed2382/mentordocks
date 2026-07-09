@@ -272,24 +272,6 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
               <ShieldCheck className="h-3.5 w-3.5 text-zinc-600" />
               <span>Encrypted local session token active.</span>
             </div>
-            
-            <div className="mt-4 pt-3 border-t border-zinc-800">
-              <button
-                onClick={() => {
-                  onLoginSuccess({
-                    name: "Guest User",
-                    email: "guest@example.com",
-                    role: "Guest",
-                    isLoggedIn: true,
-                    isGuest: true,
-                  });
-                  onClose();
-                }}
-                className="w-full py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded-xl text-xs font-bold transition"
-              >
-                Continue as Guest
-              </button>
-            </div>
           </div>
         )}
       </div>
