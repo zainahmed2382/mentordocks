@@ -1,11 +1,24 @@
 import 'dotenv/config';
 import express from 'express';
-import authRouter from './_auth/index.js';
-import auditRouter from './audit.js';
-import auditsRouter from './audits.js';
-import healthRouter from './_health.js';
+import * as authRouterModule from './_auth/index.js';
+import * as auditRouterModule from './audit.js';
+import * as auditsRouterModule from './audits.js';
+import * as healthRouterModule from './_health.js';
 
 const app = express();
+
+const resolveRouter = (mod: any, name: string) => {
+  const router = mod?.default ?? mod;
+  if (!router || typeof router !== 'function') {
+    throw new Error(`${name} did not export a valid Express router`);
+  }
+  return router;
+};
+
+const authRouter = resolveRouter(authRouterModule, 'authRouter');
+const auditRouter = resolveRouter(auditRouterModule, 'auditRouter');
+const auditsRouter = resolveRouter(auditsRouterModule, 'auditsRouter');
+const healthRouter = resolveRouter(healthRouterModule, 'healthRouter');
 
 // Native zero-dependency CORS middleware (prevents Vercel Cannot find package 'cors' errors)
 app.use((req, res, next) => {
