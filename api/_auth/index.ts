@@ -10,18 +10,24 @@ const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-default-key-for-dev';
 
 router.post('/signup', async (req, res) => {
   try {
+    console.log('Signup request body:', req.body);
     const { name, email, password, role } = req.body;
 
     if (!email || !password) {
+      console.log('Missing email or password');
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
+    console.log('Checking if user exists:', email);
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
+      console.log('User already exists');
       return res.status(400).json({ error: 'Email is already in use' });
     }
 
+    console.log('Hashing password');
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Creating user');
     const user = await prisma.user.create({
       data: {
         name,
@@ -30,6 +36,7 @@ router.post('/signup', async (req, res) => {
         role: role || 'Developer',
       },
     });
+    console.log('User created:', user);
 
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
       expiresIn: '7d',
@@ -45,7 +52,7 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error: ' + (error as Error).message });
   }
 });
 
