@@ -606,8 +606,8 @@ export default function App() {
             {/* Audit Report Dashboard */}
             <div className="grid grid-cols-1 xl:grid-cols-[1.5fr,0.95fr] gap-6">
               <div className="space-y-6">
-                <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl shadow-xl overflow-hidden">
-                  <div className="bg-gradient-to-r from-blue-600/15 via-sky-500/5 to-transparent p-6">
+                <div className="bg-[#07070d] border border-[#17191f] rounded-[32px] shadow-2xl overflow-hidden">
+                  <div className="bg-gradient-to-r from-slate-950 via-blue-950/60 to-transparent p-6">
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                       <div className="space-y-3 max-w-2xl">
                         <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold uppercase tracking-[0.3em] text-blue-300">
@@ -625,13 +625,12 @@ export default function App() {
                             <ExternalLink className="h-4 w-4" />
                           </a>
                         </div>
-                        <p className="text-sm text-zinc-400 leading-relaxed">
-                          {report.summary}
+                        <p className="max-w-3xl text-sm text-zinc-400 leading-relaxed">
+                          Complete architectural & SEO audit for {report.website_url}. Evaluated core web vitals, DOM structure, semantic tags, and visual accessibility metrics.
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <div className="rounded-3xl bg-[#090909] border border-white/10 p-5 text-center min-w-[120px]">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                           <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Overall</p>
                           <p className={`mt-3 text-5xl font-black ${report.overall_score >= 90 ? "text-emerald-400" : report.overall_score >= 55 ? "text-amber-400" : "text-rose-400"}`}>
                             {report.overall_score}
@@ -646,18 +645,18 @@ export default function App() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-[#050505]">
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Diagnosed issues</p>
+                    <div className="rounded-3xl border border-[#23252c] bg-[#07080d] p-4">
+                      <p className="text-[10px] uppercase tracking-[0.28em] text-zinc-500">Diagnosed issues</p>
                       <p className="mt-3 text-3xl font-black text-white">{report.issues.length}</p>
                       <p className="text-xs text-zinc-400 mt-1">Actionable findings flagged</p>
                     </div>
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Heading structure</p>
+                    <div className="rounded-3xl border border-[#23252c] bg-[#07080d] p-4">
+                      <p className="text-[10px] uppercase tracking-[0.28em] text-zinc-500">Heading structure</p>
                       <p className="mt-3 text-3xl font-black text-white">{report.h1Count ?? 0}/{report.h2Count ?? 0}</p>
                       <p className="text-xs text-zinc-400 mt-1">H1 & H2 tags analyzed</p>
                     </div>
-                    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Priority fixes</p>
+                    <div className="rounded-3xl border border-[#23252c] bg-[#07080d] p-4">
+                      <p className="text-[10px] uppercase tracking-[0.28em] text-zinc-500">Priority fixes</p>
                       <p className="mt-3 text-3xl font-black text-white">{report.priority_fixes?.length ?? 0}</p>
                       <p className="text-xs text-zinc-400 mt-1">Urgent repairs needed</p>
                     </div>
@@ -666,9 +665,9 @@ export default function App() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1.2fr,0.8fr] gap-6">
                   <div className="space-y-4">
-                    <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl p-5 shadow-xl">
+                    <div className="rounded-3xl border border-[#222] bg-[#07080f] p-5 shadow-xl">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-zinc-500">All keywords</h3>
+                        <h3 className="text-sm font-bold uppercase tracking-[0.28em] text-zinc-500">All keywords</h3>
                         <span className="text-[10px] text-zinc-400">{mappedKeywords.length} keywords</span>
                       </div>
                       <div className="mt-4 space-y-3">
@@ -717,16 +716,16 @@ export default function App() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="bg-white border border-slate-200/10 rounded-3xl p-5 shadow-xl">
+                    <div className="rounded-3xl border border-[#222] bg-[#090909] p-5 shadow-xl">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-slate-500">Optimization rate</h3>
-                        <span className="text-[10px] text-slate-400">Performance signal</span>
+                        <h3 className="text-sm font-bold uppercase tracking-[0.28em] text-slate-400">Optimization rate</h3>
+                        <span className="text-[10px] text-slate-500">Performance signal</span>
                       </div>
                       <div className="mt-5 flex items-center justify-center">
                         <div className="relative w-36 h-36">
                           <CircularProgress score={report.overall_score} size={140} strokeWidth={12} label="" />
                           <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-[10px] uppercase tracking-[0.3em] text-slate-400">Score</span>
+                            <span className="text-[10px] uppercase tracking-[0.28em] text-slate-400">Score</span>
                             <span className={`text-2xl font-black ${report.overall_score >= 90 ? "text-emerald-500" : report.overall_score >= 55 ? "text-amber-500" : "text-rose-500"}`}>{report.overall_score}</span>
                           </div>
                         </div>
@@ -736,17 +735,17 @@ export default function App() {
                       </p>
                     </div>
 
-                    <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl p-5 shadow-xl">
+                    <div className="rounded-3xl border border-[#222] bg-[#090909] p-5 shadow-xl">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-zinc-500">Organic traffic</h3>
-                          <p className="text-[10px] text-zinc-400">Projected visits</p>
+                          <h3 className="text-sm font-bold uppercase tracking-[0.28em] text-zinc-400">Organic traffic</h3>
+                          <p className="text-[10px] text-zinc-500">Projected visits</p>
                         </div>
                         <span className="text-xl font-black text-emerald-400">{Math.round(6500 + report.overall_score * 24)}</span>
                       </div>
                       <div className="space-y-3">
-                        <div className="rounded-3xl bg-[#050505] border border-[#222] p-4">
-                          <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Mapped keywords</p>
+                        <div className="rounded-3xl border border-[#222] bg-[#050505] p-4">
+                          <p className="text-[10px] uppercase tracking-[0.28em] text-zinc-500">Mapped keywords</p>
                           <div className="mt-3 flex flex-wrap gap-2">
                             {mappedKeywords.map((keyword, idx) => (
                               <span key={idx} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-950 text-[11px] text-zinc-200 border border-[#222]">
@@ -755,8 +754,8 @@ export default function App() {
                             ))}
                           </div>
                         </div>
-                        <div className="rounded-3xl bg-[#050505] border border-[#222] p-4">
-                          <label htmlFor="keyword-add" className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Ranking keywords</label>
+                        <div className="rounded-3xl border border-[#222] bg-[#050505] p-4">
+                          <label htmlFor="keyword-add" className="text-[10px] uppercase tracking-[0.28em] text-zinc-500">Ranking keywords</label>
                           <div className="mt-3 flex gap-2">
                             <input
                               id="keyword-add"
@@ -766,6 +765,7 @@ export default function App() {
                               className="flex-1 rounded-2xl border border-[#333] bg-[#090909] px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
                             />
                             <button
+                              type="button"
                               onClick={() => {
                                 const trimmed = keywordInput.trim();
                                 if (trimmed) {
@@ -773,7 +773,8 @@ export default function App() {
                                   setKeywordInput("");
                                 }
                               }}
-                              className="rounded-2xl bg-blue-600 px-4 py-2 text-xs font-bold uppercase text-white tracking-[0.2em] hover:bg-blue-500 transition"
+                              disabled={!keywordInput.trim()}
+                              className="rounded-2xl bg-blue-600 px-4 py-2 text-xs font-bold uppercase text-white tracking-[0.2em] hover:bg-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Add
                             </button>
