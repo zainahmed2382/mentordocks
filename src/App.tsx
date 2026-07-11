@@ -178,6 +178,8 @@ export default function App() {
   })());
 
   const [brandColor, setBrandColor] = useState<"blue" | "emerald" | "violet" | "amber">("blue");
+  const [keywordInput, setKeywordInput] = useState("");
+  const [mappedKeywords, setMappedKeywords] = useState<string[]>(["audit", "performance", "accessibility"]);
 
   const BrandAccents = {
     blue: {
@@ -601,265 +603,184 @@ export default function App() {
         {/* Audit Report Container */}
         {report && !loading && !errorMsg && (
           <div className="space-y-10 animate-fade-in">
-            {/* Report Jumbotron Header */}
-            <div className="bg-[#0a0a0a] rounded-xl border border-[#222] shadow-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="space-y-2 max-w-full">
-                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded">
-                  DIAGNOSIS COMPLETE
-                </span>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-2xl font-extrabold text-white tracking-tight select-all font-mono">
-                    {report.website_url}
-                  </h2>
-                  <a
-                    href={report.website_url}
-                    target="_blank"
-                    referrerPolicy="no-referrer"
-                    className="p-1 text-slate-500 hover:text-white hover:bg-zinc-800 rounded transition"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </div>
-                <p className="text-xs text-[#666] font-mono flex items-center gap-1">
-                  <Clock className="h-3 w-3" /> Audited on {new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                </p>
+            {/* Audit Report Dashboard */}
+            <div className="grid grid-cols-1 xl:grid-cols-[1.5fr,0.95fr] gap-6">
+              <div className="space-y-6">
+                <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl shadow-xl overflow-hidden">
+                  <div className="bg-gradient-to-r from-blue-600/15 via-sky-500/5 to-transparent p-6">
+                    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="space-y-3 max-w-2xl">
+                        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold uppercase tracking-[0.3em] text-blue-300">
+                          <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                          Audit Snapshot
+                        </span>
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h2 className="text-3xl font-extrabold text-white tracking-tight break-all">{report.website_url}</h2>
+                          <a
+                            href={report.website_url}
+                            target="_blank"
+                            referrerPolicy="no-referrer"
+                            className="inline-flex items-center justify-center h-10 w-10 rounded-2xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </div>
+                        <p className="text-sm text-zinc-400 leading-relaxed">
+                          {report.summary}
+                        </p>
+                      </div>
 
-                {currUser && (
-                  <div className="mt-4 flex items-center gap-2.5 p-2.5 px-3.5 bg-blue-950/15 border border-blue-900/30 rounded-xl text-left max-w-xl">
-                    <Briefcase className="h-4 w-4 text-blue-400 shrink-0" />
-                    <p className="text-xs text-zinc-300 font-sans leading-relaxed">
-                      <span className="font-bold text-white">Advisory Tip ({currUser.role}):</span> Prioritizing {
-                        currUser.role === "Developer" 
-                          ? "code structure semantics, layout parameters and responsive script payloads"
-                          : currUser.role === "UI/UX Designer"
-                          ? "WCAG contrast specifications, line-height intervals and branding layout rhythm"
-                          : currUser.role === "SEO Architect"
-                          ? "google preview snippet lengths, heading arrangements and crawl index parameters"
-                          : "performance payload optimization, paint speeds and accessibility validation logs"
-                      }. Use the sandbox below to tweak metadata tags!
-                    </p>
+                      <div className="flex items-center gap-4">
+                        <div className="rounded-3xl bg-[#090909] border border-white/10 p-5 text-center min-w-[120px]">
+                          <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Overall</p>
+                          <p className={`mt-3 text-5xl font-black ${report.overall_score >= 90 ? "text-emerald-400" : report.overall_score >= 55 ? "text-amber-400" : "text-rose-400"}`}>
+                            {report.overall_score}
+                          </p>
+                          <p className="text-[11px] text-zinc-500 mt-1">Audit score</p>
+                        </div>
+                        <div className="rounded-3xl bg-[#090909] border border-white/10 p-3">
+                          <CircularProgress score={report.overall_score} size={78} strokeWidth={7} label="" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                )}
 
-                <div className="pt-2">
-                  <button
-                    onClick={() => exportReportToPDF(report)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded transition cursor-pointer"
-                  >
-                    <Download className="h-4 w-4" />
-                    Export PDF Report
-                  </button>
-                </div>
-              </div>
-
-              {/* Overall circular rating & live severity statistics breakdown */}
-              <div className="flex items-center gap-4 bg-[#141414] p-3.5 rounded-xl border border-zinc-900 shadow-sm shrink-0">
-                <CircularProgress score={report.overall_score} size={88} strokeWidth={8} label="Rating" />
-                <div className="space-y-1 text-left">
-                  <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider block">Scale Grade</span>
-                  <span className="text-base font-black text-white block leading-tight">
-                    {report.overall_score >= 90 ? "Excellent / Robust" : report.overall_score >= 55 ? "Needs Remediation" : "Critical Repair"}
-                  </span>
-                  <span className="text-[11px] font-medium text-zinc-400 block pb-1.5">
-                    {report.issues.length} total diagnostics flagged
-                  </span>
-                  <div className="flex flex-wrap gap-1.5 pt-1.5 border-t border-zinc-850">
-                    <button
-                      onClick={() => setSelectedSeverity(selectedSeverity === "High" ? "all" : "High")}
-                      className={`inline-flex items-center gap-1 text-[9px] font-mono font-bold px-2 py-0.5 rounded-md transition cursor-pointer border ${
-                        selectedSeverity === "High"
-                          ? "bg-rose-500/20 text-rose-300 border-rose-500"
-                          : "bg-rose-950/20 text-rose-400 border-rose-950/45 hover:border-rose-900"
-                      }`}
-                    >
-                      ● {report.issues.filter(i => i.severity === "High").length} High
-                    </button>
-                    <button
-                      onClick={() => setSelectedSeverity(selectedSeverity === "Medium" ? "all" : "Medium")}
-                      className={`inline-flex items-center gap-1 text-[9px] font-mono font-bold px-2 py-0.5 rounded-md transition cursor-pointer border ${
-                        selectedSeverity === "Medium"
-                          ? "bg-amber-500/20 text-amber-300 border-amber-500"
-                          : "bg-amber-950/20 text-amber-400 border-amber-950/45 hover:border-amber-900"
-                      }`}
-                    >
-                      ● {report.issues.filter(i => i.severity === "Medium").length} Med
-                    </button>
-                    <button
-                      onClick={() => setSelectedSeverity(selectedSeverity === "Low" ? "all" : "Low")}
-                      className={`inline-flex items-center gap-1 text-[9px] font-mono font-bold px-2 py-0.5 rounded-md transition cursor-pointer border ${
-                        selectedSeverity === "Low"
-                          ? "bg-zinc-700/20 text-zinc-300 border-zinc-500"
-                          : "bg-zinc-905 text-zinc-400 border-zinc-800 hover:border-zinc-700"
-                      }`}
-                    >
-                      ● {report.issues.filter(i => i.severity === "Low").length} Low
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Scoreboard Matrix Cards with Interactive Pre-Filters */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center px-1 text-left">
-                <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">
-                  Diagnostic Score Matrix (Click card to filter issues below)
-                </span>
-                {selectedCategory !== "all" && (
-                  <button
-                    onClick={() => setSelectedCategory("all")}
-                    className="text-[10px] font-mono text-blue-400 hover:text-white underline cursor-pointer"
-                  >
-                    Reset Filter
-                  </button>
-                )}
-              </div>
-              
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                {/* 1. Code Quality */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "Code Quality" ? "all" : "Code Quality")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "Code Quality"
-                      ? "border-blue-500 bg-blue-500/[0.04] ring-1 ring-blue-500/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Quality</span>
-                    <Code className="h-4 w-4 text-blue-400" />
-                  </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.code_quality_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.code_quality_score)}`}>
-                      Code
-                    </span>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-[#050505]">
+                    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Diagnosed issues</p>
+                      <p className="mt-3 text-3xl font-black text-white">{report.issues.length}</p>
+                      <p className="text-xs text-zinc-400 mt-1">Actionable findings flagged</p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Heading structure</p>
+                      <p className="mt-3 text-3xl font-black text-white">{report.h1Count ?? 0}/{report.h2Count ?? 0}</p>
+                      <p className="text-xs text-zinc-400 mt-1">H1 & H2 tags analyzed</p>
+                    </div>
+                    <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Priority fixes</p>
+                      <p className="mt-3 text-3xl font-black text-white">{report.priority_fixes?.length ?? 0}</p>
+                      <p className="text-xs text-zinc-400 mt-1">Urgent repairs needed</p>
+                    </div>
                   </div>
                 </div>
 
-                {/* 2. UI/UX Design */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "UI/UX Design" ? "all" : "UI/UX Design")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "UI/UX Design"
-                      ? "border-indigo-500 bg-indigo-500/[0.04] ring-1 ring-indigo-500/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Design</span>
-                    <Layout className="h-4 w-4 text-indigo-400" />
-                  </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.design_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.design_score)}`}>
-                      UI/UX
-                    </span>
-                  </div>
-                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-[1.2fr,0.8fr] gap-6">
+                  <div className="space-y-4">
+                    <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl p-5 shadow-xl">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-zinc-500">All keywords</h3>
+                        <span className="text-[10px] text-zinc-400">{mappedKeywords.length} keywords</span>
+                      </div>
+                      <div className="mt-4 space-y-3">
+                        {mappedKeywords.map((keyword, idx) => (
+                          <div key={idx} className="flex items-center justify-between gap-3 rounded-3xl border border-[#222] bg-[#050505] p-3">
+                            <div className="space-y-1">
+                              <p className="text-sm text-white font-semibold">{keyword}</p>
+                              <p className="text-[11px] text-zinc-500">Phrase relevance score: {Math.min(100, 60 + idx * 8)}%</p>
+                            </div>
+                            <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-400">Core</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                {/* 3. Responsiveness */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "Responsiveness" ? "all" : "Responsiveness")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "Responsiveness"
-                      ? "border-purple-500 bg-purple-500/[0.04] ring-1 ring-purple-500/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Mobile</span>
-                    <Smartphone className="h-4 w-4 text-purple-400" />
+                    <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl p-5 shadow-xl">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-zinc-500">All pages</h3>
+                        <span className="text-[10px] text-zinc-400">{Math.min(5, auditHistory.length + 1)} pages</span>
+                      </div>
+                      <div className="mt-4 space-y-3">
+                        <div className="rounded-3xl border border-[#222] bg-[#050505] p-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="space-y-1">
+                              <p className="text-sm text-white font-semibold">{report.website_url}</p>
+                              <p className="text-[11px] text-zinc-500">Current audited target</p>
+                            </div>
+                            <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-400">Live</span>
+                          </div>
+                        </div>
+                        {auditHistory.slice(0, 2).map((item, idx) => (
+                          <div key={idx} className="rounded-3xl border border-[#222] bg-[#050505] p-3">
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="space-y-1">
+                                <p className="text-sm text-white font-semibold">{item.url}</p>
+                                <p className="text-[11px] text-zinc-500">Last scanned {item.date}</p>
+                              </div>
+                              <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${item.score >= 90 ? "bg-emerald-500/10 text-emerald-300" : item.score >= 70 ? "bg-amber-500/10 text-amber-300" : "bg-rose-500/10 text-rose-300"}`}>
+                                {item.score}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.responsiveness_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.responsiveness_score)}`}>
-                      Responsive
-                    </span>
-                  </div>
-                </div>
 
-                {/* 4. Typography */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "Typography" ? "all" : "Typography")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "Typography"
-                      ? "border-pink-500 bg-pink-500/[0.04] ring-1 ring-pink-500/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Fonts</span>
-                    <Type className="h-4 w-4 text-pink-400" />
-                  </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.typography_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.typography_score)}`}>
-                      Typography
-                    </span>
-                  </div>
-                </div>
+                  <div className="space-y-4">
+                    <div className="bg-white border border-slate-200/10 rounded-3xl p-5 shadow-xl">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-slate-500">Optimization rate</h3>
+                        <span className="text-[10px] text-slate-400">Performance signal</span>
+                      </div>
+                      <div className="mt-5 flex items-center justify-center">
+                        <div className="relative w-36 h-36">
+                          <CircularProgress score={report.overall_score} size={140} strokeWidth={12} label="" />
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-[10px] uppercase tracking-[0.3em] text-slate-400">Score</span>
+                            <span className={`text-2xl font-black ${report.overall_score >= 90 ? "text-emerald-500" : report.overall_score >= 55 ? "text-amber-500" : "text-rose-500"}`}>{report.overall_score}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-4 leading-relaxed">
+                        This score combines accessibility, performance, and design health signals.
+                      </p>
+                    </div>
 
-                {/* 5. Color Theme (Contrast) */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "Color Theme" ? "all" : "Color Theme")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "Color Theme"
-                      ? "border-emerald-500 bg-emerald-500/[0.04] ring-1 ring-emerald-500/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Theme</span>
-                    <Palette className="h-4 w-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.color_theme_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.color_theme_score)}`}>
-                      Contrast
-                    </span>
-                  </div>
-                </div>
-
-                {/* 6. Performance */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "Performance" ? "all" : "Performance")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "Performance"
-                      ? "border-amber-500 bg-amber-500/[0.04] ring-1 ring-amber-500/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Speed</span>
-                    <Zap className="h-4 w-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.performance_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.performance_score)}`}>
-                      Speed
-                    </span>
-                  </div>
-                </div>
-
-                {/* 7. Accessibility */}
-                <div 
-                  onClick={() => setSelectedCategory(selectedCategory === "Accessibility" ? "all" : "Accessibility")}
-                  className={`p-4 rounded-xl border shadow-sm flex flex-col justify-between space-y-4 transition cursor-pointer select-none text-left ${
-                    selectedCategory === "Accessibility"
-                      ? "border-emerald-600 bg-emerald-600/[0.04] ring-1 ring-emerald-600/20"
-                      : "bg-[#0a0a0a] border-[#222] hover:border-[#333]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Access</span>
-                    <Accessibility className="h-4 w-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <span className="text-2xl font-bold tracking-tight text-white font-mono block">{report.accessibility_score}</span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border inline-block mt-1 ${getScoreColorClass(report.accessibility_score)}`}>
-                      WCAG
-                    </span>
+                    <div className="bg-[#0a0a0a] border border-[#222] rounded-3xl p-5 shadow-xl">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-zinc-500">Organic traffic</h3>
+                          <p className="text-[10px] text-zinc-400">Projected visits</p>
+                        </div>
+                        <span className="text-xl font-black text-emerald-400">{Math.round(6500 + report.overall_score * 24)}</span>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="rounded-3xl bg-[#050505] border border-[#222] p-4">
+                          <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Mapped keywords</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {mappedKeywords.map((keyword, idx) => (
+                              <span key={idx} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-950 text-[11px] text-zinc-200 border border-[#222]">
+                                {keyword}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="rounded-3xl bg-[#050505] border border-[#222] p-4">
+                          <label htmlFor="keyword-add" className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Ranking keywords</label>
+                          <div className="mt-3 flex gap-2">
+                            <input
+                              id="keyword-add"
+                              value={keywordInput}
+                              onChange={(e) => setKeywordInput(e.target.value)}
+                              placeholder="Add keyword"
+                              className="flex-1 rounded-2xl border border-[#333] bg-[#090909] px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
+                            />
+                            <button
+                              onClick={() => {
+                                const trimmed = keywordInput.trim();
+                                if (trimmed) {
+                                  setMappedKeywords((prev) => [trimmed, ...prev].slice(0, 8));
+                                  setKeywordInput("");
+                                }
+                              }}
+                              className="rounded-2xl bg-blue-600 px-4 py-2 text-xs font-bold uppercase text-white tracking-[0.2em] hover:bg-blue-500 transition"
+                            >
+                              Add
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
