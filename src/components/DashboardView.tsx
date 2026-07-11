@@ -19,7 +19,11 @@ import {
   Accessibility,
   Sparkles,
   ChevronRight,
-  RefreshCw
+  RefreshCw,
+  Search,
+  History,
+  Calendar,
+  ExternalLink
 } from "lucide-react";
 import { AuditReport } from "../types";
 
@@ -28,6 +32,7 @@ interface DashboardViewProps {
   currentReport: AuditReport | null;
   onSelectAudit: (url: string) => void;
   onClearHistory: () => void;
+  onDeleteAudit?: (url: string) => void;
   onAuditNew: () => void;
   currUser: any;
 }
@@ -36,10 +41,12 @@ export function DashboardView({
   auditHistory, 
   currentReport, 
   onSelectAudit, 
-  onClearHistory, 
+  onClearHistory,
+  onDeleteAudit,
   onAuditNew,
   currUser 
 }: DashboardViewProps) {
+  const [historyQuery, setHistoryQuery] = useState("");
   const [comparingUrls, setComparingUrls] = useState<string[]>([]);
   const [fixChecklist, setFixChecklist] = useState<Array<{ id: string; label: string; impact: number; checked: boolean; category: string }>>([
     { id: "alt-tags", label: "Add alternate text tags to all critical viewport images", impact: 6, checked: false, category: "Accessibility" },
@@ -503,32 +510,172 @@ export function DashboardView({
               </p>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Quick history selector sidebar */}
-          <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-5 shadow-lg space-y-3">
-            <h3 className="font-bold text-white text-sm">Select Crawl History</h3>
-            <p className="text-[10px] text-zinc-500">Pick any past scan to reload full audit reports, code recommendations, and SEO sandbox files</p>
-            <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-              {auditHistory.map((hist, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => onSelectAudit(hist.url)}
-                  className="p-2 px-3 bg-zinc-950 hover:bg-[#111] border border-zinc-900 hover:border-zinc-850 rounded-xl flex items-center justify-between cursor-pointer transition text-left"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-mono font-bold text-zinc-300 truncate">{hist.url}</p>
-                    <p className="text-[9px] text-zinc-500 font-mono tracking-tight">Scanned on {hist.date}</p>
-                  </div>
-                  <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border shrink-0 ${getScoreBadgeClass(hist.score)}`}>
-                    {hist.score}
-                  </span>
-                </div>
-              ))}
+      {/* Comprehensive Audit Crawl History & Reports Section */}
+      <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-6 shadow-xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-900 pb-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-mono font-bold uppercase tracking-wider">
+              <History className="h-3 w-3" /> AUDIT HISTORY LOGS
             </div>
+            <h3 className="text-lg font-bold text-white tracking-tight">Website Compliance Crawl History</h3>
+            <p className="text-xs text-zinc-400">
+              Inspect past diagnostic evaluations, reload scanner blueprints, or compare historical scans.
+            </p>
           </div>
 
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="relative">
+              <Search className="h-3.5 w-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Filter domain crawls..."
+                value={historyQuery}
+                onChange={(e) => setHistoryQuery(e.target.value)}
+                className="pl-8 pr-3 py-1.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition w-48 sm:w-60"
+              />
+            </div>
+            <button
+              onClick={onAuditNew}
+              className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5" /> Run New Audit
+            </button>
+            {auditHistory.length > 0 && (
+              <button
+                onClick={onClearHistory}
+                className="px-3 py-1.5 bg-zinc-900 hover:bg-rose-950/40 text-zinc-400 hover:text-rose-300 border border-zinc-800 hover:border-rose-900/40 rounded-xl text-xs font-semibold transition cursor-pointer"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
         </div>
 
+        {/* Audit History Table */}
+        {auditHistory.length === 0 ? (
+          <div className="py-12 px-4 text-center bg-zinc-950/60 rounded-2xl border border-dashed border-zinc-850 space-y-4">
+            <div className="h-12 w-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto">
+              <Globe className="h-6 w-6" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="text-sm font-bold text-white">No Audit History Available</h4>
+              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+                You haven't scanned any websites under this profile yet. Run your first website audit to populate history and unlock visual analytics.
+              </p>
+            </div>
+            <button
+              onClick={onAuditNew}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition inline-flex items-center gap-2 shadow-md cursor-pointer"
+            >
+              Start First Audit <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-zinc-900 text-[11px] font-mono uppercase tracking-wider text-zinc-500">
+                  <th className="pb-3 pl-2">Target Website URL</th>
+                  <th className="pb-3">Scan Date</th>
+                  <th className="pb-3">Health Score</th>
+                  <th className="pb-3">Compliance Index Bar</th>
+                  <th className="pb-3 text-right pr-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-900/60">
+                {auditHistory
+                  .filter((item) =>
+                    item.url.toLowerCase().includes(historyQuery.toLowerCase())
+                  )
+                  .map((item, idx) => (
+                    <tr key={idx} className="group hover:bg-zinc-950/80 transition">
+                      <td className="py-3.5 pl-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="h-7 w-7 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-blue-400 transition">
+                            <Globe className="h-3.5 w-3.5" />
+                          </div>
+                          <div>
+                            <span className="font-mono font-bold text-xs text-zinc-200 block">
+                              {item.url}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="py-3.5">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400">
+                          <Calendar className="h-3 w-3 text-zinc-600" />
+                          {item.date}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5">
+                        <span
+                          className={`inline-flex items-center gap-1 font-mono font-bold text-xs px-2.5 py-0.5 rounded-full border ${getScoreBadgeClass(
+                            item.score
+                          )}`}
+                        >
+                          {item.score} / 100
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 max-w-xs">
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 bg-zinc-950 h-2 rounded-full overflow-hidden border border-zinc-900">
+                            <div
+                              className={`h-full rounded-full transition-all duration-300 ${
+                                item.score >= 90
+                                  ? "bg-emerald-500"
+                                  : item.score >= 70
+                                  ? "bg-amber-500"
+                                  : "bg-rose-500"
+                              }`}
+                              style={{ width: `${item.score}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 pr-2 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => onSelectAudit(item.url)}
+                            className="px-2.5 py-1 bg-zinc-900 hover:bg-blue-600/20 text-zinc-300 hover:text-blue-400 border border-zinc-800 hover:border-blue-500/30 rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                            title="Inspect full audit report"
+                          >
+                            <ExternalLink className="h-3 w-3" /> View Report
+                          </button>
+                          <button
+                            onClick={() => handleToggleCompare(item.url)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition border cursor-pointer ${
+                              comparingUrls.includes(item.url)
+                                ? "bg-blue-600/20 text-blue-400 border-blue-500/30"
+                                : "bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200"
+                            }`}
+                            title="Compare this scan"
+                          >
+                            {comparingUrls.includes(item.url) ? "Comparing" : "Compare"}
+                          </button>
+                          {onDeleteAudit && (
+                            <button
+                              onClick={() => onDeleteAudit(item.url)}
+                              className="p-1.5 bg-zinc-900 hover:bg-rose-950/40 text-zinc-500 hover:text-rose-400 border border-zinc-800 hover:border-rose-900/40 rounded-lg transition cursor-pointer"
+                              title="Delete from history"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
     </div>
