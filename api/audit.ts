@@ -166,7 +166,7 @@ interface AuditReport {
 }
 
 async function generateReportWithGemini(url: string, html: string, diagnostics: HTMLDiagnostics): Promise<AuditReport> {
-  const prompt = `You are a senior web auditor. Analyze this website and provide a comprehensive audit report in JSON format.
+  const prompt = `You are a friendly web auditor helping beginners understand their website. Analyze this website and provide a simple, easy-to-read audit report in JSON format. Keep everything in plain English, no technical jargon.
 
 URL: ${url}
 HTML Diagnostics: ${JSON.stringify(diagnostics, null, 2)}
@@ -186,14 +186,14 @@ Return your response as valid JSON only (no extra text). The JSON should match t
     {
       "category": "Code Quality" | "UI/UX Design" | "Responsiveness" | "Typography" | "Color Theme" | "Performance" | "Accessibility",
       "severity": "Low" | "Medium" | "High",
-      "problem": "Brief description of the issue",
-      "reason": "Why this is important",
-      "recommendation": "How to fix it",
-      "example_fix": "Optional code example"
+      "problem": "1-2 sentence simple description of the issue",
+      "reason": "Why this matters in simple terms",
+      "recommendation": "Clear, step-by-step how to fix it",
+      "example_fix": "Optional simple code example if needed"
     }
   ],
-  "summary": "Executive summary of the audit",
-  "priority_fixes": ["List of top 3-5 priority fixes"]
+  "summary": "Friendly summary of what we found and how the website is doing",
+  "priority_fixes": ["Top 3-5 simple fixes to do first"]
 }
 `;
 
@@ -208,7 +208,7 @@ Return your response as valid JSON only (no extra text). The JSON should match t
 }
 
 async function generateReportWithOpenAI(url: string, html: string, diagnostics: HTMLDiagnostics): Promise<AuditReport> {
-  const prompt = `You are a senior web auditor. Analyze this website and provide a comprehensive audit report in JSON format.
+  const prompt = `You are a friendly web auditor helping beginners understand their website. Analyze this website and provide a simple, easy-to-read audit report in JSON format. Keep everything in plain English, no technical jargon.
 
 URL: ${url}
 HTML Diagnostics: ${JSON.stringify(diagnostics, null, 2)}
@@ -228,14 +228,14 @@ Return your response as valid JSON only (no extra text). The JSON should match t
     {
       "category": "Code Quality" | "UI/UX Design" | "Responsiveness" | "Typography" | "Color Theme" | "Performance" | "Accessibility",
       "severity": "Low" | "Medium" | "High",
-      "problem": "Brief description of the issue",
-      "reason": "Why this is important",
-      "recommendation": "How to fix it",
-      "example_fix": "Optional code example"
+      "problem": "1-2 sentence simple description of the issue",
+      "reason": "Why this matters in simple terms",
+      "recommendation": "Clear, step-by-step how to fix it",
+      "example_fix": "Optional simple code example if needed"
     }
   ],
-  "summary": "Executive summary of the audit",
-  "priority_fixes": ["List of top 3-5 priority fixes"]
+  "summary": "Friendly summary of what we found and how the website is doing",
+  "priority_fixes": ["Top 3-5 simple fixes to do first"]
 }
 `;
 
@@ -263,9 +263,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Code Quality',
       severity: 'High',
-      problem: 'No H1 heading found',
-      reason: 'H1 headings are critical for SEO and document structure',
-      recommendation: 'Add a single descriptive H1 heading',
+      problem: 'Your website is missing a main heading (called H1).',
+      reason: 'Main headings help search engines and screen readers understand what your page is about.',
+      recommendation: 'Add one big, clear heading at the top of your page that tells visitors what it\'s about.',
       example_fix: '<h1>Welcome to Our Website</h1>'
     });
     codeQualityScore -= 10;
@@ -274,9 +274,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Code Quality',
       severity: 'Medium',
-      problem: 'Multiple H1 headings found',
-      reason: 'Best practice is to have one H1 per page',
-      recommendation: 'Keep only the most important H1'
+      problem: 'You have more than one main heading (H1) on the page.',
+      reason: 'It\'s best to have just one main heading so people and search engines know what the most important thing is.',
+      recommendation: 'Keep only the most important heading as your main one.'
     });
     codeQualityScore -= 5;
   }
@@ -285,9 +285,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Responsiveness',
       severity: 'High',
-      problem: 'No viewport meta tag',
-      reason: 'Critical for mobile responsiveness',
-      recommendation: 'Add viewport meta tag',
+      problem: 'Your website doesn\'t have a mobile view setting.',
+      reason: 'This means your site might not look good or work well on phones and tablets.',
+      recommendation: 'Add a simple tag to help your website fit on all screen sizes.',
       example_fix: '<meta name="viewport" content="width=device-width, initial-scale=1">'
     });
     responsivenessScore -= 20;
@@ -297,9 +297,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Accessibility',
       severity: 'Medium',
-      problem: `${diagnostics.imagesWithoutAlt} image(s) missing alt attributes`,
-      reason: 'Alt text is required for screen readers',
-      recommendation: 'Add descriptive alt text to all images'
+      problem: `${diagnostics.imagesWithoutAlt} of your images don\'t have a description.`,
+      reason: 'People who use screen readers need descriptions to understand what your images show.',
+      recommendation: 'Add a short, clear description to every image.'
     });
     accessibilityScore -= (diagnostics.imagesWithoutAlt * 3);
   }
@@ -307,9 +307,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Accessibility',
       severity: 'Medium',
-      problem: 'No main landmark found',
-      reason: 'Helps screen readers navigate page structure',
-      recommendation: 'Use <main> tag or role="main"'
+      problem: 'Your page doesn\'t clearly mark the main content area.',
+      reason: 'This makes it harder for people with disabilities to find the most important stuff.',
+      recommendation: 'Wrap your main content in a <main> tag.'
     });
     accessibilityScore -= 10;
   }
@@ -317,9 +317,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Accessibility',
       severity: 'Medium',
-      problem: 'Some form inputs missing labels',
-      reason: 'Form inputs need labels for accessibility',
-      recommendation: 'Associate labels with inputs using for/id attributes'
+      problem: 'Some of your form fields don\'t have clear labels.',
+      reason: 'People using screen readers won\'t know what to type in those fields.',
+      recommendation: 'Make sure every form box has a label that says what it\'s for.'
     });
     accessibilityScore -= 8;
   }
@@ -328,9 +328,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Performance',
       severity: 'Medium',
-      problem: 'High number of scripts loaded',
-      reason: 'Can impact page load time',
-      recommendation: 'Consider bundling and deferring scripts'
+      problem: 'Your website loads a lot of small code files.',
+      reason: 'Too many small files can make your website slower to load.',
+      recommendation: 'Combine your small code files into a few bigger ones if possible.'
     });
     performanceScore -= 10;
   }
@@ -338,9 +338,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Performance',
       severity: 'Low',
-      problem: 'Many inline styles',
-      reason: 'Better to use external stylesheets',
-      recommendation: 'Move inline styles to CSS files'
+      problem: 'You have a lot of style code mixed into your main page code.',
+      reason: 'Keeping styles separate makes your website easier to update and can help it load faster.',
+      recommendation: 'Move your style code into separate CSS files.'
     });
     performanceScore -= 5;
   }
@@ -349,9 +349,9 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     issues.push({
       category: 'Typography',
       severity: 'Medium',
-      problem: 'No meta description',
-      reason: 'Important for search engines and social sharing',
-      recommendation: 'Add a unique, descriptive meta description'
+      problem: 'You don\'t have a short description for search engines.',
+      reason: 'This description shows up in search results and tells people what your page is about.',
+      recommendation: 'Write a 1-2 sentence description of what visitors will find on this page.'
     });
     typographyScore -= 10;
   }
@@ -372,7 +372,7 @@ function generateFallbackReport(url: string, diagnostics: HTMLDiagnostics): Audi
     performance_score: Math.max(0, Math.min(100, performanceScore)),
     accessibility_score: Math.max(0, Math.min(100, accessibilityScore)),
     issues,
-    summary: `Audit complete for ${url}. Found ${issues.length} issues that need attention.`,
+    summary: `Great news! We've finished checking ${url}. We found ${issues.length} things you can improve, and none of them are too hard to fix!`,
     priority_fixes: issues.filter(i => i.severity === 'High').map(i => i.problem).slice(0, 5),
     h1Count: diagnostics.h1Count,
     h2Count: diagnostics.h2Count,

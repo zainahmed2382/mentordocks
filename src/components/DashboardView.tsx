@@ -49,12 +49,12 @@ export function DashboardView({
   const [historyQuery, setHistoryQuery] = useState("");
   const [comparingUrls, setComparingUrls] = useState<string[]>([]);
   const [fixChecklist, setFixChecklist] = useState<Array<{ id: string; label: string; impact: number; checked: boolean; category: string }>>([
-    { id: "alt-tags", label: "Add alternate text tags to all critical viewport images", impact: 6, checked: false, category: "Accessibility" },
-    { id: "minify-js", label: "Bundle script modules and compress JavaScript payloads", impact: 8, checked: false, category: "Performance" },
-    { id: "meta-desc", label: "Configure high-relevance search meta descriptions", impact: 4, checked: false, category: "SEO" },
-    { id: "heading-hier", label: "Normalize nested heading hierarchy sequence (H1 -> H2)", impact: 5, checked: false, category: "UI/UX" },
-    { id: "contrast", label: "Increase background-to-text text color contrast ratios", impact: 7, checked: false, category: "Design" },
-    { id: "viewport", label: "Embed relative standard initial-scale viewport tags", impact: 8, checked: false, category: "Mobile" },
+    { id: "alt-tags", label: "Add descriptions to all your images", impact: 6, checked: false, category: "Accessibility" },
+    { id: "minify-js", label: "Make your website code smaller and faster", impact: 8, checked: false, category: "Performance" },
+    { id: "meta-desc", label: "Write a short description for search engines", impact: 4, checked: false, category: "SEO" },
+    { id: "heading-hier", label: "Use big headings followed by smaller ones (H1 then H2)", impact: 5, checked: false, category: "UI/UX" },
+    { id: "contrast", label: "Make your text easier to read against the background", impact: 7, checked: false, category: "Design" },
+    { id: "viewport", label: "Make your website look good on phones and tablets", impact: 8, checked: false, category: "Mobile" },
   ]);
 
   const [hoveredDataPoint, setHoveredDataPoint] = useState<number | null>(null);
@@ -506,7 +506,7 @@ export function DashboardView({
                 AI Advisory Tip
               </span>
               <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-                Implementing standard ALT tags, minifying runtime JS bundles, and enforcing correct nesting orders are the top 3 highest leverage ways to lift WCAG readability indexes and paint speeds.
+                The best ways to improve your website are: adding descriptions to images, making your code smaller, and using headings in order. These changes will make your site faster and easier for everyone to use!
               </p>
             </div>
           </div>
