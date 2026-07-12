@@ -785,7 +785,7 @@ export default function App() {
                   </div>
                 </div>
               </div>
-            </div>
+
 
             {/* Fallback Engine Info Banner */}
             {report.isFallbackScanner && (
