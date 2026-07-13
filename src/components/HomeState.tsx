@@ -86,7 +86,7 @@ export function HomeState({ onAudit, isLoading, brandColor = "blue", brandAccent
             </div>
             <input
               type="text"
-              placeholder="e.g. wikipedia.org or https://mywebsite.com"
+              placeholder="Enter your website URL"
               value={url}
               onChange={(e) => {
                 setUrl(e.target.value);
