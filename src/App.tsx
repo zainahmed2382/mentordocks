@@ -3,33 +3,16 @@ import {
   Sparkles,
   ArrowRight,
   RotateCcw,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Layout,
-  Code,
-  Palette,
-  Type,
-  Zap,
-  Accessibility,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  HelpCircle,
-  Clock,
-  ExternalLink,
-  ChevronRight,
-  Filter,
-  Download,
   User,
   LogOut,
   History,
   ShieldCheck,
-  Briefcase,
+  Download,
+  HelpCircle,
+  XCircle,
+  Zap,
+  BarChart3,
   Search,
-  Eye,
-  EyeOff,
-  BarChart3
 } from "lucide-react";
 import { AuditReport, CategoryFilter, SeverityFilter } from "./types";
 import { CircularProgress } from "./components/CircularProgress";
@@ -92,7 +75,7 @@ export default function App() {
     return [
       { url: "react.dev", date: "2026-06-15", score: 94 },
       { url: "wikipedia.org", date: "2026-06-12", score: 86 },
-      { url: "news.ycombinator.com", date: "2026-06-10", score: 77 }
+      { url: "github.com", date: "2026-06-10", score: 77 },
     ];
   });
 
@@ -178,65 +161,6 @@ export default function App() {
     return "scanner";
   })());
 
-  const [brandColor, setBrandColor] = useState<"blue" | "emerald" | "violet" | "amber">("blue");
-  const [keywordInput, setKeywordInput] = useState("");
-  const [mappedKeywords, setMappedKeywords] = useState<string[]>(["audit", "performance", "accessibility"]);
-
-  const BrandAccents = {
-    blue: {
-      name: "Sapphire Blue",
-      gradient: "from-blue-600 to-indigo-600",
-      text: "text-blue-400",
-      headerSpan: "text-blue-400 font-semibold",
-      textHover: "hover:text-blue-300",
-      bg: "bg-blue-600",
-      bgHover: "hover:bg-blue-700",
-      border: "border-blue-500/20",
-      borderFocused: "focus:border-blue-500",
-      bgLight: "bg-blue-500/10",
-      rawHex: "#3b82f6"
-    },
-    emerald: {
-      name: "Mint Emerald",
-      gradient: "from-emerald-500 to-teal-500",
-      text: "text-emerald-400",
-      headerSpan: "text-emerald-400 font-semibold",
-      textHover: "hover:text-emerald-300",
-      bg: "bg-emerald-500",
-      bgHover: "hover:bg-emerald-600",
-      border: "border-emerald-500/20",
-      borderFocused: "focus:border-emerald-500",
-      bgLight: "bg-emerald-500/10",
-      rawHex: "#10b981"
-    },
-    violet: {
-      name: "Mystic Violet",
-      gradient: "from-violet-600 to-pink-600",
-      text: "text-violet-400",
-      headerSpan: "text-violet-400 font-semibold",
-      textHover: "hover:text-violet-300",
-      bg: "bg-violet-600",
-      bgHover: "hover:bg-violet-700",
-      border: "border-violet-500/20",
-      borderFocused: "focus:border-violet-500",
-      bgLight: "bg-violet-500/10",
-      rawHex: "#8b5cf6"
-    },
-    amber: {
-      name: "Golden Amber",
-      gradient: "from-amber-500 to-orange-500",
-      text: "text-amber-400",
-      headerSpan: "text-amber-400 font-semibold",
-      textHover: "hover:text-amber-300",
-      bg: "bg-amber-500",
-      bgHover: "hover:bg-amber-600",
-      border: "border-amber-500/20",
-      borderFocused: "focus:border-amber-500",
-      bgLight: "bg-amber-500/10",
-      rawHex: "#f59e0b"
-    }
-  };
-
   const handleRunAudit = async (targetUrl: string) => {
     if (!currUser || !currUser.isLoggedIn) {
       setShowAuthModal(true);
@@ -288,7 +212,7 @@ export default function App() {
         const filtered = prev.filter((item) => item.url !== shortDomain);
         return [
           { url: shortDomain, date: new Date().toISOString().slice(0, 10), score: data.overall_score },
-          ...filtered
+          ...filtered,
         ].slice(0, 10);
       });
     } catch (err: any) {
@@ -326,166 +250,142 @@ export default function App() {
 
   // Helper to colorize categorical badges in scorecards
   const getScoreColorClass = (score: number) => {
-    if (score >= 90) return "text-emerald-400 bg-emerald-950/20 border-emerald-900/40";
-    if (score >= 55) return "text-amber-400 bg-amber-950/20 border-amber-900/40";
-    return "text-rose-400 bg-rose-950/20 border-rose-900/40";
+    if (score >= 90) return "text-success-700 bg-success-50 border-success-100";
+    if (score >= 55) return "text-warning-700 bg-warning-50 border-warning-100";
+    return "text-error-700 bg-error-50 border-error-100";
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e0e0e0] pb-20">
-      {/* 1. Header Navigation */}
-      <header className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#1c1c1c] px-3.5 sm:px-6 py-2.5 sm:py-3.5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 md:gap-4">
+    <div className="min-h-screen bg-gray-50 text-gray-900 pb-20">
+      {/* Header Navigation */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
           
-          {/* Top Bar on Mobile / Left Side on Desktop */}
+          {/* Brand Logo */}
           <div className="flex items-center justify-between w-full md:w-auto">
-            {/* Brand Logo */}
             <div className="flex items-center gap-2 cursor-pointer select-none" onClick={handleReset}>
-              <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-tr ${BrandAccents[brandColor].gradient} flex items-center justify-center shadow-md transition-all duration-300`}>
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-2xl bg-gradient-to-tr from-primary-500 to-secondary-500 flex items-center justify-center shadow-md transition-all duration-300">
                 <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
-              <span className="font-display font-extrabold text-base sm:text-lg text-white tracking-tight">
-                Mentor<span className={`${BrandAccents[brandColor].headerSpan} transition-all duration-300`}>Docks</span>
+              <span className="font-display font-extrabold text-lg sm:text-xl text-gray-900 tracking-tight">
+                Mentor<span className="text-primary-600">Docks</span>
               </span>
             </div>
 
             {/* Mobile Actions Right (User Profile / Sign In) */}
             <div className="flex items-center gap-2 md:hidden">
               {currUser ? (
-                <div className="flex items-center gap-1.5 bg-[#141414] border border-[#262626] py-1 px-2.5 rounded-full text-xs">
-                  <div className="h-5 w-5 rounded-full bg-blue-600/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
+                <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 py-1.5 px-3 rounded-xl text-sm">
+                  <div className="h-7 w-7 rounded-full bg-primary-100 text-primary-700 font-mono font-bold flex items-center justify-center text-xs">
                     {currUser.name.slice(0, 2).toUpperCase()}
                   </div>
-                  <span className="font-bold text-zinc-300 text-xs max-w-[85px] truncate">{currUser.name}</span>
+                  <span className="font-bold text-gray-800 text-xs max-w-[85px] truncate">{currUser.name}</span>
                   <button
                     onClick={handleLogout}
                     title="Sign Out"
-                    className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-white transition cursor-pointer"
+                    className="p-1 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-gray-700 transition cursor-pointer"
                   >
-                    <LogOut className="h-3 w-3" />
+                    <LogOut className="h-3.5 w-3.5" />
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#161616] border border-[#2a2a2a] hover:border-zinc-700 text-zinc-200 text-xs font-semibold rounded-lg transition shadow-inner cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition cursor-pointer shadow-sm"
                 >
-                  <User className="h-3.5 w-3.5" />
+                  <User className="h-4 w-4" />
                   Sign In
                 </button>
               )}
             </div>
           </div>
 
-          {/* Secondary Bar on Mobile / Middle & Right on Desktop */}
-          <div className="flex items-center justify-between md:justify-end gap-2 sm:gap-3 w-full md:w-auto pt-2.5 md:pt-0 border-t border-zinc-900/80 md:border-0">
+          {/* Desktop Actions */}
+          <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto pt-3 md:pt-0 border-t border-gray-100 md:border-0">
             {/* Segmented View-Tab Controller */}
-            <div className="flex items-center bg-zinc-950 border border-zinc-900 p-0.5 rounded-xl">
+            <div className="flex items-center bg-gray-100 border border-gray-200 p-1 rounded-xl">
               <button
                 onClick={() => setActiveTab("scanner")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                   activeTab === "scanner"
-                    ? "bg-zinc-900 text-white border border-zinc-800 shadow-sm"
-                    : "text-zinc-500 hover:text-zinc-300"
+                    ? "bg-white text-gray-900 border border-gray-200 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
-                <Search className="h-3.5 w-3.5" />
-                <span>Scanner</span>
+                <Search className="h-4 w-4" />
+                Scanner
               </button>
               {currUser && (
                 <button
                   onClick={() => setActiveTab("dashboard")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                     activeTab === "dashboard"
-                      ? "bg-zinc-900 text-white border border-zinc-800 shadow-sm"
-                      : "text-zinc-500 hover:text-zinc-300"
+                      ? "bg-white text-gray-900 border border-gray-200 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
                   }`}
                 >
-                  <BarChart3 className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>Dashboard</span>
+                  <BarChart3 className="h-4 w-4" />
+                  Dashboard
                 </button>
               )}
             </div>
 
-            {/* Desktop Actions & Accent Controller */}
-            <div className="flex items-center gap-2">
-              {/* Accent Customizer Dot Set (Hidden on mobile for professional uncluttered view) */}
-              <div className="hidden sm:flex items-center gap-2 bg-[#121212] border border-[#222] rounded-xl px-2.5 py-1.5 shadow-sm">
-                <span className="text-[9px] font-bold font-mono text-zinc-500 uppercase tracking-widest hidden lg:block">BRAND VIBE:</span>
-                <div className="flex gap-1.5">
-                  {(Object.keys(BrandAccents) as Array<keyof typeof BrandAccents>).map((col) => (
-                    <button
-                      key={col}
-                      onClick={() => setBrandColor(col)}
-                      title={`Switch Accent to ${BrandAccents[col].name}`}
-                      className={`h-3 w-3 rounded-full cursor-pointer transition-all duration-200 ${
-                        col === "blue" ? "bg-blue-500" :
-                        col === "emerald" ? "bg-emerald-500" :
-                        col === "violet" ? "bg-[#c026d3]" : "bg-amber-500"
-                      } ${brandColor === col ? "ring-2 ring-white ring-offset-2 ring-offset-black scale-125" : "hover:scale-110 opacity-60 hover:opacity-100"}`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Desktop Sign In / User Profile */}
-              <div className="hidden md:flex items-center gap-2">
-                {currUser ? (
-                  <div className="flex items-center gap-2 bg-[#121212] border border-[#222] p-1 pr-3 rounded-full text-xs">
-                    <div className="h-6 w-6 rounded-full bg-blue-600/10 border border-blue-500/20 text-blue-400 font-mono font-bold flex items-center justify-center text-[10px]">
-                      {currUser.name.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div className="text-left">
-                      <p className="font-bold leading-none text-zinc-300 text-[11px] truncate max-w-[90px]">{currUser.name}</p>
-                      <p className="text-[8px] font-mono font-semibold text-zinc-500 tracking-wider uppercase leading-none mt-0.5">{currUser.role}</p>
-                    </div>
-                    <button
-                      onClick={handleLogout}
-                      title="Sign Out"
-                      className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-white cursor-pointer transition ml-1 shrink-0"
-                    >
-                      <LogOut className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setShowAuthModal(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#141414] border border-[#222] hover:border-zinc-700 hover:bg-[#1a1a1a] text-zinc-200 text-xs font-semibold rounded-lg transition cursor-pointer shadow-inner shrink-0"
-                  >
-                    <User className="h-3.5 w-3.5" />
-                    Sign In
-                  </button>
-                )}
-              </div>
-
+            {/* Desktop User Profile / Actions */}
+            <div className="flex items-center gap-3">
               {report && (
-                <div className="flex items-center gap-1.5 shrink-0">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => exportReportToPDF(report)}
-                    className="flex items-center gap-1 px-2.5 py-1.5 bg-white text-black hover:bg-zinc-200 rounded-lg text-xs font-bold cursor-pointer transition shadow-sm shrink-0"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition cursor-pointer shadow-sm"
                     title="Download PDF Report"
                   >
-                    <Download className="h-3.5 w-3.5" />
+                    <Download className="h-4 w-4" />
                     <span className="hidden sm:inline-block">PDF Report</span>
                   </button>
                   <button
                     onClick={handleReset}
-                    className="flex items-center gap-1 px-2.5 py-1.5 bg-[#141414] border border-[#2c2c2c] hover:bg-[#1f1f1f] rounded-lg text-xs font-semibold text-slate-300 cursor-pointer transition shadow-sm shrink-0"
+                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition cursor-pointer shadow-sm"
                     title="Audit New URL"
                   >
-                    <RotateCcw className="h-3.5 w-3.5" />
+                    <RotateCcw className="h-4 w-4" />
                     <span className="hidden sm:inline-block">New Audit</span>
                   </button>
                 </div>
               )}
+              
+              {currUser ? (
+                <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 p-2 pr-4 rounded-xl text-sm">
+                  <div className="h-9 w-9 rounded-full bg-primary-100 border border-primary-200 text-primary-700 font-mono font-bold flex items-center justify-center text-xs">
+                    {currUser.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="text-left">
+                    <p className="font-bold leading-none text-gray-900 text-sm">{currUser.name}</p>
+                    <p className="text-[10px] font-mono font-semibold text-gray-500 tracking-wider uppercase leading-none mt-1">{currUser.role}</p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    title="Sign Out"
+                    className="p-1.5 hover:bg-gray-200 rounded-lg text-gray-500 hover:text-gray-700 cursor-pointer transition ml-1"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition cursor-pointer shadow-sm"
+                >
+                  <User className="h-4 w-4" />
+                  Sign In
+                </button>
+              )}
             </div>
           </div>
-
         </div>
       </header>
 
-      {/* 2. Main Page Container */}
-      <main className="max-w-7xl mx-auto px-4 md:px-6 pt-6 md:pt-10">
+      {/* Main Page Container */}
+      <main className="max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-12">
         {activeTab === "dashboard" ? (
           <DashboardView
             auditHistory={auditHistory}
@@ -509,128 +409,132 @@ export default function App() {
             {/* Loading Phase */}
             {loading && <LoadingScreen url={currentUrl} />}
 
-        {/* Error States */}
-        {errorMsg && (
-          <div className="max-w-xl mx-auto bg-rose-50 border border-rose-100 text-rose-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-start gap-3">
-              <XCircle className="h-6 w-6 text-rose-500 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="font-bold font-display text-base">Audit Operation Failed</h3>
-                <p className="text-sm text-rose-600 mt-1 leading-relaxed">
-                  {errorMsg}
-                </p>
-                <p className="text-xs text-rose-500 mt-2 font-medium">
-                  Tip: Confirm that the URL is valid, public-facing, and allows network connections. You can try a simplified domain format like "wikipedia.org".
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={handleReset}
-              className="w-full py-2 bg-white border border-rose-200 text-rose-700 rounded-xl hover:bg-rose-100/50 transition font-semibold text-xs shrink-0 cursor-pointer"
-            >
-              Back to Home State
-            </button>
-          </div>
-        )}
-
-        {/* Home Landing Page (no report, no loading, no error) */}
-        {!report && !loading && !errorMsg && (
-          <div className="space-y-12">
-            <HomeState onAudit={handleRunAudit} isLoading={loading} brandColor={brandColor} brandAccent={BrandAccents[brandColor]} />
-            
-            {/* Interactive saved queries, personalized diagnostic badges and previous audit logs */}
-            <div className="max-w-4xl mx-auto bg-[#0a0a0a] border border-[#222]/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-44 h-44 bg-gradient-to-tr from-blue-500/5 to-transparent blur-[40px] pointer-events-none rounded-full" />
-              
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-900 pb-4 gap-4 mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="h-8 w-8 text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center">
-                    <History className="h-4 w-4" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="font-display font-extrabold text-[#e0e0e0] text-sm leading-tight">
-                      {currUser ? `${currUser.name}'s Search Logbook` : "Interactive Workspace History"}
+            {/* Error States */}
+            {errorMsg && (
+              <div className="max-w-2xl mx-auto bg-error-50 border border-error-100 text-error-800 rounded-2xl p-8 shadow-sm space-y-6">
+                <div className="flex items-start gap-4">
+                  <XCircle className="h-8 w-8 text-error-600 shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <h3 className="font-bold font-display text-xl text-error-900 mb-2">
+                      Audit Operation Failed
                     </h3>
-                    <p className="text-[10px] text-zinc-500">
-                      Fast recall of previously parsed domains and evaluation indexes
+                    <p className="text-error-700 leading-relaxed text-base">
+                      {errorMsg}
+                    </p>
+                    <p className="text-error-600 text-sm mt-3 font-medium">
+                      Tip: Confirm that the URL is valid, public-facing, and allows network connections.
                     </p>
                   </div>
                 </div>
-
-                {!currUser ? (
-                  <button
-                    onClick={() => setShowAuthModal(true)}
-                    className="text-xs bg-zinc-900 hover:bg-[#161616] border border-zinc-800 text-blue-400 font-bold px-3 py-1.5 rounded-lg cursor-pointer transition self-start"
-                  >
-                    🔐 Unlock Sync Settings
-                  </button>
-                ) : (
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1">
-                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Premium Local Engine Active
-                  </span>
-                )}
+                <button
+                  onClick={handleReset}
+                  className="w-full py-3 bg-white border border-error-200 text-error-700 rounded-xl hover:bg-error-100/50 transition font-semibold text-base cursor-pointer shadow-sm"
+                >
+                  Back to Home State
+                </button>
               </div>
+            )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {auditHistory.map((hist, hidx) => (
-                  <div
-                    key={hidx}
-                    onClick={() => handleRunAudit(hist.url)}
-                    className="bg-[#121212]/40 hover:bg-[#141414] border border-[#1e1e1e] hover:border-blue-500/30 p-3 rounded-xl flex items-center justify-between cursor-pointer transition shadow-sm relative group text-left"
-                  >
-                    <div className="space-y-1">
-                      <p className="font-mono text-xs font-bold text-zinc-300 truncate max-w-[155px] group-hover:text-blue-400 transition">
-                        {hist.url}
-                      </p>
-                      <p className="text-[9px] text-zinc-500 font-mono tracking-tight flex items-center gap-1 leading-none">
-                        <Clock className="h-3 w-3 inline shrink-0 text-zinc-600" />
-                        Scanned {hist.date}
-                      </p>
+            {/* Home Landing Page (no report, no loading, no error) */}
+            {!report && !loading && !errorMsg && (
+              <div className="space-y-12">
+                <HomeState onAudit={handleRunAudit} isLoading={loading} />
+                
+                {/* History Section */}
+                <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-3xl p-8 shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-tr from-primary-500/5 to-transparent blur-[40px] pointer-events-none rounded-full" />
+                  
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-6 gap-4 mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 text-primary-600 bg-primary-50 border border-primary-100 rounded-xl flex items-center justify-center">
+                        <History className="h-5 w-5" />
+                      </div>
+                      <div className="text-left">
+                        <h3 className="font-display font-extrabold text-gray-900 text-lg leading-tight">
+                          {currUser ? `${currUser.name}'s Search History` : "Your Recent Scans"}
+                        </h3>
+                        <p className="text-gray-500 text-sm mt-1">
+                          Fast access to your previous website audits
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border leading-none ${
-                        hist.score >= 90 ? "text-emerald-400 bg-emerald-950/20 border-emerald-900/30" : "text-amber-400 bg-amber-950/20 border-amber-900/40"
-                      }`}>
-                        {hist.score}
+
+                    {!currUser ? (
+                      <button
+                        onClick={() => setShowAuthModal(true)}
+                        className="text-sm bg-primary-50 border border-primary-100 text-primary-700 font-bold px-5 py-2.5 rounded-xl hover:bg-primary-100 transition cursor-pointer self-start"
+                      >
+                        <ShieldCheck className="h-4 w-4 inline mr-2" />
+                        Sign Up for Free
+                      </button>
+                    ) : (
+                      <span className="text-xs font-mono text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+                        <ShieldCheck className="h-3.5 w-3.5 text-success-600" /> 
+                        Premium Features Active
                       </span>
-                    </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* Audit Report Container — Premium SaaS Dashboard */}
-        {report && !loading && !errorMsg && (
-          <AuditResultsDashboard
-            report={report}
-            filteredIssues={filteredIssues}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedSeverity={selectedSeverity}
-            setSelectedSeverity={setSelectedSeverity}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            allExpanded={allExpanded}
-            setAllExpanded={setAllExpanded}
-            auditHistory={auditHistory}
-            mappedKeywords={mappedKeywords}
-            keywordInput={keywordInput}
-            setKeywordInput={setKeywordInput}
-            setMappedKeywords={setMappedKeywords}
-            onReset={handleReset}
-            onRescan={() => handleRunAudit(currentUrl)}
-            onExportPDF={() => exportReportToPDF(report)}
-            brandColor={brandColor}
-            brandAccent={BrandAccents[brandColor]}
-          />
-        )}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {auditHistory.map((hist, hidx) => (
+                      <div
+                        key={hidx}
+                        onClick={() => handleRunAudit(hist.url)}
+                        className="bg-gray-50 hover:bg-white border border-gray-200 hover:border-primary-300 p-5 rounded-2xl flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow-md relative group text-left"
+                      >
+                        <div className="space-y-2">
+                          <p className="font-mono text-sm font-bold text-gray-800 truncate max-w-[160px] group-hover:text-primary-700 transition">
+                            {hist.url}
+                          </p>
+                          <p className="text-xs text-gray-500 font-mono tracking-tight flex items-center gap-1.5 leading-none">
+                            <History className="h-3.5 w-3.5 inline" />
+                            {hist.date}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className={`text-xs font-mono font-bold px-3 py-1 rounded-lg border leading-none ${
+                            getScoreColorClass(hist.score)
+                          }`}>
+                            {hist.score}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Audit Report Container */}
+            {report && !loading && !errorMsg && (
+              <AuditResultsDashboard
+                report={report}
+                filteredIssues={filteredIssues}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                selectedSeverity={selectedSeverity}
+                setSelectedSeverity={setSelectedSeverity}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                allExpanded={allExpanded}
+                setAllExpanded={setAllExpanded}
+                auditHistory={auditHistory}
+                mappedKeywords={[]}
+                keywordInput=""
+                setKeywordInput={() => {}}
+                setMappedKeywords={() => {}}
+                onReset={handleReset}
+                onRescan={() => handleRunAudit(currentUrl)}
+                onExportPDF={() => exportReportToPDF(report)}
+                brandColor="blue"
+                brandAccent={null as any}
+              />
+            )}
           </>
         )}
       </main>
 
-      {/* Modern High-fidelity Splash Screen Boot Layer */}
+      {/* Splash Screen */}
       {showSplash && (
         <SplashScreen 
           onDismiss={() => { 
@@ -642,7 +546,7 @@ export default function App() {
         />
       )}
 
-      {/* Simulated authentication account flow gating */}
+      {/* Auth Modal */}
       {showAuthModal && (
         <AuthScreen 
           onClose={() => setShowAuthModal(false)} 
@@ -650,85 +554,86 @@ export default function App() {
         />
       )}
 
-      {/* Floating Diagnostics Glossary Coach Trigger Toggle Button */}
+      {/* Help Glossary Button */}
       <button
         onClick={() => setShowGlossary(true)}
-        className="fixed bottom-6 right-6 z-40 p-3.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-850 hover:border-zinc-700 text-zinc-300 hover:text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer group"
-        title="Open Diagnostics Guide & Standards Glossary"
+        className="fixed bottom-6 right-6 z-40 p-4 bg-white border border-gray-200 hover:border-gray-300 text-gray-700 hover:text-gray-900 rounded-full shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer group"
+        title="Open Diagnostics Guide"
       >
-        <span className={`absolute top-0 right-0 h-3 w-3 rounded-full bg-gradient-to-tr ${BrandAccents[brandColor].gradient} animate-ping`} />
-        <span className={`absolute top-0 right-0 h-3 w-3 rounded-full bg-gradient-to-tr ${BrandAccents[brandColor].gradient}`} />
+        <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-gradient-to-tr from-primary-500 to-secondary-500 animate-ping" />
+        <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-gradient-to-tr from-primary-500 to-secondary-500" />
         <HelpCircle className="h-6 w-6 group-hover:rotate-12 transition-transform duration-200" />
       </button>
 
-      {/* Diagnostics Standards Side Slider Guide Drawer Card */}
+      {/* Glossary Drawer */}
       {showGlossary && (
         <div className="fixed inset-0 z-50 overflow-hidden flex justify-end">
           {/* Backdrop */}
           <div 
             onClick={() => setShowGlossary(false)} 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 cursor-pointer" 
+            className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300 cursor-pointer" 
           />
           
-          {/* Drawer Body container */}
-          <div className="relative w-full max-w-md bg-[#0a0a0a] border-l border-zinc-900 shadow-2xl h-full flex flex-col justify-between p-6 overflow-y-auto animate-fade-in text-left">
-            <div className="space-y-6">
-              {/* Drawer Top Header block */}
-              <div className="flex items-center justify-between border-b border-zinc-900 pb-4">
-                <div className="space-y-1">
-                  <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] uppercase font-bold font-mono tracking-wider ${BrandAccents[brandColor].text} ${BrandAccents[brandColor].bgLight} border ${BrandAccents[brandColor].border}`}>
-                    ★ WORKSPACE ADVOCACY
+          {/* Drawer */}
+          <div className="relative w-full max-w-md bg-white border-l border-gray-200 shadow-2xl h-full flex flex-col justify-between p-8 overflow-y-auto animate-fade-in text-left">
+            <div className="space-y-8">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-6">
+                <div className="space-y-1.5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 text-primary-700 border border-primary-100 text-xs uppercase font-bold font-mono tracking-widest">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    BEST PRACTICES
                   </div>
-                  <h3 className="text-base font-extrabold text-white tracking-tight">Diagnostics Standards Companion</h3>
+                  <h3 className="text-xl font-extrabold text-gray-900 tracking-tight font-display">
+                    Website Audit Guide
+                  </h3>
                 </div>
                 <button 
                   onClick={() => setShowGlossary(false)}
-                  className="text-zinc-500 hover:text-white transition cursor-pointer"
+                  className="text-gray-400 hover:text-gray-600 transition cursor-pointer p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  <XCircle className="h-5.5 w-5.5" />
+                  <XCircle className="h-6 w-6" />
                 </button>
               </div>
 
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-                Professional rules of thumb for WCAG compliances, search ranking performance, content layout, and general client-side optimization heuristics.
+              <p className="text-gray-600 leading-relaxed">
+                Learn about key website metrics and how to improve your score in every category.
               </p>
 
-              {/* Glossary Definitions Items List Grid */}
               <div className="space-y-4">
                 {[
                   {
-                    title: "WCAG Color Contrast Ratios",
-                    desc: "Contrast between screen assets and written elements. WCAG Level AA specifies a contrast of at least 4.5:1 for standard fonts, while AAA heightens the standard to 7:1 for optimum low-vision compatibility."
+                    title: "Color Contrast",
+                    desc: "Make sure your text is readable against its background. WCAG Level AA requires 4.5:1 contrast ratio for normal text.",
                   },
                   {
-                    title: "Largest Contentful Paint (LCP)",
-                    desc: "An essential Core Web Vital metric reporting render speed times. It signals when the primary visual element or largest content block renders on the viewport. Good performance targets ≤ 2.5s."
+                    title: "Page Speed",
+                    desc: "Fast loading improves user experience and SEO. Aim for Largest Contentful Paint (LCP) under 2.5 seconds.",
                   },
                   {
-                    title: "Heading Hierarchies Order",
-                    desc: "Semantic sequential order of page headlines (H1 followed consecutively by H2 sequences, avoiding skips to H4). Vital for web-readers and text speech synthesizers."
+                    title: "Heading Hierarchy",
+                    desc: "Use proper heading tags in order (H1 → H2 → H3) to help screen readers and search engines understand your content.",
                   },
                   {
-                    title: "Image Alternate Text (ALT Attributes)",
-                    desc: "Critical short descriptions appended to HTML image assets. They explain asset nature to disabled browser tools or load when image paths fail."
+                    title: "Image Alt Text",
+                    desc: "Add descriptive alt text to all images so screen reader users know what they show.",
                   },
                   {
-                    title: "Meta Search Index Descriptions",
-                    desc: "Summaries displayed on Google Search Engine Results Page (SERP) cards. Maintain values under 160 characters to maximize clicks and prevent title truncation on mobile."
+                    title: "Meta Descriptions",
+                    desc: "Write unique, descriptive meta tags for each page to improve search results and click-through rates.",
                   },
                   {
-                    title: "Bundle Script Compressions",
-                    desc: "Minifying runtime JavaScript blocks by stripping spaces, wrapping functions, and deferring non-critical assets. Drastically cuts render blocks and speed ratings."
-                  }
+                    title: "Mobile Responsiveness",
+                    desc: "Ensure your site looks good and works well on mobile devices. Use a viewport meta tag!",
+                  },
                 ].map((item, idx) => (
-                  <div key={idx} className="p-4 rounded-xl bg-zinc-950 border border-zinc-900 hover:border-zinc-800 transition">
-                    <h4 className={`text-xs font-bold ${BrandAccents[brandColor].text} flex items-center justify-between`}>
+                  <div key={idx} className="p-5 rounded-2xl bg-gray-50 border border-gray-200 hover:border-primary-200 hover:bg-primary-50/30 transition-all">
+                    <h4 className="text-sm font-bold text-primary-700 flex items-center justify-between mb-2">
                       <span>{item.title}</span>
-                      <span className="text-[9px] font-mono font-bold text-zinc-650 bg-zinc-900 border border-zinc-850 px-1 py-0.5 rounded">
-                        RULE {idx + 1}
+                      <span className="text-[10px] font-mono font-bold text-gray-500 bg-white border border-gray-200 px-2 py-1 rounded-lg">
+                        TIP {idx + 1}
                       </span>
                     </h4>
-                    <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
+                    <p className="text-sm text-gray-700 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
@@ -736,16 +641,16 @@ export default function App() {
               </div>
             </div>
 
-            {/* Bottom Help Card Footer */}
-            <div className="pt-6 border-t border-zinc-900 text-center space-y-3">
-              <p className="text-[10px] text-zinc-500 italic">
-                MentorDocks automatically applies these diagnostic standards to every code scan!
+            {/* Footer */}
+            <div className="pt-8 border-t border-gray-100 text-center space-y-4">
+              <p className="text-xs text-gray-500 italic">
+                Apply these tips to improve your website score!
               </p>
               <button
                 onClick={() => setShowGlossary(false)}
-                className={`w-full py-2.5 rounded-xl bg-white text-black font-extrabold text-xs uppercase hover:bg-zinc-200 transition cursor-pointer`}
+                className="w-full py-3.5 rounded-xl bg-gray-900 text-white font-extrabold text-sm uppercase hover:bg-gray-800 transition-all cursor-pointer shadow-lg hover:shadow-xl"
               >
-                Return to Workspace
+                Got it, thanks!
               </button>
             </div>
           </div>

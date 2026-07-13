@@ -99,42 +99,42 @@ export function DashboardView({
   };
 
   const getScoreBadgeClass = (score: number) => {
-    if (score >= 90) return "text-emerald-400 bg-emerald-950/20 border-emerald-900/30";
-    if (score >= 70) return "text-amber-400 bg-amber-950/20 border-amber-900/40";
-    return "text-rose-400 bg-rose-950/20 border-rose-900/40";
+    if (score >= 90) return "text-success-700 bg-success-50 border-success-100";
+    if (score >= 70) return "text-warning-700 bg-warning-50 border-warning-100";
+    return "text-error-700 bg-error-50 border-error-100";
   };
 
   return (
     <div className="space-y-6 animate-fade-in text-left">
       
       {/* Dashboard Top Intro Banner */}
-      <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-blue-500/10 via-indigo-500/5 to-transparent blur-[50px] pointer-events-none rounded-full" />
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 relative overflow-hidden shadow-sm">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-primary-500/10 via-secondary-500/5 to-transparent blur-[50px] pointer-events-none rounded-full" />
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-mono font-bold uppercase tracking-wider">
-              <BarChart3 className="h-3 w-3" /> ANALYTICS COMMAND CENTER
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-primary-50 border border-primary-100 rounded-full text-primary-700 text-[10px] font-mono font-bold uppercase tracking-wider">
+              <BarChart3 className="h-3 w-3" /> ANALYTICS DASHBOARD
             </div>
-            <h2 className="text-xl md:text-2xl font-extrabold text-white tracking-tight">
-              {currUser ? `${currUser.name}'s Compliance Dashboard` : "Universal Audit Command Dashboard"}
+            <h2 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+              {currUser ? `${currUser.name}'s Website Audit Dashboard` : "Website Audit Dashboard"}
             </h2>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Explore aggregate health curves, evaluate compliance indices across saved websites, and simulate remediation impact levels in real time.
+            <p className="text-sm text-gray-600 leading-relaxed">
+              Explore your audit history, track scores over time, and simulate improvements.
             </p>
           </div>
           
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={onAuditNew}
-              className="px-4 py-2 bg-white text-black hover:bg-zinc-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              className="px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white hover:shadow-lg transition flex items-center gap-1.5 cursor-pointer shadow-sm rounded-xl font-bold text-xs"
             >
               <Plus className="h-4 w-4" /> Run New Audit
             </button>
             {totalScans > 0 && (
               <button
                 onClick={onClearHistory}
-                className="px-3.5 py-2 bg-zinc-950 border border-zinc-850 hover:bg-zinc-900 hover:border-zinc-800 rounded-xl text-xs font-semibold text-zinc-400 hover:text-rose-400 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-2 bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 rounded-xl text-xs font-semibold text-gray-600 hover:text-error-600 transition flex items-center gap-1.5 cursor-pointer"
                 title="Clear Logs"
               >
                 <Trash2 className="h-3.5 w-3.5" /> Clear Logs
@@ -147,72 +147,72 @@ export function DashboardView({
       {/* Bento Grid Analytics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Total Audited */}
-        <div className="bg-[#0a0a0a] border border-zinc-900 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-zinc-800 transition">
+        <div className="bg-white border border-gray-200 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-primary-300 transition shadow-sm card">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider">Audit Frequency</span>
-            <div className="p-1.5 bg-blue-500/10 border border-blue-500/10 text-blue-400 rounded-lg">
+            <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider">Audit Count</span>
+            <div className="p-1.5 bg-primary-50 border border-primary-100 text-primary-600 rounded-lg">
               <Globe className="h-4 w-4" />
             </div>
           </div>
           <div>
-            <span className="text-3xl font-black font-mono text-white block tracking-tight">{totalScans}</span>
-            <span className="text-[11px] text-zinc-400 block mt-1 leading-none">Scanned URLs in history</span>
+            <span className="text-3xl font-black font-mono text-gray-900 block tracking-tight">{totalScans}</span>
+            <span className="text-[11px] text-gray-500 block mt-1 leading-none">Scanned URLs in history</span>
           </div>
         </div>
 
         {/* Card 2: Average Score */}
-        <div className="bg-[#0a0a0a] border border-zinc-900 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-zinc-800 transition">
+        <div className="bg-white border border-gray-200 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-primary-300 transition shadow-sm card">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider">Average Compliance</span>
-            <div className="p-1.5 bg-emerald-500/10 border border-emerald-500/10 text-emerald-400 rounded-lg">
+            <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider">Average Score</span>
+            <div className="p-1.5 bg-success-50 border border-success-100 text-success-600 rounded-lg">
               <Award className="h-4 w-4" />
             </div>
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-black font-mono text-white block tracking-tight">{avgScore}</span>
-              <span className="text-xs font-mono font-bold text-emerald-400">/100</span>
+              <span className="text-3xl font-black font-mono text-gray-900 block tracking-tight">{avgScore}</span>
+              <span className="text-xs font-mono font-bold text-success-600">/100</span>
             </div>
-            <span className="text-[11px] text-zinc-400 block mt-1 leading-none">
+            <span className="text-[11px] text-gray-500 block mt-1 leading-none">
               {avgScore >= 90 ? "Excellent Avg Grade" : avgScore >= 70 ? "Needs Minor Edits" : "Action Recommended"}
             </span>
           </div>
         </div>
 
         {/* Card 3: Top Performer */}
-        <div className="bg-[#0a0a0a] border border-zinc-900 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-zinc-800 transition">
+        <div className="bg-white border border-gray-200 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-primary-300 transition shadow-sm card">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider">Peak Audit Score</span>
-            <div className="p-1.5 bg-indigo-500/10 border border-indigo-500/10 text-indigo-400 rounded-lg">
+            <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider">Top Score</span>
+            <div className="p-1.5 bg-secondary-50 border border-secondary-100 text-secondary-600 rounded-lg">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-black font-mono text-white block tracking-tight">{highestScore}</span>
-              <span className="text-[10px] text-zinc-500 font-mono font-bold">Max score</span>
+              <span className="text-3xl font-black font-mono text-gray-900 block tracking-tight">{highestScore}</span>
+              <span className="text-[10px] text-gray-500 font-mono font-bold">Max</span>
             </div>
-            <p className="text-[11px] text-zinc-400 truncate mt-1 leading-none">
+            <p className="text-[11px] text-gray-500 truncate mt-1 leading-none">
               {totalScans > 0 ? `Best: ${auditHistory.reduce((a, b) => b.score > a.score ? b : a).url}` : "No scanned records"}
             </p>
           </div>
         </div>
 
         {/* Card 4: Weakest Performer */}
-        <div className="bg-[#0a0a0a] border border-zinc-900 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-zinc-800 transition">
+        <div className="bg-white border border-gray-200 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-primary-300 transition shadow-sm card">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider">Lowest Audit Score</span>
-            <div className="p-1.5 bg-rose-500/10 border border-rose-500/10 text-rose-400 rounded-lg">
+            <span className="text-[10px] font-mono font-bold text-gray-500 uppercase tracking-wider">Lowest Score</span>
+            <div className="p-1.5 bg-warning-50 border border-warning-100 text-warning-600 rounded-lg">
               <Zap className="h-4 w-4" />
             </div>
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-black font-mono text-white block tracking-tight">{lowestScore}</span>
-              <span className="text-[10px] text-zinc-500 font-mono font-bold">Min score</span>
+              <span className="text-3xl font-black font-mono text-gray-900 block tracking-tight">{lowestScore}</span>
+              <span className="text-[10px] text-gray-500 font-mono font-bold">Min</span>
             </div>
-            <p className="text-[11px] text-zinc-400 truncate mt-1 leading-none">
-              {totalScans > 0 ? `Needs improvement: ${auditHistory.reduce((a, b) => b.score < a.score ? b : a).url}` : "No scanned records"}
+            <p className="text-[11px] text-gray-500 truncate mt-1 leading-none">
+              {totalScans > 0 ? `Needs work: ${auditHistory.reduce((a, b) => b.score < a.score ? b : a).url}` : "No scanned records"}
             </p>
           </div>
         </div>
@@ -225,23 +225,23 @@ export function DashboardView({
         <div className="lg:col-span-2 space-y-6">
           
           {/* Integrated Interactive History Progress Tracker */}
-          <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-5 shadow-lg">
-            <div className="flex items-center justify-between border-b border-zinc-900 pb-3 mb-4">
+          <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
               <div className="space-y-0.5">
-                <h3 className="font-bold text-white text-sm">Crawl Health Progress Timeline</h3>
-                <p className="text-[10px] text-zinc-500">Chronological score trend for all inspected domains</p>
+                <h3 className="font-bold text-gray-900 text-sm">Score Trend Timeline</h3>
+                <p className="text-[10px] text-gray-500">Chronological score trend for all inspected domains</p>
               </div>
-              <span className="text-[10px] font-mono text-zinc-400 bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded">
-                Live Interactive SVG
+              <span className="text-[10px] font-mono text-gray-500 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded">
+                Interactive Chart
               </span>
             </div>
 
             {totalScans < 2 ? (
-              <div className="text-center py-10 text-zinc-500 space-y-2">
-                <p className="text-xs">Run audits on multiple domains to view chronological line comparison charts.</p>
+              <div className="text-center py-10 text-gray-500 space-y-2">
+                <p className="text-xs">Run audits on multiple domains to view chronological charts.</p>
                 <button
                   onClick={onAuditNew}
-                  className="text-xs text-blue-400 hover:underline font-bold cursor-pointer"
+                  className="text-xs text-primary-600 hover:underline font-bold cursor-pointer"
                 >
                   Scan another site now
                 </button>
@@ -249,12 +249,12 @@ export function DashboardView({
             ) : (
               <div className="space-y-4">
                 {/* SVG Line Graph */}
-                <div className="relative pt-6 px-2 bg-zinc-950/45 rounded-xl border border-zinc-900/50">
+                <div className="relative pt-6 px-2 bg-gray-50 rounded-xl border border-gray-200">
                   <svg className="w-full h-40 overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
                     {/* Grid Lines */}
-                    <line x1="0" y1="20" x2="500" y2="20" stroke="#1c1c1c" strokeWidth="1" strokeDasharray="3,3" />
-                    <line x1="0" y1="60" x2="500" y2="60" stroke="#1c1c1c" strokeWidth="1" strokeDasharray="3,3" />
-                    <line x1="0" y1="100" x2="500" y2="100" stroke="#1c1c1c" strokeWidth="1" strokeDasharray="3,3" />
+                    <line x1="0" y1="20" x2="500" y2="20" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="3,3" />
+                    <line x1="0" y1="60" x2="500" y2="60" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="3,3" />
+                    <line x1="0" y1="100" x2="500" y2="100" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="3,3" />
 
                     {/* Gradient Area under line */}
                     <defs>
@@ -268,12 +268,10 @@ export function DashboardView({
                     {(() => {
                       const points = auditHistory.map((item, idx) => {
                         const x = totalScans > 1 ? (idx / (totalScans - 1)) * 500 : 250;
-                        // Map score 0-100 to y coordinate (110 down to 10)
                         const y = 110 - (item.score / 100) * 100;
                         return { x, y, ...item };
                       });
 
-                      // Construct cubic bezier path or simple points line
                       let pathStr = `M ${points[0].x} ${points[0].y}`;
                       for (let i = 1; i < points.length; i++) {
                         pathStr += ` L ${points[i].x} ${points[i].y}`;
@@ -302,7 +300,7 @@ export function DashboardView({
                                 cy={pt.y} 
                                 r={hoveredDataPoint === pIdx ? "6" : "4.5"} 
                                 fill={pt.score >= 90 ? "#10b981" : pt.score >= 70 ? "#f59e0b" : "#ef4444"} 
-                                stroke="#141414"
+                                stroke="#ffffff"
                                 strokeWidth="2"
                                 className="transition-all duration-150"
                               />
@@ -314,7 +312,7 @@ export function DashboardView({
                   </svg>
                   
                   {/* Timeline labels */}
-                  <div className="flex justify-between text-[9px] font-mono text-zinc-500 pt-2 border-t border-zinc-900 mt-2 px-1">
+                  <div className="flex justify-between text-[9px] font-mono text-gray-500 pt-2 border-t border-gray-200 mt-2 px-1">
                     <span>{auditHistory[0]?.date || "Oldest"}</span>
                     <span>Progression</span>
                     <span>{auditHistory[auditHistory.length - 1]?.date || "Latest"}</span>
@@ -322,23 +320,23 @@ export function DashboardView({
                 </div>
 
                 {/* Hover Details Panel */}
-                <div className="bg-zinc-950 p-3 rounded-xl border border-zinc-900 flex justify-between items-center h-14">
+                <div className="bg-gray-50 p-3 rounded-xl border border-gray-200 flex justify-between items-center h-14">
                   {hoveredDataPoint !== null ? (
                     <>
                       <div className="text-left">
-                        <span className="text-[10px] font-mono text-zinc-500 block leading-tight">INSPECTED DOMAIN</span>
-                        <span className="text-xs font-bold font-mono text-white">{auditHistory[hoveredDataPoint].url}</span>
+                        <span className="text-[10px] font-mono text-gray-500 block leading-tight">INSPECTED DOMAIN</span>
+                        <span className="text-xs font-bold font-mono text-gray-900">{auditHistory[hoveredDataPoint].url}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] font-mono text-zinc-500 block leading-tight">HEALTH RATING</span>
+                        <span className="text-[10px] font-mono text-gray-500 block leading-tight">HEALTH RATING</span>
                         <span className={`text-sm font-black font-mono ${
-                          auditHistory[hoveredDataPoint].score >= 90 ? "text-emerald-400" : "text-amber-400"
+                          auditHistory[hoveredDataPoint].score >= 90 ? "text-success-700" : "text-warning-700"
                         }`}>{auditHistory[hoveredDataPoint].score} / 100</span>
                       </div>
                     </>
                   ) : (
-                    <p className="text-[10px] font-mono text-zinc-500 italic mx-auto flex items-center gap-1.5 select-none md:gap-2">
-                      <Info className="h-3.5 w-3.5 text-blue-500 shrink-0" /> Hover over timelines nodes to inspect previous compliance metrics!
+                    <p className="text-[10px] font-mono text-gray-500 italic mx-auto flex items-center gap-1.5 select-none md:gap-2">
+                      <Info className="h-3.5 w-3.5 text-primary-600 shrink-0" /> Hover over timelines nodes to inspect previous metrics!
                     </p>
                   )}
                 </div>
@@ -347,19 +345,19 @@ export function DashboardView({
           </div>
 
           {/* Interactive Multi-URL Comparator */}
-          <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-5 shadow-lg">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-900 pb-3 mb-4 gap-2">
+          <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-3 mb-4 gap-2">
               <div className="space-y-0.5">
-                <h3 className="font-bold text-white text-sm">Interactive Multi-URL Comparator</h3>
-                <p className="text-[10px] text-zinc-500">Pick up to 3 domains to analyze and contrast evaluation metrics</p>
+                <h3 className="font-bold text-gray-900 text-sm">Multi-URL Comparator</h3>
+                <p className="text-[10px] text-gray-500">Pick up to 3 domains to analyze and contrast</p>
               </div>
-              <span className="text-[9px] font-mono text-zinc-400 bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded shrink-0 self-start">
+              <span className="text-[9px] font-mono text-gray-500 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded shrink-0 self-start">
                 {comparingUrls.length} selected
               </span>
             </div>
 
             {totalScans === 0 ? (
-              <p className="text-xs text-zinc-500 text-center py-6">Your crawl log is clean. Run a scan to unlock comparison widgets!</p>
+              <p className="text-xs text-gray-500 text-center py-6">Your crawl log is clean. Run a scan to unlock comparison widgets!</p>
             ) : (
               <div className="space-y-4">
                 {/* Selector list */}
@@ -372,11 +370,11 @@ export function DashboardView({
                         onClick={() => handleToggleCompare(item.url)}
                         className={`text-xs font-mono px-3 py-1.5 rounded-full border transition cursor-pointer flex items-center gap-1.5 ${
                           isSelected
-                            ? "bg-blue-500/10 text-blue-400 border-blue-500/50"
-                            : "bg-[#121212]/30 hover:bg-zinc-900 border-zinc-850 text-zinc-400"
+                            ? "bg-primary-50 text-primary-700 border-primary-200"
+                            : "bg-gray-50 hover:bg-gray-100 border-gray-200 text-gray-600"
                         }`}
                       >
-                        <span className={`h-2.5 w-2.5 rounded-full ${isSelected ? "bg-blue-400 animate-pulse" : "bg-zinc-600"}`} />
+                        <span className={`h-2.5 w-2.5 rounded-full ${isSelected ? "bg-primary-600 animate-pulse" : "bg-gray-400"}`} />
                         {item.url} ({item.score})
                       </button>
                     );
@@ -385,25 +383,25 @@ export function DashboardView({
 
                 {/* Compare Display */}
                 {comparingUrls.length > 0 ? (
-                  <div className="bg-[#0c0c0c] border border-zinc-90 w-full p-4 rounded-xl space-y-3.5">
+                  <div className="bg-gray-50 border border-gray-200 w-full p-4 rounded-xl space-y-3.5">
                     {comparingUrls.map((urlName) => {
                       const record = auditHistory.find(item => item.url === urlName);
                       if (!record) return null;
                       return (
                         <div key={urlName} className="space-y-1 text-left">
                           <div className="flex justify-between items-center text-xs">
-                            <span className="font-bold text-zinc-200 font-mono flex items-center gap-1">
-                              <Globe className="h-3 w-3 text-zinc-500" /> {urlName}
+                            <span className="font-bold text-gray-800 font-mono flex items-center gap-1">
+                              <Globe className="h-3 w-3 text-gray-500" /> {urlName}
                             </span>
                             <span className={`font-bold font-mono text-xs px-2 py-0.5 rounded border ${getScoreBadgeClass(record.score)}`}>
                               Score: {record.score}/100
                             </span>
                           </div>
                           {/* Relative graph horizontal bar */}
-                          <div className="w-full bg-zinc-950 h-2.5 rounded-full overflow-hidden border border-zinc-900">
+                          <div className="w-full bg-white h-2.5 rounded-full overflow-hidden border border-gray-200">
                             <div 
                               className={`h-full rounded-full transition-all duration-300 ${
-                                record.score >= 90 ? "bg-emerald-500" : record.score >= 70 ? "bg-amber-500" : "bg-rose-500"
+                                record.score >= 90 ? "bg-success-500" : record.score >= 70 ? "bg-warning-500" : "bg-error-500"
                               }`}
                               style={{ width: `${record.score}%` }}
                             />
@@ -413,8 +411,8 @@ export function DashboardView({
                     })}
                   </div>
                 ) : (
-                  <div className="bg-[#0b0b0b] p-4 rounded-xl border border-dashed border-zinc-850 text-center text-zinc-500">
-                    <p className="text-xs">Select any website domain tags above to initiate a side-by-side performance audit comparison.</p>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-dashed border-gray-300 text-center text-gray-500">
+                    <p className="text-xs">Select any website domain tags above to initiate a side-by-side comparison.</p>
                   </div>
                 )}
               </div>
@@ -427,35 +425,35 @@ export function DashboardView({
         <div className="space-y-6">
           
           {/* Diagnostic score calculator sandbox */}
-          <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-5 shadow-lg space-y-4">
-            <div className="border-b border-zinc-900 pb-3">
-              <div className="flex items-center gap-1.5 mb-1 bg-zinc-900 border border-zinc-850 w-fit px-2 py-0.5 rounded text-[9px] text-blue-400 font-mono font-bold">
-                <Sparkles className="h-3 w-3 inline text-amber-500" /> SIMULATION SANDBOX
+          <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-lg space-y-4">
+            <div className="border-b border-gray-100 pb-3">
+              <div className="flex items-center gap-1.5 mb-1 bg-gray-50 border border-gray-200 w-fit px-2 py-0.5 rounded text-[9px] text-primary-600 font-mono font-bold">
+                <Sparkles className="h-3 w-3 inline text-warning-500" /> SIMULATION SANDBOX
               </div>
-              <h3 className="font-bold text-white text-sm">Interactive Dev Playbook</h3>
-              <p className="text-[10px] text-zinc-500">Toggle optimization tasks to see simulated health score upgrades</p>
+              <h3 className="font-bold text-gray-900 text-sm">Simulated Score Improvements</h3>
+              <p className="text-[10px] text-gray-500">Toggle optimization tasks to see simulated score upgrades</p>
             </div>
 
             {/* Score Lift Visual Gauge */}
-            <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-900 text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-24 h-24 bg-blue-500/10 blur-[30px] rounded-full pointer-events-none" />
+            <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-24 h-24 bg-primary-500/10 blur-[30px] rounded-full pointer-events-none" />
               
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block">Simulated Grade</span>
+                <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest block">Simulated Grade</span>
                 <div className="flex items-baseline justify-center gap-2">
                   <span className={`text-4xl font-black font-mono transition-colors duration-200 ${
-                    simulatedScore >= 90 ? "text-emerald-400" : simulatedScore >= 70 ? "text-amber-400" : "text-rose-400"
+                    simulatedScore >= 90 ? "text-success-700" : simulatedScore >= 70 ? "text-warning-700" : "text-error-700"
                   }`}>
                     {simulatedScore}
                   </span>
-                  <span className="text-sm font-bold text-zinc-500">/ 100</span>
+                  <span className="text-sm font-bold text-gray-500">/ 100</span>
                 </div>
                 {simulatedScore > baseScore ? (
-                  <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/20 border border-emerald-900/20 px-2 py-0.5 rounded-full inline-block mt-1">
+                  <span className="text-[10px] font-semibold text-success-700 bg-success-50 border border-success-100 px-2 py-0.5 rounded-full inline-block mt-1">
                     ★ Estimated Score Lift: +{simulatedScore - baseScore} points!
                   </span>
                 ) : (
-                  <span className="text-[10px] text-[#666] italic block mt-1">
+                  <span className="text-[10px] text-gray-500 italic block mt-1">
                     Select optimizations below to simulate score impact
                   </span>
                 )}
@@ -468,31 +466,31 @@ export function DashboardView({
                 <div 
                   key={item.id}
                   onClick={() => handleToggleChecklist(item.id)}
-                  className={`p-3 rounded-xl border transition cursor-pointer flex items-start gap-3 select-none hover:border-zinc-800 ${
+                  className={`p-3 rounded-xl border transition cursor-pointer flex items-start gap-3 select-none hover:border-primary-200 ${
                     item.checked 
-                      ? "bg-blue-500/5 border-blue-500/20 text-white" 
-                      : "bg-[#0c0c0c] border-[#161616] text-zinc-400"
+                      ? "bg-primary-50 border-primary-200 text-gray-900" 
+                      : "bg-gray-50 border-gray-200 text-gray-700"
                   }`}
                 >
                   <div className="pt-0.5 shrink-0">
                     <div className={`h-4.5 w-4.5 rounded-md flex items-center justify-center border transition ${
                       item.checked 
-                        ? "bg-blue-500 border-blue-500 text-white" 
-                        : "border-zinc-800 bg-[#070707]"
+                        ? "bg-primary-600 border-primary-600 text-white" 
+                        : "border-gray-300 bg-white"
                     }`}>
                       {item.checked && <CheckCircle2 className="h-3 w-3 stroke-[3]" />}
                     </div>
                   </div>
                   <div className="space-y-1 flex-1 text-left">
-                    <span className="text-[10px] font-mono text-zinc-500 bg-zinc-950 px-1.5 py-0.5 rounded border border-zinc-900">
+                    <span className="text-[10px] font-mono text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200">
                       {item.category}
                     </span>
-                    <p className={`text-xs leading-normal ${item.checked ? "text-zinc-100 font-medium" : "text-zinc-400"}`}>
+                    <p className={`text-xs leading-normal ${item.checked ? "text-gray-900 font-medium" : "text-gray-700"}`}>
                       {item.label}
                     </p>
                   </div>
                   <span className={`text-[10px] font-mono font-bold shrink-0 py-0.5 px-2 rounded-md ${
-                    item.checked ? "text-blue-400 bg-blue-950/25" : "text-zinc-500 bg-zinc-950"
+                    item.checked ? "text-primary-700 bg-primary-50" : "text-gray-500 bg-white border border-gray-200"
                   }`}>
                     +{item.impact}
                   </span>
@@ -501,12 +499,12 @@ export function DashboardView({
             </div>
 
             {/* Playbook AI advisory tip */}
-            <div className="bg-[#1010ef]/5 p-3 rounded-xl border border-blue-900/10 text-left">
-              <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block mb-1">
+            <div className="bg-primary-50 p-3 rounded-xl border border-primary-100 text-left">
+              <span className="text-[10px] font-bold text-primary-700 uppercase tracking-widest block mb-1">
                 AI Advisory Tip
               </span>
-              <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-                The best ways to improve your website are: adding descriptions to images, making your code smaller, and using headings in order. These changes will make your site faster and easier for everyone to use!
+              <p className="text-xs text-gray-700 leading-relaxed font-sans">
+                The best ways to improve your website are: adding descriptions to images, making your code smaller, and using headings in order!
               </p>
             </div>
           </div>
@@ -514,39 +512,39 @@ export function DashboardView({
       </div>
 
       {/* Comprehensive Audit Crawl History & Reports Section */}
-      <div className="bg-[#0a0a0a] border border-zinc-900 rounded-2xl p-6 shadow-xl space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-900 pb-4">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-mono font-bold uppercase tracking-wider">
-              <History className="h-3 w-3" /> AUDIT HISTORY LOGS
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-primary-50 border border-primary-100 rounded-full text-primary-700 text-[10px] font-mono font-bold uppercase tracking-wider">
+              <History className="h-3 w-3" /> AUDIT HISTORY
             </div>
-            <h3 className="text-lg font-bold text-white tracking-tight">Website Compliance Crawl History</h3>
-            <p className="text-xs text-zinc-400">
-              Inspect past diagnostic evaluations, reload scanner blueprints, or compare historical scans.
+            <h3 className="text-lg font-bold text-gray-900 tracking-tight">Your Audit History</h3>
+            <p className="text-xs text-gray-600">
+              Inspect past evaluations, reload audits, or compare historical scans.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
             <div className="relative">
-              <Search className="h-3.5 w-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="h-3.5 w-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Filter domain crawls..."
                 value={historyQuery}
                 onChange={(e) => setHistoryQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition w-48 sm:w-60"
+                className="pl-8 pr-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 transition w-48 sm:w-60"
               />
             </div>
             <button
               onClick={onAuditNew}
-              className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-primary-500 to-secondary-500 hover:shadow-lg text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" /> Run New Audit
             </button>
             {auditHistory.length > 0 && (
               <button
                 onClick={onClearHistory}
-                className="px-3 py-1.5 bg-zinc-900 hover:bg-rose-950/40 text-zinc-400 hover:text-rose-300 border border-zinc-800 hover:border-rose-900/40 rounded-xl text-xs font-semibold transition cursor-pointer"
+                className="px-3 py-1.5 bg-gray-100 hover:bg-error-50 text-gray-600 hover:text-error-600 border border-gray-200 hover:border-error-200 rounded-xl text-xs font-semibold transition cursor-pointer"
               >
                 Clear All
               </button>
@@ -556,19 +554,19 @@ export function DashboardView({
 
         {/* Audit History Table */}
         {auditHistory.length === 0 ? (
-          <div className="py-12 px-4 text-center bg-zinc-950/60 rounded-2xl border border-dashed border-zinc-850 space-y-4">
-            <div className="h-12 w-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto">
+          <div className="py-12 px-4 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300 space-y-4">
+            <div className="h-12 w-12 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center mx-auto">
               <Globe className="h-6 w-6" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-white">No Audit History Available</h4>
-              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                You haven't scanned any websites under this profile yet. Run your first website audit to populate history and unlock visual analytics.
+              <h4 className="text-sm font-bold text-gray-900">No Audit History Available</h4>
+              <p className="text-xs text-gray-600 max-w-sm mx-auto">
+                You haven't scanned any websites yet. Run your first website audit to populate history and unlock analytics!
               </p>
             </div>
             <button
               onClick={onAuditNew}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition inline-flex items-center gap-2 shadow-md cursor-pointer"
+              className="px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-xl text-xs font-bold transition inline-flex items-center gap-2 shadow-md cursor-pointer hover:shadow-lg"
             >
               Start First Audit <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -577,7 +575,7 @@ export function DashboardView({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-zinc-900 text-[11px] font-mono uppercase tracking-wider text-zinc-500">
+                <tr className="border-b border-gray-200 text-[11px] font-mono uppercase tracking-wider text-gray-500">
                   <th className="pb-3 pl-2">Target Website URL</th>
                   <th className="pb-3">Scan Date</th>
                   <th className="pb-3">Health Score</th>
@@ -585,20 +583,20 @@ export function DashboardView({
                   <th className="pb-3 text-right pr-2">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-900/60">
+              <tbody className="divide-y divide-gray-100">
                 {auditHistory
                   .filter((item) =>
                     item.url.toLowerCase().includes(historyQuery.toLowerCase())
                   )
                   .map((item, idx) => (
-                    <tr key={idx} className="group hover:bg-zinc-950/80 transition">
+                    <tr key={idx} className="group hover:bg-gray-50 transition">
                       <td className="py-3.5 pl-2">
                         <div className="flex items-center gap-2.5">
-                          <div className="h-7 w-7 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-blue-400 transition">
+                          <div className="h-7 w-7 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 group-hover:text-primary-600 transition">
                             <Globe className="h-3.5 w-3.5" />
                           </div>
                           <div>
-                            <span className="font-mono font-bold text-xs text-zinc-200 block">
+                            <span className="font-mono font-bold text-xs text-gray-900 block">
                               {item.url}
                             </span>
                           </div>
@@ -606,8 +604,8 @@ export function DashboardView({
                       </td>
 
                       <td className="py-3.5">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400">
-                          <Calendar className="h-3 w-3 text-zinc-600" />
+                        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-600">
+                          <Calendar className="h-3 w-3 text-gray-400" />
                           {item.date}
                         </span>
                       </td>
@@ -624,14 +622,14 @@ export function DashboardView({
 
                       <td className="py-3.5 max-w-xs">
                         <div className="flex items-center gap-3">
-                          <div className="flex-1 bg-zinc-950 h-2 rounded-full overflow-hidden border border-zinc-900">
+                          <div className="flex-1 bg-gray-100 h-2 rounded-full overflow-hidden border border-gray-200">
                             <div
                               className={`h-full rounded-full transition-all duration-300 ${
                                 item.score >= 90
-                                  ? "bg-emerald-500"
+                                  ? "bg-success-500"
                                   : item.score >= 70
-                                  ? "bg-amber-500"
-                                  : "bg-rose-500"
+                                  ? "bg-warning-500"
+                                  : "bg-error-500"
                               }`}
                               style={{ width: `${item.score}%` }}
                             />
@@ -643,7 +641,7 @@ export function DashboardView({
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => onSelectAudit(item.url)}
-                            className="px-2.5 py-1 bg-zinc-900 hover:bg-blue-600/20 text-zinc-300 hover:text-blue-400 border border-zinc-800 hover:border-blue-500/30 rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                            className="px-2.5 py-1 bg-gray-100 hover:bg-primary-50 text-gray-700 hover:text-primary-700 border border-gray-200 hover:border-primary-200 rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                             title="Inspect full audit report"
                           >
                             <ExternalLink className="h-3 w-3" /> View Report
@@ -652,8 +650,8 @@ export function DashboardView({
                             onClick={() => handleToggleCompare(item.url)}
                             className={`px-2.5 py-1 rounded-lg text-xs font-bold transition border cursor-pointer ${
                               comparingUrls.includes(item.url)
-                                ? "bg-blue-600/20 text-blue-400 border-blue-500/30"
-                                : "bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200"
+                                ? "bg-primary-50 text-primary-700 border-primary-200"
+                                : "bg-gray-100 text-gray-600 border-gray-200 hover:text-gray-900"
                             }`}
                             title="Compare this scan"
                           >
@@ -662,7 +660,7 @@ export function DashboardView({
                           {onDeleteAudit && (
                             <button
                               onClick={() => onDeleteAudit(item.url)}
-                              className="p-1.5 bg-zinc-900 hover:bg-rose-950/40 text-zinc-500 hover:text-rose-400 border border-zinc-800 hover:border-rose-900/40 rounded-lg transition cursor-pointer"
+                              className="p-1.5 bg-gray-100 hover:bg-error-50 text-gray-500 hover:text-error-600 border border-gray-200 hover:border-error-200 rounded-lg transition cursor-pointer"
                               title="Delete from history"
                             >
                               <Trash2 className="h-3 w-3" />

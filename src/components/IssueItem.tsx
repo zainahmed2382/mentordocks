@@ -6,13 +6,10 @@ import {
   Info, 
   Copy, 
   Check, 
-  Terminal, 
   FileCode, 
   Hammer, 
   ChevronDown, 
-  ChevronUp, 
-  Eye,
-  EyeOff
+  ChevronUp
 } from "lucide-react";
 
 interface IssueItemProps {
@@ -35,22 +32,22 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
 
   switch (issue.severity) {
     case "High":
-      severityBadge = "bg-rose-500/10 text-rose-400 border-rose-500/20";
-      severityIcon = <XCircle className="h-3.5 w-3.5 text-rose-400" />;
-      borderAccent = "border-l-4 border-l-rose-500";
-      hoverBg = "hover:bg-rose-500/[0.02]";
+      severityBadge = "bg-error-50 text-error-700 border-error-200";
+      severityIcon = <XCircle className="h-3.5 w-3.5 text-error-600" />;
+      borderAccent = "border-l-4 border-l-error-500";
+      hoverBg = "hover:bg-error-50";
       break;
     case "Medium":
-      severityBadge = "bg-amber-500/10 text-amber-400 border-amber-500/20";
-      severityIcon = <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />;
-      borderAccent = "border-l-4 border-l-amber-550";
-      hoverBg = "hover:bg-amber-500/[0.02]";
+      severityBadge = "bg-warning-50 text-warning-700 border-warning-200";
+      severityIcon = <AlertTriangle className="h-3.5 w-3.5 text-warning-600" />;
+      borderAccent = "border-l-4 border-l-warning-500";
+      hoverBg = "hover:bg-warning-50";
       break;
     case "Low":
-      severityBadge = "bg-zinc-800 text-zinc-400 border-zinc-700/60";
-      severityIcon = <Info className="h-3.5 w-3.5 text-zinc-400" />;
-      borderAccent = "border-l-4 border-l-zinc-600";
-      hoverBg = "hover:bg-zinc-800/10";
+      severityBadge = "bg-gray-50 text-gray-700 border-gray-200";
+      severityIcon = <Info className="h-3.5 w-3.5 text-gray-600" />;
+      borderAccent = "border-l-4 border-l-gray-400";
+      hoverBg = "hover:bg-gray-50";
       break;
   }
 
@@ -88,8 +85,8 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
   return (
     <div
       onClick={() => setLocalExpanded(!localExpanded)}
-      className={`bg-[#0a0a0a] rounded-xl border border-zinc-900 shadow-md overflow-hidden transition-all duration-200 cursor-pointer ${hoverBg} ${borderAccent} ${
-        isExpanded ? "ring-1 ring-blue-500/20 bg-zinc-950/20 border-zinc-800" : ""
+      className={`bg-white rounded-xl border border-gray-200 shadow-md overflow-hidden transition-all duration-200 cursor-pointer ${hoverBg} ${borderAccent} ${
+        isExpanded ? "ring-1 ring-primary-200 bg-gray-50 border-primary-300" : ""
       }`}
     >
       <div className="p-4 md:p-5">
@@ -98,7 +95,7 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
           <div className="flex-1 min-w-0 space-y-1.5 text-left">
             {/* Meta Tags Row */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-mono font-bold bg-[#141414] text-blue-400 border border-zinc-800 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+              <span className="text-[10px] font-mono font-bold bg-primary-50 text-primary-700 border border-primary-200 px-2.5 py-0.5 rounded-md uppercase tracking-wider">
                 {issue.category}
               </span>
               <span className={`text-[10px] font-mono font-bold border px-2 py-0.5 rounded-full flex items-center gap-1 ${severityBadge}`}>
@@ -108,19 +105,19 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
             </div>
 
             {/* Problem Statement */}
-            <h3 className="text-sm md:text-base font-bold text-zinc-100 tracking-tight font-sans">
+            <h3 className="text-sm md:text-base font-bold text-gray-900 tracking-tight font-sans">
               {issue.problem}
             </h3>
           </div>
 
           {/* Action indicator on the right */}
           <div className="flex items-center gap-3 shrink-0">
-            <span className="text-[10px] font-mono text-zinc-500 hover:text-zinc-400 hidden sm:inline-block">
+            <span className="text-[10px] font-mono text-gray-500 hover:text-gray-700 hidden sm:inline-block">
               {isExpanded ? "Hide Details" : "Inspect Details"}
             </span>
-            <div className="h-8 w-8 rounded-full bg-zinc-950 border border-zinc-900 group-hover:bg-zinc-900 flex items-center justify-center text-zinc-400 transition shrink-0">
+            <div className="h-8 w-8 rounded-full bg-gray-50 border border-gray-200 group-hover:bg-gray-100 flex items-center justify-center text-gray-500 transition shrink-0">
               {isExpanded ? (
-                <ChevronUp className="h-4 w-4 text-blue-400" />
+                <ChevronUp className="h-4 w-4 text-primary-600" />
               ) : (
                 <ChevronDown className="h-4 w-4" />
               )}
@@ -132,24 +129,24 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
         {isExpanded && (
           <div 
             onClick={(e) => e.stopPropagation()} // Stop clicking details closing the card
-            className="mt-4 pt-4 border-t border-zinc-900 space-y-4 text-left animate-fade-in"
+            className="mt-4 pt-4 border-t border-gray-200 space-y-4 text-left animate-fade-in"
           >
             {/* Context Impact Analysis */}
             <div className="space-y-1">
-              <h4 className="text-zinc-500 font-bold text-[10px] font-mono uppercase tracking-wider">
+              <h4 className="text-gray-500 font-bold text-[10px] font-mono uppercase tracking-wider">
                 Impact Analysis & Reason
               </h4>
-              <p className="text-xs text-zinc-300 leading-relaxed bg-[#0e0e0e] hover:bg-zinc-950 p-3 rounded-lg border border-zinc-900">
+              <p className="text-xs text-gray-700 leading-relaxed bg-gray-50 hover:bg-gray-100 p-3 rounded-lg border border-gray-200">
                 {issue.reason}
               </p>
             </div>
 
             {/* Expert recommendations */}
             <div className="space-y-1">
-              <h4 className="text-zinc-500 font-bold text-[10px] font-mono uppercase tracking-wider flex items-center gap-1.5">
-                <Hammer className="h-3.5 w-3.5 text-blue-400" /> Actionable Audit Suggestion
+              <h4 className="text-gray-500 font-bold text-[10px] font-mono uppercase tracking-wider flex items-center gap-1.5">
+                <Hammer className="h-3.5 w-3.5 text-primary-600" /> Actionable Audit Suggestion
               </h4>
-              <p className="text-xs text-white font-medium leading-relaxed bg-[#0f0fa0]/5 p-3 rounded-lg border border-blue-900/10">
+              <p className="text-xs text-gray-800 font-medium leading-relaxed bg-primary-50 p-3 rounded-lg border border-primary-200">
                 {issue.recommendation}
               </p>
             </div>
@@ -157,17 +154,17 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
             {/* Code example remediation blueprint block */}
             {issue.example_fix && (
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-zinc-500 font-bold text-[10px] font-mono uppercase tracking-wider">
+                <div className="flex items-center justify-between text-gray-500 font-bold text-[10px] font-mono uppercase tracking-wider">
                   <span className="flex items-center gap-1">
-                    <FileCode className="h-3.5 w-3.5 text-slate-500" /> Example Fix Snippet
+                    <FileCode className="h-3.5 w-3.5 text-gray-600" /> Example Fix Snippet
                   </span>
                   <button
                     onClick={handleCopyCode}
-                    className="flex items-center gap-1 px-2.5 py-1 bg-[#141414] hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-[#ccc] rounded-md text-[9px] font-mono transition cursor-pointer"
+                    className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-gray-50 border border-gray-200 hover:border-primary-300 text-gray-700 rounded-md text-[9px] font-mono transition cursor-pointer"
                   >
                     {copied ? (
                       <>
-                        <Check className="h-3 w-3 text-emerald-400" /> Copied!
+                        <Check className="h-3 w-3 text-success-600" /> Copied!
                       </>
                     ) : (
                       <>
@@ -177,7 +174,7 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue, forceExpanded = fal
                   </button>
                 </div>
                 <div className="relative">
-                  <pre className="p-3.5 bg-black rounded-lg text-[11px] text-zinc-300 font-mono overflow-x-auto border border-zinc-950 leading-relaxed shadow-inner max-h-72">
+                  <pre className="p-3.5 bg-gray-900 rounded-lg text-[11px] text-gray-100 font-mono overflow-x-auto border border-gray-800 leading-relaxed shadow-inner max-h-72">
                     <code>{issue.example_fix}</code>
                   </pre>
                 </div>
