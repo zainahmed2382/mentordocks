@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import {
   Zap, Code, Palette, Layout, Accessibility, ShieldCheck,
   Monitor, Menu, LayoutDashboard, ScanLine, Sparkles,
-  ExternalLink, Download, RotateCcw, CheckCircle2, Clock
+  ExternalLink, Download, RotateCcw, CheckCircle2, Clock,
+  Lock, ArrowRight, Wand2, FileText, Brain, Layers3, Rocket
 } from "lucide-react";
 import { AuditReport, AuditIssue, CategoryFilter, SeverityFilter } from "../types";
 import { ScoreCard } from "./audit/ScoreCard";
@@ -111,6 +112,17 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
     setActiveSection(section);
     setTimeout(() => scrollToSection(section), 50);
   };
+
+  const premiumFeatures = [
+    { title: "Generate Meta Description", description: "Create SEO-friendly meta descriptions instantly using AI.", icon: FileText },
+    { title: "Generate SEO Title", description: "Draft compelling page titles tailored to your audience and keywords.", icon: Sparkles },
+    { title: "Generate Accessibility Fixes", description: "Get AI suggestions that improve navigation, labels, and screen-reader support.", icon: Accessibility },
+    { title: "Generate CSS Fix", description: "Receive production-ready visual and layout improvements with one click.", icon: Palette },
+    { title: "Generate Schema Markup", description: "Structure your content with smart schema suggestions and examples.", icon: Layers3 },
+    { title: "AI Performance Optimization", description: "Unlock practical performance recommendations that save time and lift scores.", icon: Rocket },
+  ];
+
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   return (
     <div className="flex bg-slate-100 min-h-screen -mx-4 md:-mx-6 rounded-2xl overflow-hidden shadow-2xl border border-slate-200 mt-4">
@@ -223,6 +235,40 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
               />
             </div>
 
+            <div className="dash-card p-6 animate-slide-up delay-350 mt-4">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-gradient-to-r from-violet-50 to-primary-50 border border-violet-100 text-violet-700 text-[10px] font-semibold uppercase tracking-wider">
+                    <Lock className="h-3.5 w-3.5" /> MentorDocks Pro Preview
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 mt-2">Unlock MentorDocks Pro</h3>
+                  <p className="text-sm text-slate-600 mt-1">Upgrade to unlock AI-powered website optimization tools, advanced reports, unlimited audits, and productivity features.</p>
+                </div>
+                <button
+                  onClick={() => setShowPremiumModal(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-primary-600 text-white text-sm font-semibold hover:shadow-lg transition cursor-pointer"
+                >
+                  Upgrade to Pro
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {[
+                  "AI-generated Fixes",
+                  "AI SEO Optimization",
+                  "AI Code Generation",
+                  "Advanced PDF Reports",
+                  "Unlimited Audits",
+                  "Team Collaboration",
+                ].map((benefit) => (
+                  <div key={benefit} className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    {benefit}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Priority Fixes */}
             {report.priority_fixes && report.priority_fixes.length > 0 && (
               <div className="dash-card p-6 animate-slide-up delay-400 mt-4">
@@ -251,6 +297,41 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
                 </div>
               </div>
             )}
+
+            <div className="dash-card p-6 animate-slide-up delay-450 mt-4">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Premium AI Tools</h3>
+                  <p className="text-xs text-slate-500 mt-1">These capabilities are ready for the future Pro experience and appear directly inside the report.</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                {premiumFeatures.map((feature, idx) => {
+                  const Icon = feature.icon;
+                  return (
+                    <div key={feature.title} className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                      <div className="flex items-center justify-between">
+                        <div className="p-2 rounded-xl bg-violet-50 text-violet-600">
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+                          <Lock className="h-3 w-3" /> Pro
+                        </span>
+                      </div>
+                      <h4 className="mt-3 text-sm font-semibold text-slate-900">{feature.title}</h4>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-600">{feature.description}</p>
+                      <button
+                        onClick={() => setShowPremiumModal(true)}
+                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700 transition"
+                      >
+                        Upgrade to Pro
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
             {/* Heading structure stats */}
             {(report.h1Count !== undefined || report.h2Count !== undefined) && (
@@ -422,6 +503,33 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
           </div>
         </div>
       </div>
+
+      {showPremiumModal && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-[28px] border border-slate-200 bg-white p-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-violet-600">MentorDocks Pro</p>
+                <h3 className="text-xl font-bold text-slate-900">This feature will be available in MentorDocks Pro.</h3>
+              </div>
+              <button onClick={() => setShowPremiumModal(false)} className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition cursor-pointer">
+                <Sparkles className="h-5 w-5" />
+              </button>
+            </div>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">The premium experience is being prepared for a future release, and these AI-powered tools will appear here once unlocked.</p>
+            <div className="mt-6 rounded-2xl border border-violet-100 bg-violet-50 p-4 text-sm text-violet-800">
+              Upcoming Pro capabilities include AI-generated fixes, SEO optimization, advanced exports, and team workflows.
+            </div>
+            <button
+              onClick={() => setShowPremiumModal(false)}
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-primary-600 px-4 py-3 text-sm font-semibold text-white transition hover:shadow-lg"
+            >
+              Continue exploring
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { AuditIssue, CategoryFilter, SeverityFilter } from "../../types";
+import { getFriendlyIssueContent } from "../../utils/reportExperience";
 import {
   ChevronDown, ChevronUp, XCircle, AlertTriangle, Info,
   Copy, Check, FileCode, Hammer, ChevronRight,
-  Search, Filter, Eye, EyeOff, CheckCircle2
+  Search, Filter, Eye, EyeOff, CheckCircle2, Sparkles,
+  Brain, ShieldCheck, ArrowRight, Clock3
 } from "lucide-react";
 
 interface AuditFindingsPanelProps {
@@ -63,6 +65,7 @@ const FindingItem: React.FC<FindingItemProps> = ({ issue, forceExpanded, index }
   const isExpanded = forceExpanded || localExpanded;
   const sev = SEVERITY_CONFIG[issue.severity];
   const catColor = CATEGORY_COLORS[issue.category] || "bg-slate-100 text-slate-600";
+  const friendly = getFriendlyIssueContent(issue);
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -129,45 +132,74 @@ const FindingItem: React.FC<FindingItemProps> = ({ issue, forceExpanded, index }
           className="px-4 pb-4 pt-0 border-t border-slate-100 space-y-4 animate-fade-in"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Why it matters */}
+          <div className="rounded-2xl bg-slate-50 border border-slate-100 p-3 space-y-2">
+            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-violet-500" />
+              What does this mean?
+            </div>
+            <p className="text-sm text-slate-700 leading-relaxed">{friendly.plainEnglish}</p>
+          </div>
+
           <div className="space-y-1.5">
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block" />
-              Why it matters
+              Why is this important?
             </div>
             <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 rounded-lg p-3 border border-slate-100">
-              {issue.reason}
+              {friendly.whyItMatters}
             </p>
           </div>
 
-          {/* How to fix it */}
           <div className="space-y-1.5">
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
               <Hammer className="h-3 w-3 text-blue-500" />
-              How to fix it
+              How can I fix it?
             </div>
             <p className="text-xs text-slate-700 leading-relaxed bg-blue-50 rounded-lg p-3 border border-blue-100">
-              {issue.recommendation}
+              {friendly.howToFix}
             </p>
           </div>
 
-          {/* Impact & Time */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-100">
-              <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-1">Expected Impact</div>
-              <div className="text-xs text-emerald-800 font-semibold">
-                {issue.severity === "High" ? "High — Significant improvement" : issue.severity === "Medium" ? "Medium — Moderate improvement" : "Low — Minor improvement"}
-              </div>
+            <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+              <div className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-1">Difficulty</div>
+              <div className="text-sm font-semibold text-emerald-800">{friendly.difficulty}</div>
             </div>
-            <div className="bg-violet-50 rounded-lg p-3 border border-violet-100">
-              <div className="text-[10px] font-bold text-violet-600 uppercase tracking-wider mb-1">Est. Fix Time</div>
-              <div className="text-xs text-violet-800 font-semibold">
-                {issue.severity === "High" ? "30–60 minutes" : issue.severity === "Medium" ? "15–30 minutes" : "5–15 minutes"}
-              </div>
+            <div className="bg-violet-50 rounded-xl p-3 border border-violet-100">
+              <div className="text-[10px] font-bold text-violet-700 uppercase tracking-wider mb-1">Priority</div>
+              <div className="text-sm font-semibold text-violet-800">{friendly.priority}</div>
+            </div>
+            <div className="bg-amber-50 rounded-xl p-3 border border-amber-100">
+              <div className="text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1">Estimated Fix Time</div>
+              <div className="text-sm font-semibold text-amber-800">{friendly.estimatedFixTime}</div>
+            </div>
+            <div className="bg-sky-50 rounded-xl p-3 border border-sky-100">
+              <div className="text-[10px] font-bold text-sky-700 uppercase tracking-wider mb-1">Expected Improvement</div>
+              <div className="text-sm font-semibold text-sky-800">{friendly.expectedImprovement}</div>
             </div>
           </div>
 
-          {/* Code example */}
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="rounded-xl border border-primary-100 bg-primary-50 p-3">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-primary-700 uppercase tracking-wider mb-1.5">
+                <Brain className="h-3.5 w-3.5" /> AI Insight
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed">{friendly.aiInsight}</p>
+            </div>
+            <div className="rounded-xl border border-amber-100 bg-amber-50 p-3">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-1.5">
+                <ShieldCheck className="h-3.5 w-3.5" /> Pro Tip
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed">{friendly.proTip}</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                <Clock3 className="h-3.5 w-3.5" /> Learn More
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed">{friendly.learnMore}</p>
+            </div>
+          </div>
+
           {issue.example_fix && (
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
@@ -213,8 +245,12 @@ const CategorySection: React.FC<CategorySectionProps> = ({ category, issues, for
 
   if (issues.length === 0) return null;
 
-  const highCount = issues.filter(i => i.severity === "High").length;
+  const severityRank = { High: 0, Medium: 1, Low: 2 } as Record<string, number>;
+  const orderedIssues = [...issues].sort((a, b) => severityRank[a.severity] - severityRank[b.severity]);
+  const highCount = orderedIssues.filter(i => i.severity === "High").length;
   const catColor = CATEGORY_COLORS[category] || "bg-slate-100 text-slate-600";
+  const overallScore = Math.max(0, 100 - orderedIssues.length * 10 - highCount * 8);
+  const passedChecks = orderedIssues.length === 0 ? "All checks passed" : `${Math.max(0, 6 - orderedIssues.length)} checks likely passing`;
 
   return (
     <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white animate-slide-up">
@@ -257,7 +293,20 @@ const CategorySection: React.FC<CategorySectionProps> = ({ category, issues, for
 
       {open && (
         <div className="px-4 pb-4 space-y-3 border-t border-slate-100">
-          {issues.map((issue, idx) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-3">
+            {[
+              { label: "Overall Score", value: `${overallScore}%` },
+              { label: "Total Issues", value: orderedIssues.length },
+              { label: "Critical Issues", value: highCount },
+              { label: "Passed Checks", value: passedChecks },
+            ].map((stat) => (
+              <div key={stat.label} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{stat.label}</div>
+                <div className="text-sm font-semibold text-slate-900 mt-1">{stat.value}</div>
+              </div>
+            ))}
+          </div>
+          {orderedIssues.map((issue, idx) => (
             <FindingItem
               key={idx}
               issue={issue}
@@ -386,6 +435,22 @@ export const AuditFindingsPanel: React.FC<AuditFindingsPanelProps> = ({
                 Reset Filters
               </button>
             )}
+          </div>
+        </div>
+      </div>
+
+      <div className="dash-card p-5 bg-gradient-to-br from-primary-50 via-white to-violet-50 border-primary-100">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white border border-primary-100 text-primary-700 text-[10px] font-semibold uppercase tracking-wider">
+              <Sparkles className="h-3.5 w-3.5" /> Mentor Guidance
+            </div>
+            <h3 className="text-base font-bold text-slate-900 mt-2">Your report, translated into plain English</h3>
+            <p className="text-sm text-slate-600 mt-1">Each finding now explains what it means, why it matters, and how to improve it in a simple, practical way.</p>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-slate-600">
+            <ArrowRight className="h-4 w-4 text-primary-600" />
+            Friendly for beginners and professionals alike
           </div>
         </div>
       </div>
