@@ -40,16 +40,16 @@ export function HomeState({
     <div className="space-y-16 py-8">
       {/* Hero Section */}
       <div className="text-center space-y-8 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 border border-primary-100 text-primary-700 rounded-full text-sm font-semibold">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 border border-primary-400/20 text-primary-300 rounded-full text-sm font-semibold backdrop-blur">
           <Sparkles className="h-4 w-4" />
           AI-Powered Website Analysis
         </div>
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-gray-900 leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-100 leading-tight">
           Audit Your Website in Seconds
         </h1>
         
-        <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
           Get actionable insights on performance, accessibility, SEO, and design with a single click.
         </p>
 
@@ -57,12 +57,12 @@ export function HomeState({
         <div className="max-w-2xl mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="url" className="block text-sm font-semibold text-gray-700 text-left">
+              <label htmlFor="url" className="block text-sm font-semibold text-slate-300 text-left">
                 Website URL
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
+                  <Search className="h-5 w-5 text-slate-500" />
                 </div>
                 <input
                   id="url"
@@ -74,13 +74,13 @@ export function HomeState({
                     if (error) setError("");
                   }}
                   disabled={isLoading}
-                  className="w-full pl-12 pr-36 py-4 text-lg bg-white border border-gray-200 rounded-2xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 transition-all disabled:opacity-65 shadow-sm"
+                  className="w-full pl-12 pr-36 py-4 text-lg bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-400/20 transition-all disabled:opacity-65 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 />
                 <div className="absolute inset-y-0 right-2 flex items-center">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="h-10 px-6 bg-gradient-to-r from-primary-500 to-secondary-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all disabled:opacity-65 disabled:cursor-not-allowed disabled:scale-100 flex items-center gap-2"
+                    className="h-10 px-6 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-bold rounded-xl hover:shadow-[0_14px_34px_-16px_rgba(37,99,235,0.7)] hover:scale-[1.01] transition-all disabled:opacity-65 disabled:cursor-not-allowed disabled:scale-100 flex items-center gap-2"
                   >
                     {isLoading ? "Auditing..." : "Start AI Audit"}
                     {!isLoading && <Zap className="h-4 w-4" />}
@@ -88,7 +88,7 @@ export function HomeState({
                 </div>
               </div>
               {error && (
-                <p className="text-sm font-semibold text-error-600 text-left">
+                <p className="text-sm font-semibold text-error-400 text-left">
                   {error}
                 </p>
               )}
@@ -97,13 +97,13 @@ export function HomeState({
 
           {/* Preset Buttons */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <span className="text-sm text-gray-500 font-medium">Try with:</span>
+            <span className="text-sm text-slate-500 font-medium">Try with:</span>
             {PRESETS.map((preset) => (
               <button
                 key={preset.name}
                 onClick={() => handleSelectPreset(preset.url)}
                 disabled={isLoading}
-                className="px-4 py-2 bg-white border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-primary-300 transition-all cursor-pointer disabled:opacity-60"
+                className="px-4 py-2 bg-slate-900/80 border border-slate-700 text-slate-300 font-medium rounded-xl hover:bg-slate-800 hover:border-primary-400 transition-all cursor-pointer disabled:opacity-60"
               >
                 {preset.name}
               </button>
@@ -115,10 +115,10 @@ export function HomeState({
       {/* Features Section */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-display font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl font-display font-bold text-slate-100 mb-3">
             Everything You Need to Improve
           </h2>
-          <p className="text-gray-600">
+          <p className="text-slate-400">
             Comprehensive audit covering all critical aspects of your website
           </p>
         </div>
@@ -172,12 +172,12 @@ export function HomeState({
               key={idx}
               className="card p-6 space-y-4"
             >
-              <div className={`${feature.bg} w-12 h-12 rounded-xl flex items-center justify-center ${feature.color}`}>
+              <div className={`${feature.bg} w-12 h-12 rounded-xl flex items-center justify-center ${feature.color} border border-slate-700/60`}>
                 {feature.icon}
               </div>
               <div className="space-y-1">
-                <h3 className="text-lg font-bold text-gray-900">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.desc}</p>
+                <h3 className="text-lg font-bold text-slate-100">{feature.title}</h3>
+                <p className="text-slate-400 text-sm">{feature.desc}</p>
               </div>
             </div>
           ))}
@@ -186,11 +186,11 @@ export function HomeState({
 
       {/* CTA Section */}
       <div className="max-w-4xl mx-auto">
-        <div className="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl p-8 md:p-12 text-white text-center">
+        <div className="bg-gradient-to-r from-primary-600/90 to-primary-500/90 rounded-3xl p-8 md:p-12 text-white text-center shadow-[0_24px_70px_-32px_rgba(37,99,235,0.8)]">
           <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">
             Ready to Audit Your Website?
           </h2>
-          <p className="text-primary-100 mb-8 max-w-xl mx-auto">
+          <p className="text-primary-50/90 mb-8 max-w-xl mx-auto">
             Get a full report in seconds and start improving your website today.
           </p>
           <button
@@ -198,7 +198,7 @@ export function HomeState({
               const input = document.getElementById('url') as HTMLInputElement;
               input?.focus();
             }}
-            className="bg-white text-primary-700 font-bold px-8 py-3.5 rounded-xl hover:shadow-xl hover:scale-105 transition-all cursor-pointer inline-flex items-center gap-2"
+            className="bg-white text-primary-700 font-bold px-8 py-3.5 rounded-xl hover:shadow-xl hover:scale-[1.02] transition-all cursor-pointer inline-flex items-center gap-2"
           >
             Start Your Audit <ArrowRight className="h-4 w-4" />
           </button>

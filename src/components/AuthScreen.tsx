@@ -79,8 +79,8 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
 
   return (
     <div className="fixed inset-0 z-[110] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white border border-gray-200 rounded-[28px] p-6 md:p-8 relative shadow-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_40%)] pointer-events-none" />
+      <div className="w-full max-w-lg bg-slate-900/90 border border-slate-800 rounded-[28px] p-6 md:p-8 relative shadow-[0_28px_80px_-32px_rgba(2,6,23,0.95)] overflow-hidden backdrop-blur-xl">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.16),transparent_42%)] pointer-events-none" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-28 bg-primary-400/10 blur-[60px] pointer-events-none rounded-full" />
 
         <div className="flex justify-between items-center relative z-10 mb-6">

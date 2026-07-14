@@ -317,9 +317,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 pb-20">
+    <div className="min-h-screen bg-transparent text-slate-100 pb-20 relative overflow-x-hidden">
       {/* Header Navigation */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+      <header className="sticky top-0 z-50 bg-slate-950/70 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
           
           {/* Brand Logo */}
@@ -328,7 +328,7 @@ export default function App() {
               <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-2xl bg-gradient-to-tr from-primary-500 to-secondary-500 flex items-center justify-center shadow-md transition-all duration-300">
                 <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
-              <span className="font-display font-extrabold text-lg sm:text-xl text-gray-900 tracking-tight">
+              <span className="font-display font-extrabold text-lg sm:text-xl text-slate-100 tracking-tight">
                 Mentor<span className="text-primary-600">Docks</span>
               </span>
             </div>
@@ -336,15 +336,15 @@ export default function App() {
             {/* Mobile Actions Right (User Profile / Sign In) */}
             <div className="flex items-center gap-2 md:hidden">
               {currUser ? (
-                <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 py-1.5 px-3 rounded-xl text-sm">
-                  <div className="h-7 w-7 rounded-full bg-primary-100 text-primary-700 font-mono font-bold flex items-center justify-center text-xs">
+                <div className="flex items-center gap-2 bg-slate-900/70 border border-slate-800 py-1.5 px-3 rounded-xl text-sm">
+                  <div className="h-7 w-7 rounded-full bg-primary-500/15 text-primary-300 font-mono font-bold flex items-center justify-center text-xs">
                     {currUser.name.slice(0, 2).toUpperCase()}
                   </div>
-                  <span className="font-bold text-gray-800 text-xs max-w-[85px] truncate">{currUser.name}</span>
+                  <span className="font-bold text-slate-100 text-xs max-w-[85px] truncate">{currUser.name}</span>
                   <button
                     onClick={handleLogout}
                     title="Sign Out"
-                    className="p-1 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-gray-700 transition cursor-pointer"
+                    className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5" />
                   </button>
@@ -352,7 +352,7 @@ export default function App() {
               ) : (
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition cursor-pointer shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-500 transition cursor-pointer shadow-[0_10px_30px_-15px_rgba(37,99,235,0.8)]"
                 >
                   <User className="h-4 w-4" />
                   Sign In
@@ -364,13 +364,13 @@ export default function App() {
           {/* Desktop Actions */}
           <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto pt-3 md:pt-0 border-t border-gray-100 md:border-0">
             {/* Segmented View-Tab Controller */}
-            <div className="flex items-center bg-gray-100 border border-gray-200 p-1 rounded-xl">
+            <div className="flex items-center bg-slate-900/70 border border-slate-800 p-1 rounded-xl">
               <button
                 onClick={() => setActiveTab("scanner")}
                 className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                   activeTab === "scanner"
-                    ? "bg-white text-gray-900 border border-gray-200 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "bg-slate-800 text-slate-100 border border-slate-700 shadow-sm"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
                 <Search className="h-4 w-4" />
@@ -381,8 +381,8 @@ export default function App() {
                   onClick={() => setActiveTab("dashboard")}
                   className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                     activeTab === "dashboard"
-                      ? "bg-white text-gray-900 border border-gray-200 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "bg-slate-800 text-slate-100 border border-slate-700 shadow-sm"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
                   <BarChart3 className="h-4 w-4" />
@@ -397,7 +397,7 @@ export default function App() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => exportReportToPDF(report)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition cursor-pointer shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-900/90 text-slate-100 font-semibold rounded-xl hover:bg-slate-800 transition cursor-pointer border border-slate-700"
                     title="Download PDF Report"
                   >
                     <Download className="h-4 w-4" />
@@ -434,7 +434,7 @@ export default function App() {
               ) : (
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition cursor-pointer shadow-sm"
+                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-500 transition cursor-pointer shadow-[0_10px_30px_-15px_rgba(37,99,235,0.8)]"
                 >
                   <User className="h-4 w-4" />
                   Sign In
@@ -472,7 +472,7 @@ export default function App() {
 
             {/* Error States */}
             {errorMsg && errorState && (
-              <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-[28px] p-8 shadow-xl space-y-6">
+              <div className="max-w-2xl mx-auto bg-slate-900/85 border border-slate-800 rounded-[28px] p-8 shadow-[0_24px_70px_-32px_rgba(2,6,23,0.95)] backdrop-blur-xl space-y-6">
                 <div className="flex items-start gap-4">
                   <div className={`h-12 w-12 rounded-2xl flex items-center justify-center border ${errorState.accent}`}>
                     <ErrorIcon className="h-6 w-6" />
@@ -519,7 +519,7 @@ export default function App() {
                 <HomeState onAudit={handleRunAudit} isLoading={loading} />
                 
                 {/* History Section */}
-                <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-3xl p-8 shadow-lg relative overflow-hidden">
+                <div className="max-w-5xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 shadow-[0_24px_70px_-32px_rgba(2,6,23,0.95)] backdrop-blur-xl relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-tr from-primary-500/5 to-transparent blur-[40px] pointer-events-none rounded-full" />
                   
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-6 gap-4 mb-6">
@@ -554,7 +554,7 @@ export default function App() {
                   </div>
 
                   {auditHistory.length === 0 ? (
-                    <div className="rounded-3xl border border-dashed border-gray-200 bg-gray-50/70 p-8 text-center">
+                    <div className="rounded-3xl border border-dashed border-slate-700 bg-slate-950/60 p-8 text-center">
                       <div className="mx-auto h-14 w-14 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center shadow-sm">
                         <FileQuestion className="h-6 w-6" />
                       </div>
@@ -576,7 +576,7 @@ export default function App() {
                         <div
                           key={hidx}
                           onClick={() => handleRunAudit(hist.url)}
-                          className="bg-gray-50 hover:bg-white border border-gray-200 hover:border-primary-300 p-5 rounded-2xl flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow-md relative group text-left"
+                          className="bg-slate-950/70 hover:bg-slate-900/90 border border-slate-800 hover:border-primary-400 p-5 rounded-2xl flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow-md relative group text-left"
                         >
                           <div className="space-y-2">
                             <p className="font-mono text-sm font-bold text-gray-800 truncate max-w-[160px] group-hover:text-primary-700 transition">
@@ -654,7 +654,7 @@ export default function App() {
       {/* Help Glossary Button */}
       <button
         onClick={() => setShowGlossary(true)}
-        className="fixed bottom-6 right-6 z-40 p-4 bg-white border border-gray-200 hover:border-gray-300 text-gray-700 hover:text-gray-900 rounded-full shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer group"
+        className="fixed bottom-6 right-6 z-40 p-4 bg-slate-900/90 border border-slate-800 hover:border-primary-400 text-slate-200 hover:text-white rounded-full shadow-[0_18px_55px_-24px_rgba(2,6,23,0.95)] transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer group"
         title="Open Diagnostics Guide"
       >
         <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-gradient-to-tr from-primary-500 to-secondary-500 animate-ping" />
@@ -672,7 +672,7 @@ export default function App() {
           />
           
           {/* Drawer */}
-          <div className="relative w-full max-w-md bg-white border-l border-gray-200 shadow-2xl h-full flex flex-col justify-between p-8 overflow-y-auto animate-fade-in text-left">
+          <div className="relative w-full max-w-md bg-slate-950/95 border-l border-slate-800 shadow-2xl h-full flex flex-col justify-between p-8 overflow-y-auto animate-fade-in text-left backdrop-blur-xl">
             <div className="space-y-8">
               <div className="flex items-center justify-between border-b border-gray-100 pb-6">
                 <div className="space-y-1.5">
