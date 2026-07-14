@@ -23,7 +23,10 @@ import {
   Search,
   History,
   Calendar,
-  ExternalLink
+  ExternalLink,
+  FolderOpen,
+  FileText,
+  Activity
 } from "lucide-react";
 import { AuditReport } from "../types";
 
@@ -35,6 +38,39 @@ interface DashboardViewProps {
   onDeleteAudit?: (url: string) => void;
   onAuditNew: () => void;
   currUser: any;
+}
+
+function EmptyStateCard({
+  icon: Icon,
+  title,
+  description,
+  actionLabel,
+  onAction,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  actionLabel: string;
+  onAction: () => void;
+}) {
+  return (
+    <div className="card p-8 text-center space-y-4">
+      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center shadow-sm">
+        <Icon className="h-6 w-6" />
+      </div>
+      <div className="space-y-2">
+        <h4 className="text-lg font-bold text-gray-900">{title}</h4>
+        <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+      </div>
+      <button
+        onClick={onAction}
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition cursor-pointer"
+      >
+        {actionLabel}
+        <ArrowRight className="h-4 w-4" />
+      </button>
+    </div>
+  );
 }
 
 export function DashboardView({ 
@@ -217,6 +253,25 @@ export function DashboardView({
           </div>
         </div>
       </div>
+
+      {totalScans === 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <EmptyStateCard
+            icon={FolderOpen}
+            title="No Projects"
+            description="Create your first workspace project and start organizing priority audits in one place."
+            actionLabel="Start a project"
+            onAction={onAuditNew}
+          />
+          <EmptyStateCard
+            icon={Activity}
+            title="No Recent Activity"
+            description="Your latest scans and project updates will show up here as soon as you begin auditing."
+            actionLabel="Run your first audit"
+            onAction={onAuditNew}
+          />
+        </div>
+      )}
 
       {/* Main Grid: timeline chart + score comparison charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -554,22 +609,14 @@ export function DashboardView({
 
         {/* Audit History Table */}
         {auditHistory.length === 0 ? (
-          <div className="py-12 px-4 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300 space-y-4">
-            <div className="h-12 w-12 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center mx-auto">
-              <Globe className="h-6 w-6" />
-            </div>
-            <div className="space-y-1">
-              <h4 className="text-sm font-bold text-gray-900">No Audit History Available</h4>
-              <p className="text-xs text-gray-600 max-w-sm mx-auto">
-                You haven't scanned any websites yet. Run your first website audit to populate history and unlock analytics!
-              </p>
-            </div>
-            <button
-              onClick={onAuditNew}
-              className="px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-xl text-xs font-bold transition inline-flex items-center gap-2 shadow-md cursor-pointer hover:shadow-lg"
-            >
-              Start First Audit <ArrowRight className="h-3.5 w-3.5" />
-            </button>
+          <div className="py-4">
+            <EmptyStateCard
+              icon={History}
+              title="No Audit History"
+              description="Run your first website audit to build a history of scores, insights, and improvement milestones."
+              actionLabel="Run your first audit"
+              onAction={onAuditNew}
+            />
           </div>
         ) : (
           <div className="overflow-x-auto">

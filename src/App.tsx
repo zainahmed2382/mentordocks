@@ -13,6 +13,12 @@ import {
   Zap,
   BarChart3,
   Search,
+  AlertTriangle,
+  Globe2,
+  WifiOff,
+  ServerCrash,
+  FileQuestion,
+  RefreshCw,
 } from "lucide-react";
 import { AuditReport, CategoryFilter, SeverityFilter } from "./types";
 import { CircularProgress } from "./components/CircularProgress";
@@ -233,6 +239,61 @@ export default function App() {
     setAllExpanded(false);
   };
 
+  const getErrorState = (message: string) => {
+    const normalized = message.toLowerCase();
+
+    if (normalized.includes("404") || normalized.includes("not found") || normalized.includes("page not found")) {
+      return {
+        title: "Page not found",
+        description: "The destination page could not be reached. Verify the URL and try again with a public website.",
+        icon: FileQuestion,
+        actionLabel: "Try another URL",
+        accent: "text-slate-700 bg-slate-100 border-slate-200",
+      };
+    }
+
+    if (normalized.includes("network") || normalized.includes("fetch") || normalized.includes("connection") || normalized.includes("timed out") || normalized.includes("internet")) {
+      return {
+        title: "Network connection issue",
+        description: "We could not reach the site from your current connection. Please check your network and retry.",
+        icon: WifiOff,
+        actionLabel: "Retry audit",
+        accent: "text-warning-700 bg-warning-50 border-warning-100",
+      };
+    }
+
+    if (normalized.includes("server") || normalized.includes("status 5") || normalized.includes("500") || normalized.includes("502") || normalized.includes("503") || normalized.includes("504")) {
+      return {
+        title: "Server error",
+        description: "The audit service is currently unavailable. Please wait a moment and try again.",
+        icon: ServerCrash,
+        actionLabel: "Retry audit",
+        accent: "text-primary-700 bg-primary-50 border-primary-100",
+      };
+    }
+
+    if (normalized.includes("invalid") || normalized.includes("valid") || normalized.includes("please enter") || normalized.includes("url")) {
+      return {
+        title: "Invalid URL",
+        description: "The website address looks incomplete or unsupported. Try a full URL such as https://example.com.",
+        icon: Globe2,
+        actionLabel: "Try a new URL",
+        accent: "text-error-700 bg-error-50 border-error-100",
+      };
+    }
+
+    return {
+      title: "Audit could not be completed",
+      description: "We hit an unexpected issue while generating your report. Review the message below and try again.",
+      icon: AlertTriangle,
+      actionLabel: "Retry audit",
+      accent: "text-error-700 bg-error-50 border-error-100",
+    };
+  };
+
+  const errorState = errorMsg ? getErrorState(errorMsg) : null;
+  const ErrorIcon = errorState?.icon ?? AlertTriangle;
+
   // Filter issues logic
   const filteredIssues = report
     ? report.issues.filter((issue) => {
@@ -410,28 +471,45 @@ export default function App() {
             {loading && <LoadingScreen url={currentUrl} />}
 
             {/* Error States */}
-            {errorMsg && (
-              <div className="max-w-2xl mx-auto bg-error-50 border border-error-100 text-error-800 rounded-2xl p-8 shadow-sm space-y-6">
+            {errorMsg && errorState && (
+              <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-[28px] p-8 shadow-xl space-y-6">
                 <div className="flex items-start gap-4">
-                  <XCircle className="h-8 w-8 text-error-600 shrink-0 mt-0.5" />
+                  <div className={`h-12 w-12 rounded-2xl flex items-center justify-center border ${errorState.accent}`}>
+                    <ErrorIcon className="h-6 w-6" />
+                  </div>
                   <div className="flex-1">
-                    <h3 className="font-bold font-display text-xl text-error-900 mb-2">
-                      Audit Operation Failed
+                    <h3 className="font-display font-extrabold text-xl text-gray-900 mb-2">
+                      {errorState.title}
                     </h3>
-                    <p className="text-error-700 leading-relaxed text-base">
-                      {errorMsg}
+                    <p className="text-gray-600 leading-relaxed text-sm">
+                      {errorState.description}
                     </p>
-                    <p className="text-error-600 text-sm mt-3 font-medium">
-                      Tip: Confirm that the URL is valid, public-facing, and allows network connections.
+                    <p className="text-gray-500 text-sm mt-3 font-medium">
+                      {errorMsg}
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={handleReset}
-                  className="w-full py-3 bg-white border border-error-200 text-error-700 rounded-xl hover:bg-error-100/50 transition font-semibold text-base cursor-pointer shadow-sm"
-                >
-                  Back to Home State
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => {
+                      if (currentUrl.trim()) {
+                        handleRunAudit(currentUrl);
+                      } else {
+                        handleReset();
+                      }
+                    }}
+                    className="flex-1 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-2xl hover:shadow-lg transition font-semibold text-sm cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    {errorState.actionLabel}
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    className="flex-1 py-3 bg-white border border-gray-200 text-gray-700 rounded-2xl hover:bg-gray-50 transition font-semibold text-sm cursor-pointer"
+                  >
+                    Back to home
+                  </button>
+                </div>
               </div>
             )}
 
@@ -475,32 +553,51 @@ export default function App() {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {auditHistory.map((hist, hidx) => (
-                      <div
-                        key={hidx}
-                        onClick={() => handleRunAudit(hist.url)}
-                        className="bg-gray-50 hover:bg-white border border-gray-200 hover:border-primary-300 p-5 rounded-2xl flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow-md relative group text-left"
-                      >
-                        <div className="space-y-2">
-                          <p className="font-mono text-sm font-bold text-gray-800 truncate max-w-[160px] group-hover:text-primary-700 transition">
-                            {hist.url}
-                          </p>
-                          <p className="text-xs text-gray-500 font-mono tracking-tight flex items-center gap-1.5 leading-none">
-                            <History className="h-3.5 w-3.5 inline" />
-                            {hist.date}
-                          </p>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span className={`text-xs font-mono font-bold px-3 py-1 rounded-lg border leading-none ${
-                            getScoreColorClass(hist.score)
-                          }`}>
-                            {hist.score}
-                          </span>
-                        </div>
+                  {auditHistory.length === 0 ? (
+                    <div className="rounded-3xl border border-dashed border-gray-200 bg-gray-50/70 p-8 text-center">
+                      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center shadow-sm">
+                        <FileQuestion className="h-6 w-6" />
                       </div>
-                    ))}
-                  </div>
+                      <h4 className="mt-4 text-lg font-bold text-gray-900">No Reports Yet</h4>
+                      <p className="mt-2 text-sm text-gray-600 max-w-md mx-auto">
+                        Run your first audit to create a polished report, track improvements, and build a history of insights.
+                      </p>
+                      <button
+                        onClick={() => document.getElementById("url")?.focus()}
+                        className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition cursor-pointer"
+                      >
+                        Start your first audit
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {auditHistory.map((hist, hidx) => (
+                        <div
+                          key={hidx}
+                          onClick={() => handleRunAudit(hist.url)}
+                          className="bg-gray-50 hover:bg-white border border-gray-200 hover:border-primary-300 p-5 rounded-2xl flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow-md relative group text-left"
+                        >
+                          <div className="space-y-2">
+                            <p className="font-mono text-sm font-bold text-gray-800 truncate max-w-[160px] group-hover:text-primary-700 transition">
+                              {hist.url}
+                            </p>
+                            <p className="text-xs text-gray-500 font-mono tracking-tight flex items-center gap-1.5 leading-none">
+                              <History className="h-3.5 w-3.5 inline" />
+                              {hist.date}
+                            </p>
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <span className={`text-xs font-mono font-bold px-3 py-1 rounded-lg border leading-none ${
+                              getScoreColorClass(hist.score)
+                            }`}>
+                              {hist.score}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

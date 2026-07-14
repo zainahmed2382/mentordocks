@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Lock, User, Briefcase, Sparkles, CheckCircle2, ShieldCheck, X, Code, Palette, Search } from "lucide-react";
+import { Mail, Lock, User, Briefcase, Sparkles, CheckCircle2, ShieldCheck, X, Code, Palette, Search, ArrowRight } from "lucide-react";
 
 export interface UserProfile {
   name: string;
@@ -40,7 +40,7 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
     try {
       const endpoint = isSignUp ? "/api/auth/signup" : "/api/auth/login";
       const payload = isSignUp ? { name, email, password, role } : { email, password };
-      
+
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -72,152 +72,153 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
         });
         onClose();
       }, 1200);
-
     } catch (err: any) {
       setErrorMsg(err.message || "Network error. Please try again.");
     }
   };
 
   return (
-    <div className="fixed inset-0 z-[110] bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
-      {/* Container Card */}
-      <div className="w-full max-w-md bg-[#0a0a0a] border border-[#222]/90 rounded-2xl p-6 md:p-8 relative shadow-2xl overflow-hidden">
-        {/* Decorative Grid Mesh overlay inside login */}
-        <div className="absolute inset-0 bg-transparent opacity-[0.03] pointer-events-none" 
-          style={{
-            backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-            backgroundSize: "20px 20px"
-          }}
-        />
-        
-        {/* Top absolute light flare decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-32 bg-blue-500/10 blur-[50px] pointer-events-none rounded-full" />
+    <div className="fixed inset-0 z-[110] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-lg bg-white border border-gray-200 rounded-[28px] p-6 md:p-8 relative shadow-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_40%)] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-28 bg-primary-400/10 blur-[60px] pointer-events-none rounded-full" />
 
         <div className="flex justify-between items-center relative z-10 mb-6">
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="h-4.5 w-4.5 text-blue-400" />
-            <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 px-2 py-0.5 rounded">
-              Mentor Docks Account Gate
-            </span>
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-primary-500 to-secondary-500 flex items-center justify-center shadow-sm">
+              <Sparkles className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <p className="text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-primary-600">
+                MentorDocks Access
+              </p>
+              <p className="text-sm font-display font-semibold text-gray-900">
+                {isSignUp ? "Create your workspace" : "Welcome back"}
+              </p>
+            </div>
           </div>
-          <button 
+          <button
             onClick={onClose}
-            className="text-zinc-500 hover:text-white p-1 hover:bg-[#141414] rounded-lg transition overflow-hidden h-7 w-7 flex items-center justify-center cursor-pointer"
+            className="text-gray-400 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-xl transition cursor-pointer"
           >
-            <X className="h-4 bg-transparent" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {success ? (
           <div className="text-center py-8 space-y-4 relative z-10 animate-fade-in">
-            <div className="mx-auto h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-              <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+            <div className="mx-auto h-14 w-14 rounded-full bg-success-50 border border-success-100 flex items-center justify-center">
+              <CheckCircle2 className="h-7 w-7 text-success-600" />
             </div>
-            <div className="space-y-1.5">
-              <h3 className="font-display font-extrabold text-white text-lg tracking-tight">
-                {isSignUp ? "Account Standardized!" : "Verification Confirmed"}
+            <div className="space-y-2">
+              <h3 className="font-display font-extrabold text-gray-900 text-xl tracking-tight">
+                {isSignUp ? "Account ready" : "Signed in successfully"}
               </h3>
-              <p className="text-xs text-zinc-400">
-                Signing you into your live web-diagnostic workspace...
+              <p className="text-sm text-gray-600">
+                Opening your audit workspace with your saved history and preferences.
               </p>
             </div>
-            {/* Pulsating fake indicator */}
-            <div className="w-20 bg-zinc-900 h-1 mx-auto rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 animate-pulse w-full" />
+            <div className="w-24 h-1.5 bg-gray-100 rounded-full mx-auto overflow-hidden">
+              <div className="h-full bg-success-500 animate-pulse w-full" />
             </div>
           </div>
         ) : (
           <div className="relative z-10 space-y-6">
-            <div className="space-y-1 text-center">
-              <h2 className="text-xl font-display font-extrabold text-white tracking-tight">
-                {isSignUp ? "Initiate Your Profile" : "Access Professional Suite"}
+            <div className="space-y-2 text-center">
+              <h2 className="text-2xl font-display font-extrabold text-gray-900 tracking-tight">
+                {isSignUp ? "Build your analyst profile" : "Access your audit workspace"}
               </h2>
-              <p className="text-xs text-zinc-400">
-                {isSignUp 
-                  ? "Build a dedicated digital locker to bookmark crawls & premium tests" 
-                  : "Welcome back! Enter credentials to continue saved url diagnostics"
-                }
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {isSignUp
+                  ? "Create a workspace profile and start organizing audits, reports, and recommendations."
+                  : "Sign in to continue reviewing websites, reports, and performance insights."}
               </p>
             </div>
 
             {errorMsg && (
-              <div className="bg-rose-950/20 border border-rose-900/40 text-rose-400 text-xs p-3 rounded-lg font-medium">
+              <div className="bg-error-50 border border-error-100 text-error-700 text-sm p-3 rounded-2xl font-medium">
                 {errorMsg}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
               {isSignUp && (
-                <div className="space-y-1">
-                  <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Full Name</label>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-mono font-semibold uppercase tracking-[0.25em] text-gray-500">
+                    Full Name
+                  </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <input
                       type="text"
                       placeholder="e.g. Alexis Carter"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-[#141414] border border-[#222]/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 pl-11 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 transition-all"
                     />
                   </div>
                 </div>
               )}
 
-              <div className="space-y-1">
-                <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Email Address</label>
+              <div className="space-y-2">
+                <label className="text-[11px] font-mono font-semibold uppercase tracking-[0.25em] text-gray-500">
+                  Email Address
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <input
                     type="email"
                     placeholder="e.g. alexis@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-[#141414] border border-[#222]/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 pl-11 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 transition-all"
                   />
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Password</label>
+              <div className="space-y-2">
+                <label className="text-[11px] font-mono font-semibold uppercase tracking-[0.25em] text-gray-500">
+                  Password
+                </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <input
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#141414] border border-[#222]/80 rounded-xl py-2.5 pl-10 pr-4 text-xs focus:outline-none focus:border-blue-500 text-white placeholder-zinc-500"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 pl-11 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-50 transition-all"
                   />
                 </div>
               </div>
 
               {isSignUp && (
                 <div className="space-y-2">
-                  <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">
-                    Choose Your Professional Focus Role
+                  <label className="text-[11px] font-mono font-semibold uppercase tracking-[0.25em] text-gray-500 block">
+                    Professional Focus
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       {
                         value: "Developer" as UserProfile["role"],
-                        desc: "Code Quality, Semantic Tags & Speeds",
-                        icon: <Code className="h-4 w-4 text-blue-400" />
+                        desc: "Code quality, semantics, and speed",
+                        icon: <Code className="h-4 w-4 text-primary-600" />,
                       },
                       {
                         value: "UI/UX Designer" as UserProfile["role"],
-                        desc: "Typography, Styling & Contrast",
-                        icon: <Palette className="h-4 w-4 text-pink-400" />
+                        desc: "Typography, visuals, and contrast",
+                        icon: <Palette className="h-4 w-4 text-pink-500" />,
                       },
                       {
                         value: "SEO Architect" as UserProfile["role"],
-                        desc: "SERP Previews & Crawler Sync",
-                        icon: <Search className="h-4 w-4 text-amber-400" />
+                        desc: "SERP previews and crawl health",
+                        icon: <Search className="h-4 w-4 text-amber-500" />,
                       },
                       {
                         value: "Project Lead" as UserProfile["role"],
-                        desc: "High-level Performance & Audits",
-                        icon: <Briefcase className="h-4 w-4 text-emerald-400" />
-                      }
+                        desc: "High-level performance oversight",
+                        icon: <Briefcase className="h-4 w-4 text-success-600" />,
+                      },
                     ].map((item) => {
                       const isSelected = role === item.value;
                       return (
@@ -225,19 +226,17 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
                           key={item.value}
                           type="button"
                           onClick={() => setRole(item.value)}
-                          className={`flex flex-col text-left p-3 rounded-xl border transition-all cursor-pointer ${
+                          className={`flex flex-col text-left p-3 rounded-2xl border transition-all cursor-pointer ${
                             isSelected
-                              ? "bg-blue-600/5 border-blue-500/50 text-white ring-1 ring-blue-500/20"
-                              : "bg-[#141414] border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800"
+                              ? "bg-primary-50 border-primary-200 text-gray-900 shadow-sm"
+                              : "bg-white border-gray-200 text-gray-600 hover:border-primary-200 hover:bg-gray-50"
                           }`}
                         >
-                          <div className="flex items-center gap-1.5 mb-1">
+                          <div className="flex items-center gap-1.5 mb-1.5">
                             {item.icon}
                             <span className="text-[11px] font-bold tracking-tight">{item.value}</span>
                           </div>
-                          <p className="text-[9px] text-zinc-500 leading-snug">
-                            {item.desc}
-                          </p>
+                          <p className="text-[10px] text-gray-500 leading-snug">{item.desc}</p>
                         </button>
                       );
                     })}
@@ -247,30 +246,28 @@ export function AuthScreen({ onClose, onLoginSuccess }: AuthScreenProps) {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-white text-black font-bold rounded-xl text-xs uppercase tracking-wider transition hover:bg-zinc-200 mt-2 cursor-pointer"
+                className="w-full py-3.5 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-bold rounded-2xl text-sm transition hover:shadow-lg hover:-translate-y-0.5 mt-2 cursor-pointer flex items-center justify-center gap-2"
               >
-                {isSignUp ? "Create Workspace Key" : "Access Workspace Core"}
+                {isSignUp ? "Create workspace" : "Continue to dashboard"}
+                <ArrowRight className="h-4 w-4" />
               </button>
             </form>
 
-            <div className="text-center pt-2">
+            <div className="text-center pt-1">
               <button
                 onClick={() => {
                   setErrorMsg("");
                   setIsSignUp(!isSignUp);
                 }}
-                className="text-xs text-blue-400 hover:text-blue-300 underline underline-offset-4 cursor-pointer"
+                className="text-sm text-primary-600 hover:text-primary-700 font-semibold underline underline-offset-4 cursor-pointer"
               >
-                {isSignUp 
-                  ? "Already registered? Go to Login screen" 
-                  : "No workspace profile? Create an analyst profile"
-                }
+                {isSignUp ? "Already have an account? Sign in" : "Need a workspace profile? Create one"}
               </button>
             </div>
 
-            <div className="flex items-center justify-center gap-1.5 text-[10px] text-zinc-500 pt-2 border-t border-zinc-900">
-              <ShieldCheck className="h-3.5 w-3.5 text-zinc-600" />
-              <span>Encrypted local session token active.</span>
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-500 pt-2 border-t border-gray-100">
+              <ShieldCheck className="h-4 w-4 text-success-600" />
+              <span>Encrypted session token and secure local storage are active.</span>
             </div>
           </div>
         )}
