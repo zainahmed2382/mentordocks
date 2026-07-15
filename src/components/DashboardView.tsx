@@ -54,17 +54,17 @@ function EmptyStateCard({
   onAction: () => void;
 }) {
   return (
-    <div className="card p-8 text-center space-y-4">
-      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center shadow-sm">
+    <div className="card p-8 text-center space-y-5 border border-slate-800/80 bg-slate-950/40">
+      <div className="mx-auto h-14 w-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.15)]">
         <Icon className="h-6 w-6" />
       </div>
       <div className="space-y-2">
-        <h4 className="text-lg font-bold text-gray-900">{title}</h4>
-        <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+        <h4 className="text-lg font-bold text-slate-100 tracking-tight">{title}</h4>
+        <p className="text-sm text-slate-400 leading-relaxed max-w-sm mx-auto">{description}</p>
       </div>
       <button
         onClick={onAction}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition cursor-pointer"
+        className="btn btn-primary text-xs"
       >
         {actionLabel}
         <ArrowRight className="h-4 w-4" />

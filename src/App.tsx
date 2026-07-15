@@ -554,17 +554,17 @@ export default function App() {
                   </div>
 
                   {auditHistory.length === 0 ? (
-                    <div className="rounded-3xl border border-dashed border-slate-700 bg-slate-950/60 p-8 text-center">
-                      <div className="mx-auto h-14 w-14 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center shadow-sm">
+                    <div className="rounded-3xl border border-dashed border-slate-800 bg-slate-950/60 p-8 text-center transition-all hover:border-slate-700">
+                      <div className="mx-auto h-14 w-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.15)]">
                         <FileQuestion className="h-6 w-6" />
                       </div>
-                      <h4 className="mt-4 text-lg font-bold text-gray-900">No Reports Yet</h4>
-                      <p className="mt-2 text-sm text-gray-600 max-w-md mx-auto">
+                      <h4 className="mt-4 text-lg font-bold text-slate-100 tracking-tight">No Reports Yet</h4>
+                      <p className="mt-2 text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
                         Run your first audit to create a polished report, track improvements, and build a history of insights.
                       </p>
                       <button
                         onClick={() => document.getElementById("url")?.focus()}
-                        className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition cursor-pointer"
+                        className="mt-5 btn btn-primary text-xs"
                       >
                         Start your first audit
                         <ArrowRight className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface CircularProgressProps {
   score: number;
@@ -15,18 +15,50 @@ export function CircularProgress({
   showText = true,
   label,
 }: CircularProgressProps) {
+  const [displayScore, setDisplayScore] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const end = score;
+    if (start === end) {
+      setDisplayScore(end);
+      return;
+    }
+    const duration = 1200; // ms
+    const range = end - start;
+    let startTime: number | null = null;
+    
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const progressRatio = Math.min(progress / duration, 1);
+      // Ease out quad
+      const easeProgress = progressRatio * (2 - progressRatio);
+      const currentScore = Math.round(start + easeProgress * range);
+      setDisplayScore(currentScore);
+      if (progress < duration) {
+        requestAnimationFrame(animate);
+      } else {
+        setDisplayScore(end);
+      }
+    };
+    
+    const frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [score]);
+
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
+  const offset = circumference - (displayScore / 100) * circumference;
 
   // Color selection based on score tier
   let strokeColor = "stroke-emerald-400";
   let textColor = "text-emerald-400";
 
-  if (score < 55) {
+  if (displayScore < 55) {
     strokeColor = "stroke-rose-400";
     textColor = "text-rose-400";
-  } else if (score < 90) {
+  } else if (displayScore < 90) {
     strokeColor = "stroke-amber-400";
     textColor = "text-amber-400";
   }
@@ -49,7 +81,7 @@ export function CircularProgress({
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            className={`transition-all duration-1000 ease-out fill-none ${strokeColor}`}
+            className={`transition-all duration-150 ease-out fill-none ${strokeColor}`}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
@@ -61,7 +93,7 @@ export function CircularProgress({
         {showText && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className={`text-3xl font-display font-bold tracking-tight ${textColor}`}>
-              {score}
+              {displayScore}
             </span>
             {label && <span className="text-[10px] font-medium text-[#777] uppercase tracking-wider">{label}</span>}
           </div>

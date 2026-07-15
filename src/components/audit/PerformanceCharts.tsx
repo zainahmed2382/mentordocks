@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface ChartDataPoint {
   label: string;
@@ -15,6 +15,8 @@ interface SparklineChartProps {
 }
 
 const SparklineChart: React.FC<SparklineChartProps> = ({ data, color, fillColor, label, currentValue, delay = 0 }) => {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
   const W = 200;
   const H = 70;
   const pad = 8;
@@ -36,20 +38,32 @@ const SparklineChart: React.FC<SparklineChartProps> = ({ data, color, fillColor,
   const areaD = `${pathD} L ${points[points.length - 1].x} ${H - pad} L ${points[0].x} ${H - pad} Z`;
 
   const trend = values[values.length - 1] - values[values.length - 2];
+  const gradId = `grad-${label.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
     <div className="dash-card p-5 animate-slide-up" style={{ animationDelay: `${delay}ms` }}>
       <div className="flex items-center justify-between mb-3">
         <div>
           <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{label}</div>
-          <div className="text-2xl font-black text-slate-900 mt-1">{currentValue}</div>
+          <div className="text-2xl font-black text-slate-100 mt-1">{currentValue}</div>
         </div>
-        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${trend >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}>
+        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5 border ${
+          trend >= 0 
+            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
+            : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+        }`}>
           {trend >= 0 ? "▲" : "▼"} {Math.abs(trend)}
         </span>
       </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 56 }}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full overflow-visible" style={{ height: 56 }}>
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.25" />
+            <stop offset="100%" stopColor={color} stopOpacity="0.0" />
+          </linearGradient>
+        </defs>
+
         {/* Grid lines */}
         {[0.25, 0.5, 0.75].map((f, i) => (
           <line
@@ -58,15 +72,17 @@ const SparklineChart: React.FC<SparklineChartProps> = ({ data, color, fillColor,
             y1={H - pad - f * (H - pad * 2)}
             x2={W - pad}
             y2={H - pad - f * (H - pad * 2)}
-            stroke="#f1f5f9"
+            stroke="#1e293b"
             strokeWidth={1}
+            strokeDasharray="2 4"
+            opacity={0.4}
           />
         ))}
 
-        {/* Area fill */}
-        <path d={areaD} fill={fillColor} opacity={0.4} />
+        {/* Area fill using linear gradient */}
+        <path d={areaD} fill={`url(#${gradId})`} />
 
-        {/* Line */}
+        {/* Sparkline Path */}
         <path
           d={pathD}
           fill="none"
@@ -78,13 +94,75 @@ const SparklineChart: React.FC<SparklineChartProps> = ({ data, color, fillColor,
           style={{ animationDelay: `${delay + 200}ms` }}
         />
 
-        {/* Last point dot */}
-        <circle
-          cx={points[points.length - 1].x}
-          cy={points[points.length - 1].y}
-          r={4}
-          fill={color}
-        />
+        {/* Hover vertical guide line */}
+        {hoveredIdx !== null && (
+          <line
+            x1={points[hoveredIdx].x}
+            y1={pad}
+            x2={points[hoveredIdx].x}
+            y2={H - pad}
+            stroke={color}
+            strokeWidth={1.2}
+            strokeDasharray="2 2"
+            opacity={0.6}
+          />
+        )}
+
+        {/* Highlight circle on hover or last point */}
+        {points.map((p, i) => (
+          <circle
+            key={`dot-${i}`}
+            cx={p.x}
+            cy={p.y}
+            r={hoveredIdx === i ? 4.5 : i === points.length - 1 ? 3.5 : 0}
+            fill={color}
+            stroke="#0b1120"
+            strokeWidth={hoveredIdx === i ? 1.5 : 0}
+            className="transition-all duration-150 pointer-events-none"
+            opacity={hoveredIdx === i || i === points.length - 1 ? 1 : 0}
+          />
+        ))}
+
+        {/* Floating Tooltip inside SVG */}
+        {hoveredIdx !== null && (
+          <g className="transition-all duration-150 pointer-events-none">
+            <rect
+              x={Math.max(pad, Math.min(W - pad - 42, points[hoveredIdx].x - 21))}
+              y={points[hoveredIdx].y - 18 < pad ? points[hoveredIdx].y + 8 : points[hoveredIdx].y - 18}
+              width={42}
+              height={13}
+              rx={3}
+              fill="#0f172a"
+              stroke={color}
+              strokeWidth={0.8}
+            />
+            <text
+              x={Math.max(pad + 21, Math.min(W - pad - 21, points[hoveredIdx].x))}
+              y={points[hoveredIdx].y - 18 < pad ? points[hoveredIdx].y + 17 : points[hoveredIdx].y - 9}
+              fill="#f8fafc"
+              fontSize={7.5}
+              fontWeight="bold"
+              textAnchor="middle"
+              fontFamily="monospace"
+            >
+              {data[hoveredIdx].label}: {data[hoveredIdx].value}
+            </text>
+          </g>
+        )}
+
+        {/* Transparent hover sensors */}
+        {points.map((p, i) => (
+          <circle
+            key={`sensor-${i}`}
+            cx={p.x}
+            cy={p.y}
+            r={14}
+            fill="transparent"
+            className="cursor-crosshair"
+            onMouseEnter={() => setHoveredIdx(i)}
+            onMouseLeave={() => setHoveredIdx(null)}
+          />
+        ))}
       </svg>
 
       {/* X-axis labels */}

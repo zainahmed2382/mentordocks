@@ -88,26 +88,24 @@ export const AuditSidebar: React.FC<AuditSidebarProps> = ({
             <button
               key={item.id}
               onClick={() => { onSectionChange(item.id); onMobileClose(); }}
-              className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer group relative ${
+              className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer group relative ${
                 isActive
-                  ? "bg-blue-600/10 text-blue-400 border border-blue-500/30 shadow-md shadow-blue-950/40"
-                  : "text-slate-400 hover:bg-slate-900/60 hover:text-slate-200 border border-transparent"
+                  ? "bg-blue-600/15 text-blue-400 border border-blue-500/40 shadow-md shadow-blue-950/50"
+                  : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200 border border-transparent"
               }`}
             >
-              {isActive && (
-                <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-blue-500 rounded-r-md" />
-              )}
+              <span className={`absolute left-0 top-1/4 bottom-1/4 w-1 bg-blue-500 rounded-r-md transition-all duration-300 origin-left ${isActive ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}`} />
               <div className="flex items-center gap-2.5">
-                <item.icon className={`h-4 w-4 flex-shrink-0 transition-colors ${isActive ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"}`} />
-                <span className="text-xs font-semibold">{item.label}</span>
+                <item.icon className={`h-4 w-4 flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:text-blue-400 ${isActive ? "text-blue-400 scale-105" : "text-slate-500"}`} />
+                <span className={`text-xs transition-colors duration-300 ${isActive ? "font-bold text-blue-400" : "font-semibold text-slate-400 group-hover:text-slate-200"}`}>{item.label}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 {item.badge === "issues" && issueCount > 0 && (
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isActive ? "bg-blue-500/20 text-blue-400" : "bg-red-500/10 text-red-400 border border-red-500/20"}`}>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full transition-all duration-300 ${isActive ? "bg-blue-500/20 text-blue-400" : "bg-red-500/10 text-red-400 border border-red-500/20"}`}>
                     {issueCount}
                   </span>
                 )}
-                <ChevronRight className={`h-3 w-3 transition-transform ${isActive ? "text-blue-400 translate-x-0.5" : "text-slate-600 group-hover:text-slate-400 group-hover:translate-x-0.5"}`} />
+                <ChevronRight className={`h-3 w-3 transition-all duration-300 ${isActive ? "text-blue-400 translate-x-0.5" : "text-slate-600 group-hover:text-slate-400 group-hover:translate-x-0.5"}`} />
               </div>
             </button>
           );

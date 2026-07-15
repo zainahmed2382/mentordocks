@@ -56,6 +56,7 @@ function getScoreConfig(score: number) {
 
 export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay = 0 }) => {
   const circleRef = useRef<SVGCircleElement>(null);
+  const [displayScore, setDisplayScore] = useState(0);
   const config = getScoreConfig(score);
 
   const size = 68;
@@ -63,6 +64,43 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const targetOffset = circumference - (score / 100) * circumference;
+
+  useEffect(() => {
+    let start = 0;
+    const end = score;
+    if (start === end) {
+      setDisplayScore(end);
+      return;
+    }
+    const duration = 1200; // ms
+    const range = end - start;
+    let startTime: number | null = null;
+    let frameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const progressRatio = Math.min(progress / duration, 1);
+      // Ease out quad
+      const easeProgress = progressRatio * (2 - progressRatio);
+      const currentScore = Math.round(start + easeProgress * range);
+      setDisplayScore(currentScore);
+      if (progress < duration) {
+        frameId = requestAnimationFrame(animate);
+      } else {
+        setDisplayScore(end);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      frameId = requestAnimationFrame(animate);
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+      if (frameId) cancelAnimationFrame(frameId);
+    };
+  }, [score, delay]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -89,7 +127,7 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
 
   return (
     <div
-      className="bg-slate-950/70 border border-slate-900 hover:border-blue-500/30 transition-all duration-300 rounded-2xl p-4 flex flex-col justify-between h-[234px] shadow-lg shadow-black/40 hover:shadow-blue-950/10 group animate-slide-up hover:-translate-y-1"
+      className="dash-card p-4 flex flex-col justify-between h-[234px] shadow-lg shadow-black/40 group animate-slide-up"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="space-y-3 flex-1">
@@ -138,14 +176,14 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-sm font-black font-mono" style={{ color: config.ring }}>
-                {score}
+                {displayScore}
               </span>
             </div>
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline gap-0.5">
-              <span className="text-2xl font-black font-mono text-slate-100 tracking-tight">{score}</span>
+              <span className="text-2xl font-black font-mono text-slate-100 tracking-tight">{displayScore}</span>
               <span className="text-[10px] font-bold text-slate-500">/100</span>
             </div>
             <span className={`inline-flex items-center mt-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide ${config.badge}`}>
@@ -164,11 +202,10 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
         {/* Progress Bar */}
         <div className="w-full bg-slate-900 rounded-full h-1 overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-1000 ease-out"
+            className="h-full rounded-full transition-all duration-300 ease-out"
             style={{
-              width: `${score}%`,
+              width: `${displayScore}%`,
               backgroundColor: config.ring,
-              transitionDelay: `${delay + 200}ms`
             }}
           />
         </div>
