@@ -319,7 +319,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-transparent text-slate-100 pb-20 relative overflow-x-hidden">
       {/* Header Navigation */}
-      <header className="sticky top-0 z-50 bg-slate-950/70 backdrop-blur-xl border-b border-slate-800/80 px-4 sm:px-6 py-3 sm:py-4">
+      <header className="sticky top-0 z-50 bg-slate-950/70 backdrop-blur-2xl border-b border-slate-800/80 px-4 sm:px-6 py-3 sm:py-4 shadow-[0_10px_40px_-22px_rgba(2,6,23,0.95)]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
           
           {/* Brand Logo */}
@@ -364,13 +364,13 @@ export default function App() {
           {/* Desktop Actions */}
           <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto pt-3 md:pt-0 border-t border-gray-100 md:border-0">
             {/* Segmented View-Tab Controller */}
-            <div className="flex items-center bg-slate-900/70 border border-slate-800 p-1 rounded-xl">
+            <div className="flex items-center bg-slate-900/70 border border-slate-800/80 p-1 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
               <button
                 onClick={() => setActiveTab("scanner")}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                   activeTab === "scanner"
-                    ? "bg-slate-800 text-slate-100 border border-slate-700 shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-slate-800/90 text-slate-100 border border-blue-500/20 shadow-[0_10px_26px_-16px_rgba(59,130,246,0.45)]"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
                 }`}
               >
                 <Search className="h-4 w-4" />
@@ -379,10 +379,10 @@ export default function App() {
               {currUser && (
                 <button
                   onClick={() => setActiveTab("dashboard")}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                     activeTab === "dashboard"
-                      ? "bg-slate-800 text-slate-100 border border-slate-700 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200"
+                      ? "bg-slate-800/90 text-slate-100 border border-blue-500/20 shadow-[0_10px_26px_-16px_rgba(59,130,246,0.45)]"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
                   }`}
                 >
                   <BarChart3 className="h-4 w-4" />
@@ -472,7 +472,7 @@ export default function App() {
 
             {/* Error States */}
             {errorMsg && errorState && (
-              <div className="max-w-2xl mx-auto bg-slate-900/85 border border-slate-800 rounded-[28px] p-8 shadow-[0_24px_70px_-32px_rgba(2,6,23,0.95)] backdrop-blur-xl space-y-6">
+              <div className="max-w-2xl mx-auto glass-panel rounded-[28px] p-8 shadow-[0_28px_90px_-36px_rgba(2,6,23,0.98)] space-y-6">
                 <div className="flex items-start gap-4">
                   <div className={`h-12 w-12 rounded-2xl flex items-center justify-center border ${errorState.accent}`}>
                     <ErrorIcon className="h-6 w-6" />
@@ -519,7 +519,7 @@ export default function App() {
                 <HomeState onAudit={handleRunAudit} isLoading={loading} />
                 
                 {/* History Section */}
-                <div className="max-w-5xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 shadow-[0_24px_70px_-32px_rgba(2,6,23,0.95)] backdrop-blur-xl relative overflow-hidden">
+                <div className="max-w-5xl mx-auto glass-panel rounded-[28px] p-8 shadow-[0_28px_90px_-36px_rgba(2,6,23,0.98)] relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-tr from-primary-500/5 to-transparent blur-[40px] pointer-events-none rounded-full" />
                   
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-6 gap-4 mb-6">
@@ -654,7 +654,7 @@ export default function App() {
       {/* Help Glossary Button */}
       <button
         onClick={() => setShowGlossary(true)}
-        className="fixed bottom-6 right-6 z-40 p-4 bg-slate-900/90 border border-slate-800 hover:border-primary-400 text-slate-200 hover:text-white rounded-full shadow-[0_18px_55px_-24px_rgba(2,6,23,0.95)] transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer group"
+        className="fixed bottom-6 right-6 z-40 p-4 bg-slate-950/80 border border-slate-800/80 hover:border-blue-400/35 text-slate-200 hover:text-white rounded-full shadow-[0_24px_70px_-22px_rgba(2,6,23,0.95)] transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer group"
         title="Open Diagnostics Guide"
       >
         <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-gradient-to-tr from-primary-500 to-secondary-500 animate-ping" />
@@ -672,7 +672,7 @@ export default function App() {
           />
           
           {/* Drawer */}
-          <div className="relative w-full max-w-md bg-slate-950/95 border-l border-slate-800 shadow-2xl h-full flex flex-col justify-between p-8 overflow-y-auto animate-fade-in text-left backdrop-blur-xl">
+          <div className="relative w-full max-w-md glass-panel border-l border-slate-800/80 shadow-[0_25px_100px_-30px_rgba(2,6,23,0.98)] h-full flex flex-col justify-between p-8 overflow-y-auto animate-fade-in text-left backdrop-blur-2xl">
             <div className="space-y-8">
               <div className="flex items-center justify-between border-b border-gray-100 pb-6">
                 <div className="space-y-1.5">

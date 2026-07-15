@@ -51,9 +51,9 @@ export const AuditSidebar: React.FC<AuditSidebarProps> = ({
   const scoreColor = overallScore >= 90 ? "text-emerald-400" : overallScore >= 70 ? "text-blue-400" : overallScore >= 50 ? "text-amber-400" : "text-red-400";
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-slate-950 border-r border-slate-900">
+    <div className="flex flex-col h-full bg-slate-950/90 border-r border-slate-800/80">
       {/* Brand */}
-      <div className="px-5 pt-6 pb-5 border-b border-slate-900">
+      <div className="px-5 pt-6 pb-5 border-b border-slate-800/80">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20 flex-shrink-0">
             <Zap className="h-4 w-4 text-white animate-pulse" />
@@ -68,7 +68,7 @@ export const AuditSidebar: React.FC<AuditSidebarProps> = ({
       {/* Current audit site pill */}
       {websiteUrl && (
         <div className="px-4 pt-4 pb-2">
-          <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl px-4 py-3 shadow-inner">
+          <div className="bg-slate-900/70 border border-slate-800/80 rounded-[20px] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
             <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1">Target Domain</div>
             <div className="text-xs font-bold text-slate-200 truncate">{displayUrl}</div>
             <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-900">
@@ -90,7 +90,7 @@ export const AuditSidebar: React.FC<AuditSidebarProps> = ({
               onClick={() => { onSectionChange(item.id); onMobileClose(); }}
               className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer group relative ${
                 isActive
-                  ? "bg-blue-600/15 text-blue-400 border border-blue-500/40 shadow-md shadow-blue-950/50"
+                  ? "bg-blue-600/15 text-blue-400 border border-blue-500/25 shadow-[0_12px_30px_-20px_rgba(59,130,246,0.45)]"
                   : "text-slate-400 hover:bg-slate-900/80 hover:text-slate-200 border border-transparent"
               }`}
             >
@@ -130,8 +130,8 @@ export const AuditSidebar: React.FC<AuditSidebarProps> = ({
       </nav>
 
       {/* Bottom Pro / Usage Section */}
-      <div className="px-4 py-4 border-t border-slate-900 bg-slate-950/80">
-        <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800/80 rounded-2xl p-3.5 shadow-md">
+      <div className="px-4 py-4 border-t border-slate-800/80 bg-slate-950/80">
+        <div className="bg-gradient-to-br from-slate-900/90 to-slate-950/80 border border-slate-800/80 rounded-[20px] p-3.5 shadow-[0_16px_40px_-24px_rgba(2,6,23,0.95)]">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Plan: <span className="text-blue-400 font-black">Free Tier</span></span>
             <span className="inline-flex items-center gap-0.5 rounded-full bg-violet-500/10 px-1.5 py-0.2 text-[9px] font-bold text-violet-400 border border-violet-500/20">

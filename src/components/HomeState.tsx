@@ -40,7 +40,7 @@ export function HomeState({
     <div className="space-y-16 py-8">
       {/* Hero Section */}
       <div className="text-center space-y-8 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 border border-primary-400/20 text-primary-300 rounded-full text-sm font-semibold backdrop-blur">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-400/20 text-blue-300 rounded-full text-sm font-semibold backdrop-blur">
           <Sparkles className="h-4 w-4" />
           AI-Powered Website Analysis
         </div>
@@ -74,13 +74,13 @@ export function HomeState({
                     if (error) setError("");
                   }}
                   disabled={isLoading}
-                  className="w-full pl-12 pr-36 py-4 text-lg bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-400/20 transition-all disabled:opacity-65 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                  className="w-full pl-12 pr-36 py-4 text-lg bg-slate-950/80 border border-slate-800/80 rounded-[18px] text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-400/40 focus:ring-4 focus:ring-blue-400/20 transition-all disabled:opacity-65 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
                 />
                 <div className="absolute inset-y-0 right-2 flex items-center">
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="h-10 px-6 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-bold rounded-xl hover:shadow-[0_14px_34px_-16px_rgba(37,99,235,0.7)] hover:scale-[1.01] transition-all disabled:opacity-65 disabled:cursor-not-allowed disabled:scale-100 flex items-center gap-2"
+                    className="h-10 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:shadow-[0_16px_36px_-16px_rgba(37,99,235,0.65)] hover:scale-[1.01] transition-all disabled:opacity-65 disabled:cursor-not-allowed disabled:scale-100 flex items-center gap-2"
                   >
                     {isLoading ? "Auditing..." : "Start AI Audit"}
                     {!isLoading && <Zap className="h-4 w-4" />}
@@ -103,7 +103,7 @@ export function HomeState({
                 key={preset.name}
                 onClick={() => handleSelectPreset(preset.url)}
                 disabled={isLoading}
-                className="px-4 py-2 bg-slate-900/80 border border-slate-700 text-slate-300 font-medium rounded-xl hover:bg-slate-800 hover:border-primary-400 transition-all cursor-pointer disabled:opacity-60"
+                className="px-4 py-2 bg-slate-900/70 border border-slate-800/80 text-slate-300 font-medium rounded-xl hover:bg-slate-800/90 hover:border-blue-400/35 transition-all cursor-pointer disabled:opacity-60"
               >
                 {preset.name}
               </button>
@@ -186,7 +186,7 @@ export function HomeState({
 
       {/* CTA Section */}
       <div className="max-w-4xl mx-auto">
-        <div className="bg-gradient-to-r from-primary-600/90 to-primary-500/90 rounded-3xl p-8 md:p-12 text-white text-center shadow-[0_24px_70px_-32px_rgba(37,99,235,0.8)]">
+        <div className="rounded-[28px] border border-blue-400/20 bg-gradient-to-r from-blue-600/90 to-blue-500/90 p-8 md:p-12 text-white text-center shadow-[0_24px_70px_-32px_rgba(37,99,235,0.8)]">
           <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">
             Ready to Audit Your Website?
           </h2>
