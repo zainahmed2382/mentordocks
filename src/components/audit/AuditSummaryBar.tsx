@@ -68,24 +68,34 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
   const lowOffset = total > 0 ? -((high + medium) / total) * circumference : 0;
 
   return (
-    <div className="bg-slate-950/70 border border-slate-900 rounded-2xl p-5 shadow-lg shadow-black/40 animate-slide-up delay-200">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-5 border-b border-slate-900 pb-4">
+    <div className="bg-gradient-to-b from-slate-900/60 to-slate-800/50 rounded-3xl p-5 shadow-[0_14px_40px_rgba(2,6,23,0.7)] border border-slate-800 animate-slide-up delay-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-5 border-b border-slate-800/60 pb-4">
         <div>
-          <h3 className="text-sm font-bold text-slate-200 tracking-wide">Audit Severity Summary</h3>
-          <p className="text-xs text-slate-500 mt-1">Distribution of issues by impact level</p>
+          <h3 className="text-sm font-semibold text-slate-100 tracking-wide">Audit Severity Summary</h3>
+          <p className="text-xs text-slate-400 mt-1">Distribution of issues by impact level</p>
         </div>
 
         {/* Dynamic Donut Chart */}
-        <div className="flex items-center gap-4 bg-slate-900/30 border border-slate-900 px-4 py-2.5 rounded-2xl self-start sm:self-center">
+        <div className="flex items-center gap-4 bg-slate-900/30 border border-slate-800 px-4 py-3 rounded-2xl self-start sm:self-center">
           <div className="relative" style={{ width: size, height: size }}>
             <svg width={size} height={size} className="-rotate-90">
+              <defs>
+                <filter id="donutGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
               <circle
                 cx={size / 2}
                 cy={size / 2}
                 r={radius}
                 fill="none"
-                stroke="#1e293b"
+                stroke="#071025"
                 strokeWidth={strokeWidth}
+                opacity={0.6}
               />
               {/* High severity arc */}
               {high > 0 && (
@@ -94,7 +104,7 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
                   cy={size / 2}
                   r={radius}
                   fill="none"
-                  stroke="#ef4444"
+                  stroke="#ff6b6b"
                   strokeWidth={hoveredSegment === "high" ? strokeWidth + 2 : strokeWidth}
                   strokeDasharray={`${(high / total) * circumference} ${circumference}`}
                   strokeDashoffset={highOffset}
@@ -102,6 +112,7 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
                   className="transition-all duration-200 cursor-pointer"
                   onMouseEnter={() => setHoveredSegment("high")}
                   onMouseLeave={() => setHoveredSegment(null)}
+                  style={{ filter: hoveredSegment === "high" ? 'url(#donutGlow)' : undefined }}
                 />
               )}
               {/* Medium severity arc */}
@@ -119,6 +130,7 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
                   className="transition-all duration-200 cursor-pointer"
                   onMouseEnter={() => setHoveredSegment("medium")}
                   onMouseLeave={() => setHoveredSegment(null)}
+                  style={{ filter: hoveredSegment === "medium" ? 'url(#donutGlow)' : undefined }}
                 />
               )}
               {/* Low severity arc */}
@@ -128,7 +140,7 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
                   cy={size / 2}
                   r={radius}
                   fill="none"
-                  stroke="#3b82f6"
+                  stroke="#60a5fa"
                   strokeWidth={hoveredSegment === "low" ? strokeWidth + 2 : strokeWidth}
                   strokeDasharray={`${(low / total) * circumference} ${circumference}`}
                   strokeDashoffset={lowOffset}
@@ -136,29 +148,30 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
                   className="transition-all duration-200 cursor-pointer"
                   onMouseEnter={() => setHoveredSegment("low")}
                   onMouseLeave={() => setHoveredSegment(null)}
+                  style={{ filter: hoveredSegment === "low" ? 'url(#donutGlow)' : undefined }}
                 />
               )}
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-base font-black font-mono text-slate-100">{total}</span>
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Issues</span>
+              <span className="text-base font-extrabold font-mono text-white">{total}</span>
+              <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Issues</span>
             </div>
           </div>
 
           <div className="text-left">
-            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Active Status</div>
-            <div className="text-xs font-extrabold text-slate-200 flex items-center gap-1.5">
+            <div className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-1">Active Status</div>
+            <div className="text-sm font-semibold text-slate-100 flex items-center gap-2">
               {hoveredSegment === "high" ? (
-                <><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" /> {high} Critical / High</>
+                <><span className="w-2 h-2 rounded-full bg-red-500 animate-ping" /> {high} Critical / High</>
               ) : hoveredSegment === "medium" ? (
-                <><span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" /> {medium} Medium Priority</>
+                <><span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" /> {medium} Medium Priority</>
               ) : hoveredSegment === "low" ? (
-                <><span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" /> {low} Low Priority</>
+                <><span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" /> {low} Low Priority</>
               ) : (
-                <><span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" /> Scanning Complete</>
+                <><span className="w-2 h-2 rounded-full bg-slate-600 animate-pulse" /> Scanning Complete</>
               )}
             </div>
-            <div className="text-[9px] text-slate-400 mt-1 max-w-[140px] leading-tight">
+            <div className="text-[9px] text-slate-400 mt-1 max-w-[200px] leading-tight">
               {hoveredSegment 
                 ? `Represents ${Math.round(((hoveredSegment === "high" ? high : hoveredSegment === "medium" ? medium : low) / total) * 100)}% of total issues.`
                 : "Hover segments for details."
@@ -168,32 +181,32 @@ export const AuditSummaryBar: React.FC<AuditSummaryBarProps> = ({ issues }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, idx) => (
           <div
             key={stat.label}
-            className={`${stat.bg} rounded-2xl p-4 transition-all duration-300 hover:-translate-y-0.5 shadow-md flex flex-col justify-between h-[134px]`}
+            className={`rounded-2xl p-4 transition-all duration-300 transform-gpu hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between h-[140px] bg-gradient-to-b from-slate-900/50 to-slate-800/40 border border-slate-800`}
             style={{ animationDelay: `${200 + idx * 80}ms` }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{stat.label}</span>
-              <div className={`p-1.5 rounded-xl ${stat.iconBg}`}>
+              <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">{stat.label}</span>
+              <div className={`p-2 rounded-lg ${stat.iconBg}`}>
                 {stat.icon}
               </div>
             </div>
             
             <div className="mt-3">
-              <div className="text-2xl font-black font-mono text-slate-100 mb-2.5">
+              <div className="text-2xl font-extrabold font-mono text-white mb-2.5">
                 {stat.value}
               </div>
-              <div className="space-y-1">
-                <div className="w-full bg-slate-900 rounded-full h-1 overflow-hidden">
+              <div className="space-y-2">
+                <div className="w-full bg-slate-800/40 rounded-full h-2 overflow-hidden border border-slate-800/60">
                   <div
                     className={`h-full rounded-full ${stat.bar} transition-all duration-1000 ease-out`}
                     style={{ width: `${stat.percent}%`, transitionDelay: `${600 + idx * 100}ms` }}
                   />
                 </div>
-                <div className="text-[9px] font-mono text-slate-500 text-right">{stat.percent}% of total</div>
+                <div className="text-[10px] font-mono text-slate-400 text-right">{stat.percent}% of total</div>
               </div>
             </div>
           </div>

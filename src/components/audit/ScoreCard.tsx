@@ -127,17 +127,17 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
 
   return (
     <div
-      className="dash-card p-4 flex flex-col justify-between h-[234px] shadow-lg shadow-black/40 group animate-slide-up"
+      className="dash-card p-4 flex flex-col justify-between h-[234px] bg-gradient-to-b from-slate-800/60 to-slate-900/60 border border-slate-800 rounded-2xl transform-gpu transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl group animate-slide-up"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="space-y-3 flex-1">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-slate-900 text-slate-400 border border-slate-800/80 group-hover:text-blue-400 transition-colors">
+            <div className="p-2.5 rounded-lg bg-gradient-to-br from-slate-900/60 to-slate-800/50 text-slate-300 border border-slate-700/80 flex items-center justify-center w-10 h-10">
               {icon}
             </div>
-            <span className="text-xs font-bold text-slate-300 tracking-wide">{label}</span>
+            <span className="text-xs font-semibold text-slate-200 tracking-wide">{label}</span>
           </div>
           <div className="flex items-center gap-1">
             <span className={`text-[10px] font-bold ${trendColor}`}>
@@ -157,8 +157,9 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
                 cy={size / 2}
                 r={radius}
                 fill="none"
-                stroke="#1e293b"
+                stroke="#0f1724"
                 strokeWidth={strokeWidth}
+                opacity={0.6}
               />
               {/* Progress */}
               <circle
@@ -172,10 +173,11 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
                 strokeLinecap="round"
                 strokeDasharray={circumference}
                 strokeDashoffset={circumference}
+                style={{ filter: "drop-shadow(0 6px 10px rgba(0,0,0,0.6))" }}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-sm font-black font-mono" style={{ color: config.ring }}>
+              <span className="text-sm font-extrabold font-mono" style={{ color: config.ring }}>
                 {displayScore}
               </span>
             </div>
@@ -183,10 +185,10 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
 
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline gap-0.5">
-              <span className="text-2xl font-black font-mono text-slate-100 tracking-tight">{displayScore}</span>
-              <span className="text-[10px] font-bold text-slate-500">/100</span>
+              <span className="text-2xl font-extrabold font-mono text-white tracking-tight">{displayScore}</span>
+              <span className="text-[10px] font-semibold text-slate-400">/100</span>
             </div>
-            <span className={`inline-flex items-center mt-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide ${config.badge}`}>
+            <span className={`inline-flex items-center mt-1.5 px-3 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${config.badge}`}>
               {config.status}
             </span>
           </div>
@@ -195,17 +197,18 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ label, score, icon, delay 
 
       <div className="space-y-3">
         {/* Insight */}
-        <div className="text-[10px] text-slate-400 italic leading-snug line-clamp-2 border-t border-slate-900/60 pt-2.5">
+        <div className="text-[11px] text-slate-300 italic leading-tight line-clamp-2 border-t border-slate-700/50 pt-3">
           "{insight}"
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-slate-900 rounded-full h-1 overflow-hidden">
+        <div className="w-full bg-slate-800/40 rounded-full h-2 overflow-hidden border border-slate-700/60">
           <div
-            className="h-full rounded-full transition-all duration-300 ease-out"
+            className="h-full rounded-full transition-all duration-400 ease-out"
             style={{
               width: `${displayScore}%`,
               backgroundColor: config.ring,
+              boxShadow: `0 6px 18px ${config.ring}33`
             }}
           />
         </div>

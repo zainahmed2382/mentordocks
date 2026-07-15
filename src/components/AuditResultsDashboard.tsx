@@ -193,7 +193,7 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
                 <LayoutDashboard className="h-3.5 w-3.5" />
                 Score Overview
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {scoreCards.map((card, idx) => (
                   <ScoreCard
                     key={card.label}

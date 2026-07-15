@@ -144,33 +144,33 @@ export function DashboardView({
     <div className="space-y-6 animate-fade-in text-left">
       
       {/* Dashboard Top Intro Banner */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 relative overflow-hidden shadow-sm">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-primary-500/10 via-secondary-500/5 to-transparent blur-[50px] pointer-events-none rounded-full" />
-        
+      <div className="rounded-3xl p-6 relative overflow-hidden shadow-[0_10px_30px_rgba(2,6,23,0.6)] border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100">
+        <div className="absolute -right-16 -top-16 w-96 h-96 bg-gradient-to-br from-indigo-600/30 via-violet-600/10 to-transparent blur-3xl pointer-events-none rounded-full" />
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-primary-50 border border-primary-100 rounded-full text-primary-700 text-[10px] font-mono font-bold uppercase tracking-wider">
-              <BarChart3 className="h-3 w-3" /> ANALYTICS DASHBOARD
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-800/40 border border-slate-700 rounded-full text-indigo-300 text-[10px] font-mono font-semibold uppercase tracking-wider">
+              <BarChart3 className="h-3 w-3 text-indigo-300" /> ANALYTICS DASHBOARD
             </div>
-            <h2 className="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
               {currUser ? `${currUser.name}'s Website Audit Dashboard` : "Website Audit Dashboard"}
             </h2>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Explore your audit history, track scores over time, and simulate improvements.
+            <p className="text-sm text-slate-300 leading-relaxed max-w-xl">
+              Explore your audit history, track scores over time, and simulate improvements with refined insights and clear next steps.
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={onAuditNew}
-              className="px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white hover:shadow-lg transition flex items-center gap-1.5 cursor-pointer shadow-sm rounded-xl font-bold text-xs"
+              className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:shadow-[0_8px_24px_rgba(99,102,241,0.25)] transition flex items-center gap-2 cursor-pointer rounded-xl font-semibold text-sm"
             >
               <Plus className="h-4 w-4" /> Run New Audit
             </button>
             {totalScans > 0 && (
               <button
                 onClick={onClearHistory}
-                className="px-3.5 py-2 bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 rounded-xl text-xs font-semibold text-gray-600 hover:text-error-600 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-2 bg-transparent border border-slate-700 hover:bg-slate-800/40 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition flex items-center gap-2 cursor-pointer"
                 title="Clear Logs"
               >
                 <Trash2 className="h-3.5 w-3.5" /> Clear Logs
@@ -304,94 +304,103 @@ export function DashboardView({
             ) : (
               <div className="space-y-4">
                 {/* SVG Line Graph */}
-                <div className="relative pt-6 px-2 bg-gray-50 rounded-xl border border-gray-200">
-                  <svg className="w-full h-40 overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
-                    {/* Grid Lines */}
-                    <line x1="0" y1="20" x2="500" y2="20" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="3,3" />
-                    <line x1="0" y1="60" x2="500" y2="60" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="3,3" />
-                    <line x1="0" y1="100" x2="500" y2="100" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="3,3" />
+                <div className="relative pt-6 px-2 bg-gradient-to-b from-slate-900/60 to-slate-800/50 rounded-2xl border border-slate-800 shadow-[0_10px_30px_rgba(2,6,23,0.6)]">
+                      <svg className="w-full h-44 overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
+                        {/* Grid Lines (subtle) */}
+                        <line x1="0" y1="20" x2="500" y2="20" stroke="#071025" strokeWidth="1" strokeDasharray="4,4" opacity="0.6" />
+                        <line x1="0" y1="60" x2="500" y2="60" stroke="#071025" strokeWidth="1" strokeDasharray="4,4" opacity="0.5" />
+                        <line x1="0" y1="100" x2="500" y2="100" stroke="#071025" strokeWidth="1" strokeDasharray="4,4" opacity="0.4" />
 
-                    {/* Gradient Area under line */}
-                    <defs>
-                      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
-                      </linearGradient>
-                    </defs>
+                        {/* Gradient Area under line */}
+                        <defs>
+                          <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.28" />
+                            <stop offset="60%" stopColor="#60a5fa" stopOpacity="0.08" />
+                            <stop offset="100%" stopColor="#60a5fa" stopOpacity="0.0" />
+                          </linearGradient>
+                          <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                            <feMerge>
+                              <feMergeNode in="coloredBlur" />
+                              <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                          </filter>
+                        </defs>
 
-                    {/* Path builder */}
-                    {(() => {
-                      const points = auditHistory.map((item, idx) => {
-                        const x = totalScans > 1 ? (idx / (totalScans - 1)) * 500 : 250;
-                        const y = 110 - (item.score / 100) * 100;
-                        return { x, y, ...item };
-                      });
+                        {/* Path builder */}
+                        {(() => {
+                          const points = auditHistory.map((item, idx) => {
+                            const x = totalScans > 1 ? (idx / (totalScans - 1)) * 500 : 250;
+                            const y = 110 - (item.score / 100) * 100;
+                            return { x, y, ...item };
+                          });
 
-                      let pathStr = `M ${points[0].x} ${points[0].y}`;
-                      for (let i = 1; i < points.length; i++) {
-                        pathStr += ` L ${points[i].x} ${points[i].y}`;
-                      }
+                          let pathStr = `M ${points[0].x} ${points[0].y}`;
+                          for (let i = 1; i < points.length; i++) {
+                            pathStr += ` L ${points[i].x} ${points[i].y}`;
+                          }
 
-                      let areaStr = `${pathStr} L ${points[points.length - 1].x} 115 L ${points[0].x} 115 Z`;
+                          let areaStr = `${pathStr} L ${points[points.length - 1].x} 115 L ${points[0].x} 115 Z`;
 
-                      return (
-                        <>
-                          {/* Filled Area */}
-                          <path d={areaStr} fill="url(#chartGradient)" />
+                          return (
+                            <>
+                              {/* Filled Area */}
+                              <path d={areaStr} fill="url(#chartGradient)" />
 
-                          {/* Line */}
-                          <path d={pathStr} fill="none" stroke="#2563eb" strokeWidth="2.5" />
+                              {/* Line with glow */}
+                              <path d={pathStr} fill="none" stroke="#60a5fa" strokeWidth="3" strokeLinecap="round" filter="url(#softGlow)" />
+                              <path d={pathStr} fill="none" stroke="#0f1724" strokeWidth="1.5" strokeLinecap="round" opacity="0.12" />
 
-                          {/* Data points */}
-                          {points.map((pt, pIdx) => (
-                            <g 
-                              key={pIdx}
-                              onMouseEnter={() => setHoveredDataPoint(pIdx)}
-                              onMouseLeave={() => setHoveredDataPoint(null)}
-                              className="cursor-pointer group"
-                            >
-                              <circle 
-                                cx={pt.x} 
-                                cy={pt.y} 
-                                r={hoveredDataPoint === pIdx ? "6" : "4.5"} 
-                                fill={pt.score >= 90 ? "#10b981" : pt.score >= 70 ? "#f59e0b" : "#ef4444"} 
-                                stroke="#ffffff"
-                                strokeWidth="2"
-                                className="transition-all duration-150"
-                              />
-                            </g>
-                          ))}
-                        </>
-                      );
-                    })()}
-                  </svg>
-                  
-                  {/* Timeline labels */}
-                  <div className="flex justify-between text-[9px] font-mono text-gray-500 pt-2 border-t border-gray-200 mt-2 px-1">
-                    <span>{auditHistory[0]?.date || "Oldest"}</span>
-                    <span>Progression</span>
-                    <span>{auditHistory[auditHistory.length - 1]?.date || "Latest"}</span>
-                  </div>
-                </div>
+                              {/* Data points */}
+                              {points.map((pt, pIdx) => (
+                                <g 
+                                  key={pIdx}
+                                  onMouseEnter={() => setHoveredDataPoint(pIdx)}
+                                  onMouseLeave={() => setHoveredDataPoint(null)}
+                                  className="cursor-pointer"
+                                >
+                                  <circle 
+                                    cx={pt.x} 
+                                    cy={pt.y} 
+                                    r={hoveredDataPoint === pIdx ? "7" : "4.5"} 
+                                    fill={pt.score >= 90 ? "#10b981" : pt.score >= 70 ? "#f59e0b" : "#ef4444"} 
+                                    stroke="#071025"
+                                    strokeWidth={hoveredDataPoint === pIdx ? "2" : "1.2"}
+                                    className="transition-all duration-150"
+                                  />
+                                </g>
+                              ))}
+                            </>
+                          );
+                        })()}
+                      </svg>
+
+                      {/* Timeline labels */}
+                      <div className="flex justify-between text-[10px] font-mono text-slate-400 pt-2 mt-2 px-1">
+                        <span>{auditHistory[0]?.date || "Oldest"}</span>
+                        <span className="text-slate-500">Progression</span>
+                        <span>{auditHistory[auditHistory.length - 1]?.date || "Latest"}</span>
+                      </div>
+                    </div>
 
                 {/* Hover Details Panel */}
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-200 flex justify-between items-center h-14">
+                <div className="bg-gradient-to-b from-slate-900/40 to-slate-800/40 p-3 rounded-xl border border-slate-800 flex justify-between items-center h-16">
                   {hoveredDataPoint !== null ? (
                     <>
                       <div className="text-left">
-                        <span className="text-[10px] font-mono text-gray-500 block leading-tight">INSPECTED DOMAIN</span>
-                        <span className="text-xs font-bold font-mono text-gray-900">{auditHistory[hoveredDataPoint].url}</span>
+                        <span className="text-[10px] font-mono text-slate-400 block leading-tight">INSPECTED DOMAIN</span>
+                        <span className="text-sm font-bold font-mono text-white">{auditHistory[hoveredDataPoint].url}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] font-mono text-gray-500 block leading-tight">HEALTH RATING</span>
-                        <span className={`text-sm font-black font-mono ${
-                          auditHistory[hoveredDataPoint].score >= 90 ? "text-success-700" : "text-warning-700"
+                        <span className="text-[10px] font-mono text-slate-400 block leading-tight">HEALTH RATING</span>
+                        <span className={`text-sm font-extrabold font-mono ${
+                          auditHistory[hoveredDataPoint].score >= 90 ? "text-emerald-400" : "text-amber-400"
                         }`}>{auditHistory[hoveredDataPoint].score} / 100</span>
                       </div>
                     </>
                   ) : (
-                    <p className="text-[10px] font-mono text-gray-500 italic mx-auto flex items-center gap-1.5 select-none md:gap-2">
-                      <Info className="h-3.5 w-3.5 text-primary-600 shrink-0" /> Hover over timelines nodes to inspect previous metrics!
+                    <p className="text-[10px] font-mono text-slate-400 italic mx-auto flex items-center gap-1.5 select-none md:gap-2">
+                      <Info className="h-3.5 w-3.5 text-indigo-400 shrink-0" /> Hover timeline nodes to inspect previous metrics
                     </p>
                   )}
                 </div>

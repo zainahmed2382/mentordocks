@@ -123,13 +123,13 @@ export const CoreWebVitals: React.FC<CoreWebVitalsProps> = ({ performanceScore }
   const vitals = getVitalsFromScore(performanceScore);
 
   return (
-    <div className="dash-card p-6 animate-slide-up delay-300">
+    <div className="p-6 animate-slide-up delay-300 bg-gradient-to-b from-slate-900/60 to-slate-800/50 rounded-2xl border border-slate-800 shadow-[0_12px_36px_rgba(2,6,23,0.7)]">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-base font-bold text-slate-900">Core Web Vitals</h3>
-          <p className="text-xs text-slate-500 mt-0.5">Google's performance metrics for user experience</p>
+          <h3 className="text-base font-semibold text-slate-100">Core Web Vitals</h3>
+          <p className="text-xs text-slate-400 mt-0.5">Google's performance metrics for user experience</p>
         </div>
-        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800/30 text-slate-200 border border-slate-700">
           {vitals.filter(v => v.status === "good").length}/{vitals.length} Passing
         </span>
       </div>
@@ -140,30 +140,32 @@ export const CoreWebVitals: React.FC<CoreWebVitalsProps> = ({ performanceScore }
           return (
             <div
               key={vital.key}
-              className={`relative bg-white border border-slate-200 border-l-4 ${cfg.border} rounded-xl p-4 hover:shadow-md transition-all duration-200 group animate-slide-up`}
+              className={`relative bg-gradient-to-b from-slate-900/50 to-slate-800/40 border border-slate-800 rounded-xl p-4 transform-gpu hover:-translate-y-1 hover:shadow-2xl transition-all duration-200 group animate-slide-up`}
               style={{ animationDelay: `${300 + idx * 100}ms` }}
               title={vital.description}
             >
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`p-1.5 rounded-lg ${cfg.iconBg}`}>
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`p-2 rounded-lg ${cfg.iconBg}`}>
                   {vital.icon}
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-900">{vital.label}</span>
-                  <div className={`w-1.5 h-1.5 rounded-full ${cfg.dot} ml-1 inline-block`} />
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-slate-100">{vital.label}</span>
+                    <div className={`w-2 h-2 rounded-full ${cfg.dot} inline-block`} />
+                  </div>
+                  <div className="text-[10px] text-slate-400">{cfg.label}</div>
                 </div>
               </div>
 
               <div className="mb-1">
-                <span className="text-2xl font-black text-slate-900">{vital.value}</span>
-                <span className="text-sm font-semibold text-slate-500 ml-1">{vital.unit}</span>
+                <span className="text-2xl font-extrabold text-white">{vital.value}</span>
+                <span className="text-sm font-semibold text-slate-400 ml-1">{vital.unit}</span>
               </div>
 
-              <div className={`text-[10px] font-semibold ${cfg.text} mb-1`}>{cfg.label}</div>
-              <div className="text-[10px] text-slate-400">Good: {vital.goodThreshold}</div>
+              <div className="text-[10px] text-slate-400 mb-1">Good: {vital.goodThreshold}</div>
 
               {/* Tooltip on hover */}
-              <div className="absolute bottom-full left-0 mb-2 w-52 bg-slate-900 text-white text-xs rounded-lg p-3 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+              <div className="absolute bottom-full left-0 mb-2 w-60 bg-gradient-to-b from-slate-900 to-slate-800 text-white text-xs rounded-lg p-3 shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
                 <div className="font-semibold mb-1">{vital.fullName}</div>
                 <div className="text-slate-300 leading-relaxed">{vital.description}</div>
               </div>

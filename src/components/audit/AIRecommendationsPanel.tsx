@@ -138,7 +138,7 @@ const RecCard: React.FC<RecCardProps> = ({ rec, index }) => {
 
   return (
     <div
-      className={`bg-gradient-to-r ${cfg.glow} to-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-md animate-slide-up`}
+      className={`bg-gradient-to-b ${cfg.glow} to-slate-800 border border-slate-800 rounded-2xl overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-2xl transition-all duration-200 animate-slide-up`}
       style={{ animationDelay: `${600 + index * 100}ms` }}
     >
       {/* Header */}
@@ -148,7 +148,7 @@ const RecCard: React.FC<RecCardProps> = ({ rec, index }) => {
       >
         <div className="flex items-start gap-3 flex-1">
           {/* Priority number */}
-          <div className="flex-shrink-0 w-7 h-7 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center text-xs font-black text-slate-700 shadow-sm mt-0.5">
+          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-800 flex items-center justify-center text-xs font-extrabold text-white shadow-sm mt-0.5">
             {index + 1}
           </div>
 
@@ -160,55 +160,55 @@ const RecCard: React.FC<RecCardProps> = ({ rec, index }) => {
               </span>
               <span className={`text-[10px] font-semibold ${catColor}`}>{rec.category}</span>
             </div>
-            <h4 className="text-sm font-semibold text-slate-900">{rec.problem}</h4>
+            <h4 className="text-sm font-semibold text-slate-100">{rec.problem}</h4>
           </div>
         </div>
 
         <div className="shrink-0 mt-1">
           {open
-            ? <ChevronUp className="h-4 w-4 text-slate-400" />
-            : <ChevronDown className="h-4 w-4 text-slate-400" />
+            ? <ChevronUp className="h-4 w-4 text-slate-300" />
+            : <ChevronDown className="h-4 w-4 text-slate-300" />
           }
         </div>
       </div>
 
       {open && (
-        <div className="px-4 pb-4 border-t border-slate-100 space-y-3 animate-fade-in">
+        <div className="px-4 pb-4 border-t border-slate-800/60 space-y-3 animate-fade-in">
           {/* Grid of info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3">
             {/* Impact */}
-            <div className="bg-white rounded-xl p-3 border border-slate-100">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                <Target className="h-3 w-3 text-red-500" />
+            <div className="bg-slate-900/40 rounded-xl p-3 border border-slate-800">
+              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                <Target className="h-3 w-3 text-red-400" />
                 Impact
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed">{rec.impact}</p>
+              <p className="text-xs text-slate-200 leading-relaxed">{rec.impact}</p>
             </div>
 
             {/* Recommendation */}
-            <div className="bg-white rounded-xl p-3 border border-slate-100">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                <Zap className="h-3 w-3 text-blue-500" />
+            <div className="bg-slate-900/40 rounded-xl p-3 border border-slate-800">
+              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                <Zap className="h-3 w-3 text-indigo-400" />
                 Recommendation
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed">{rec.recommendation}</p>
+              <p className="text-xs text-slate-200 leading-relaxed">{rec.recommendation}</p>
             </div>
           </div>
 
           {/* Metrics row */}
           <div className="flex flex-wrap gap-3">
-            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 rounded-xl px-3 py-2">
-              <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
+            <div className="flex items-center gap-2 bg-gradient-to-b from-emerald-900/30 to-emerald-900/10 border border-emerald-800 rounded-xl px-3 py-2">
+              <TrendingUp className="h-3.5 w-3.5 text-emerald-300" />
               <div>
-                <div className="text-[9px] font-bold text-emerald-600 uppercase tracking-wide">Estimated Improvement</div>
-                <div className="text-xs font-bold text-emerald-800">{rec.estimatedImprovement}</div>
+                <div className="text-[9px] font-semibold text-emerald-300 uppercase tracking-wide">Estimated Improvement</div>
+                <div className="text-xs font-bold text-emerald-200">{rec.estimatedImprovement}</div>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-violet-50 border border-violet-100 rounded-xl px-3 py-2">
-              <Clock className="h-3.5 w-3.5 text-violet-600" />
+            <div className="flex items-center gap-2 bg-gradient-to-b from-violet-900/30 to-violet-900/10 border border-violet-800 rounded-xl px-3 py-2">
+              <Clock className="h-3.5 w-3.5 text-violet-300" />
               <div>
-                <div className="text-[9px] font-bold text-violet-600 uppercase tracking-wide">Time to Fix</div>
-                <div className="text-xs font-bold text-violet-800">{rec.timeToFix}</div>
+                <div className="text-[9px] font-semibold text-violet-300 uppercase tracking-wide">Time to Fix</div>
+                <div className="text-xs font-bold text-violet-200">{rec.timeToFix}</div>
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ export const AIRecommendationsPanel: React.FC<AIRecommendationsPanelProps> = ({
     .length * 8 + recommendations.filter(r => r.priority === "Medium").length * 4;
 
   return (
-    <div className="dash-card p-6 animate-slide-up delay-600">
+    <div className="p-6 animate-slide-up delay-600 bg-gradient-to-b from-slate-900/60 to-slate-800/50 rounded-2xl border border-slate-800 shadow-[0_12px_36px_rgba(2,6,23,0.7)]">
       {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -235,37 +235,37 @@ export const AIRecommendationsPanel: React.FC<AIRecommendationsPanelProps> = ({
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900">AI Recommendations</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Prioritized action plan to improve your score</p>
+            <h3 className="text-base font-semibold text-slate-100">AI Recommendations</h3>
+            <p className="text-xs text-slate-400 mt-0.5">Prioritized action plan to improve your score</p>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-xs text-slate-500">Potential gain</div>
-          <div className="text-lg font-black text-emerald-600">+{potentialGain} pts</div>
+          <div className="text-xs text-slate-400">Potential gain</div>
+          <div className="text-lg font-extrabold text-emerald-400">+{potentialGain} pts</div>
         </div>
       </div>
 
       {/* Score improvement preview */}
-      <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-100 rounded-xl p-4 mb-5">
+      <div className="bg-gradient-to-r from-indigo-900/40 to-emerald-900/20 border border-slate-800 rounded-xl p-4 mb-5">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-semibold text-violet-700">Current Score</span>
-          <span className="text-xs font-semibold text-emerald-700">After All Fixes</span>
+          <span className="text-xs font-semibold text-slate-400">Current Score</span>
+          <span className="text-xs font-semibold text-emerald-300">After All Fixes</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-2xl font-black text-slate-900">{overallScore}</span>
-          <div className="flex-1 h-2 bg-white rounded-full overflow-hidden border border-violet-100">
+          <span className="text-2xl font-extrabold text-white">{overallScore}</span>
+          <div className="flex-1 h-2 bg-slate-800/40 rounded-full overflow-hidden border border-slate-800/60">
             <div
-              className="h-full bg-gradient-to-r from-violet-500 to-emerald-500 rounded-full transition-all duration-1000"
+              className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full transition-all duration-1000"
               style={{ width: `${Math.min(100, overallScore + potentialGain)}%` }}
             />
           </div>
-          <span className="text-2xl font-black text-emerald-600">
+          <span className="text-2xl font-extrabold text-emerald-300">
             {Math.min(100, overallScore + potentialGain)}
           </span>
         </div>
         <div className="flex items-center gap-1 mt-2">
-          <ArrowUpRight className="h-3.5 w-3.5 text-emerald-600" />
-          <span className="text-xs text-emerald-600 font-semibold">
+          <ArrowUpRight className="h-3.5 w-3.5 text-emerald-300" />
+          <span className="text-xs text-emerald-300 font-semibold">
             Implementing all {recommendations.length} recommendations could boost your score by ~{potentialGain} points
           </span>
         </div>
