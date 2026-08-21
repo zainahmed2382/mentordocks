@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { runWebsiteAudit, AuditReachabilityError } from "./audit/index";
 import { runPageSpeedInsights } from "./audit/pageSpeedInsights";
-import { connectMongoDb, isMongoConfigured } from "./mongo";
+import { connectMongoDb, ensureMongoCollections, getMongoCollection, getNextSequenceValue, isMongoConfigured } from "./mongo";
 
 dotenv.config();
 
@@ -92,16 +92,41 @@ app.post("/api/auth/signup", async (req: any, res: any) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+    const usersCollection = await getMongoCollection("users");
 
-    const existing = inMemoryUsers.find((u) => u.email === email);
+    if (usersCollection) {
+      const existing = await usersCollection.findOne({ email: email.toLowerCase() });
+      if (existing) {
+        return res.status(400).json({ error: "Email is already registered" });
+      }
+
+      const userId = await getNextSequenceValue("users");
+      const newUser = {
+        id: userId,
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        name: name || email.split("@")[0],
+        createdAt: new Date(),
+      };
+
+      await usersCollection.insertOne(newUser);
+      const token = jwt.sign({ userId: newUser.id, email: newUser.email, name: newUser.name }, JWT_SECRET, { expiresIn: "7d" });
+      console.log(`[Mongo Auth] New user registered: ${newUser.email}`);
+      return res.status(201).json({
+        token,
+        user: { id: newUser.id, email: newUser.email, name: newUser.name }
+      });
+    }
+
+    const existing = inMemoryUsers.find((u) => u.email === email.toLowerCase());
     if (existing) {
       return res.status(400).json({ error: "Email is already registered" });
     }
 
-    const newUser = { id: inMemoryUserIdCounter++, email, password: hashedPassword, name: name || email.split("@")[0] };
+    const newUser = { id: inMemoryUserIdCounter++, email: email.toLowerCase(), password: hashedPassword, name: name || email.split("@")[0] };
     inMemoryUsers.push(newUser);
     const token = jwt.sign({ userId: newUser.id, email: newUser.email, name: newUser.name }, JWT_SECRET, { expiresIn: "7d" });
-    console.log(`[In-Memory Auth] New user registered: ${email}`);
+    console.log(`[In-Memory Auth] New user registered: ${newUser.email}`);
     return res.status(201).json({
       token,
       user: { id: newUser.id, email: newUser.email, name: newUser.name }
@@ -121,7 +146,25 @@ app.post("/api/auth/login", async (req: any, res: any) => {
   }
 
   try {
-    const user = inMemoryUsers.find((u) => u.email === email);
+    const usersCollection = await getMongoCollection("users");
+    if (usersCollection) {
+      const user = await usersCollection.findOne({ email: email.toLowerCase() });
+      if (!user) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+      const token = jwt.sign({ userId: user.id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: "7d" });
+      console.log(`[Mongo Auth] User logged in: ${user.email}`);
+      return res.json({
+        token,
+        user: { id: user.id, email: user.email, name: user.name }
+      });
+    }
+
+    const user = inMemoryUsers.find((u) => u.email === email.toLowerCase());
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
@@ -130,7 +173,7 @@ app.post("/api/auth/login", async (req: any, res: any) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
     const token = jwt.sign({ userId: user.id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: "7d" });
-    console.log(`[In-Memory Auth] User logged in: ${email}`);
+    console.log(`[In-Memory Auth] User logged in: ${user.email}`);
     return res.json({
       token,
       user: { id: user.id, email: user.email, name: user.name }
@@ -144,7 +187,16 @@ app.post("/api/auth/login", async (req: any, res: any) => {
 // Get Current User Info
 app.get("/api/auth/me", authenticateToken, async (req: any, res: any) => {
   try {
-    const user = inMemoryUsers.find((u) => u.id === req.user.userId);
+    const usersCollection = await getMongoCollection("users");
+    if (usersCollection) {
+      const user = await usersCollection.findOne({ id: Number(req.user.userId) });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      return res.json({ user: { id: user.id, email: user.email, name: user.name } });
+    }
+
+    const user = inMemoryUsers.find((u) => u.id === Number(req.user.userId));
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -160,6 +212,19 @@ app.get("/api/auth/me", authenticateToken, async (req: any, res: any) => {
 // GET user's saved projects
 app.get("/api/projects", optionalAuthenticateToken, async (req: any, res: any) => {
   try {
+    const projectsCollection = await getMongoCollection("projects");
+    if (projectsCollection && req.user) {
+      const docs = await projectsCollection.find({ userId: Number(req.user.userId) }).sort({ createdAt: -1 }).toArray();
+      return res.json(docs.map((doc) => ({
+        id: doc.id,
+        name: doc.name,
+        url: doc.url,
+        score: doc.score,
+        lastScan: doc.lastScan,
+        issues: doc.issues,
+        category: doc.category,
+      })));
+    }
     return res.json(anonymousProjects);
   } catch (err: any) {
     console.error("Error fetching projects:", err);
@@ -176,6 +241,31 @@ app.post("/api/projects", optionalAuthenticateToken, async (req: any, res: any) 
   }
 
   try {
+    const projectsCollection = await getMongoCollection("projects");
+    if (projectsCollection && req.user) {
+      const projectDoc = {
+        id: "p_" + Date.now(),
+        userId: Number(req.user.userId),
+        name,
+        url,
+        score: score || 80,
+        lastScan: lastScan || "Just now",
+        issues: issues || 0,
+        category: category || "Other",
+        createdAt: new Date(),
+      };
+      await projectsCollection.insertOne(projectDoc);
+      return res.status(201).json({
+        id: projectDoc.id,
+        name: projectDoc.name,
+        url: projectDoc.url,
+        score: projectDoc.score,
+        lastScan: projectDoc.lastScan,
+        issues: projectDoc.issues,
+        category: projectDoc.category,
+      });
+    }
+
     const newProj = {
       id: "p_" + Date.now(),
       name,
@@ -198,6 +288,20 @@ app.post("/api/projects", optionalAuthenticateToken, async (req: any, res: any) 
 // GET saved scan history
 app.get("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => {
   try {
+    const scansCollection = await getMongoCollection("scans");
+    if (scansCollection && req.user) {
+      const docs = await scansCollection.find({ userId: Number(req.user.userId) }).sort({ createdAt: -1 }).toArray();
+      return res.json(docs.map((doc) => ({
+        id: doc.id,
+        url: doc.url,
+        score: doc.score,
+        healthMessage: doc.healthMessage,
+        problems: doc.problems,
+        recommendations: doc.recommendations,
+        metrics: doc.metrics,
+        date: doc.date,
+      })));
+    }
     return res.json(anonymousScans);
   } catch (err: any) {
     console.error("Error fetching scans:", err);
@@ -214,6 +318,33 @@ app.post("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => 
   }
 
   try {
+    const scansCollection = await getMongoCollection("scans");
+    if (scansCollection && req.user) {
+      const newScan = {
+        id: "scan_" + Date.now(),
+        userId: Number(req.user.userId),
+        url,
+        score,
+        healthMessage,
+        problems: problems || [],
+        recommendations: recommendations || [],
+        metrics: metrics || {},
+        date: date || new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        createdAt: new Date(),
+      };
+      await scansCollection.insertOne(newScan);
+      return res.status(201).json({
+        id: newScan.id,
+        url: newScan.url,
+        score: newScan.score,
+        healthMessage: newScan.healthMessage,
+        problems: newScan.problems,
+        recommendations: newScan.recommendations,
+        metrics: newScan.metrics,
+        date: newScan.date,
+      });
+    }
+
     const newScan = {
       id: "scan_" + Date.now(),
       url,
@@ -236,6 +367,12 @@ app.post("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => 
 app.delete("/api/scans/:id", optionalAuthenticateToken, async (req: any, res: any) => {
   const { id } = req.params;
   try {
+    const scansCollection = await getMongoCollection("scans");
+    if (scansCollection && req.user) {
+      await scansCollection.deleteOne({ id, userId: Number(req.user.userId) });
+      return res.status(200).json({ message: "Scan deleted successfully" });
+    }
+
     const index = anonymousScans.findIndex(s => s.id === id || String(s.id) === String(id));
     if (index !== -1) {
       anonymousScans.splice(index, 1);
@@ -314,7 +451,25 @@ app.post("/api/scans/analyze", optionalAuthenticateToken, async (req: any, res: 
         status: "completed" as const,
         auditMeta,
       };
-      anonymousScans.unshift(payload);
+
+      const scansCollection = await getMongoCollection("scans");
+      if (scansCollection && req.user) {
+        await scansCollection.insertOne({
+          id: payload.id,
+          userId: Number(req.user.userId),
+          url: payload.url,
+          score: payload.score,
+          healthMessage: payload.healthMessage,
+          problems: payload.problems || [],
+          recommendations: payload.recommendations || [],
+          metrics: payload.metrics || {},
+          date: payload.date,
+          createdAt: new Date(),
+        });
+      } else {
+        anonymousScans.unshift(payload);
+      }
+
       return res.status(200).json(payload);
     } catch (saveErr: any) {
       console.error("Failed to save analyzed scan:", saveErr);
@@ -365,6 +520,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 async function startServer() {
   if (isMongoConfigured()) {
     await connectMongoDb();
+    await ensureMongoCollections();
   }
 
   if (process.env.NODE_ENV !== "production") {

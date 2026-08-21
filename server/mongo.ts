@@ -1,4 +1,4 @@
-import { MongoClient, MongoClientOptions, Db } from "mongodb";
+import { MongoClient, MongoClientOptions, Db, Collection } from "mongodb";
 import { attachDatabasePool } from "@vercel/functions";
 
 const mongoOptions: MongoClientOptions = {
@@ -31,7 +31,7 @@ export async function connectMongoDb(): Promise<Db | null> {
   if (!mongoInitPromise) {
     mongoInitPromise = (async () => {
       await mongoClient.connect();
-      mongoDb = mongoClient.db();
+      mongoDb = mongoClient.db(process.env.MONGODB_DB || "mentordocks");
       console.log("[Mongo] Connected to MongoDB Atlas.");
       return mongoDb;
     })().catch((error) => {
@@ -42,6 +42,45 @@ export async function connectMongoDb(): Promise<Db | null> {
   }
 
   return mongoInitPromise;
+}
+
+export async function getMongoCollection(name: string): Promise<Collection | null> {
+  const db = await connectMongoDb();
+  return db ? db.collection(name) : null;
+}
+
+export async function ensureMongoCollections(): Promise<void> {
+  const db = await connectMongoDb();
+  if (!db) return;
+
+  const collections = ["users", "projects", "scans", "counters"];
+
+  for (const name of collections) {
+    const exists = await db.listCollections({ name }).hasNext();
+    if (!exists) {
+      await db.createCollection(name);
+    }
+  }
+
+  await db.collection("users").createIndex({ email: 1 }, { unique: true, sparse: false });
+  await db.collection("projects").createIndex({ userId: 1, createdAt: -1 });
+  await db.collection("scans").createIndex({ userId: 1, createdAt: -1 });
+  await db.collection("counters").createIndex({ _id: 1 }, { unique: true });
+
+  console.log("[Mongo] Collections and indexes are ready.");
+}
+
+export async function getNextSequenceValue(sequenceName: string): Promise<number> {
+  const collection = await getMongoCollection("counters");
+  if (!collection) return Date.now();
+
+  const result = await collection.findOneAndUpdate(
+    { _id: sequenceName },
+    { $inc: { value: 1 } },
+    { upsert: true, returnDocument: "after" }
+  );
+
+  return Number(result?.value ?? 1);
 }
 
 export function isMongoConfigured(): boolean {
