@@ -31,7 +31,7 @@ export default function NavBar({
 
   const notifications = [
     { id: 1, text: "Audit completed successfully", time: "10m ago", read: false },
-    { id: 2, text: "Connected to Neon PostgreSQL DB", time: "2h ago", read: true },
+    { id: 2, text: "Local session storage is active", time: "2h ago", read: true },
     { id: 3, text: "Custom portfolio tracking is active", time: "1d ago", read: true },
   ];
 

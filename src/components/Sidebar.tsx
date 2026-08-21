@@ -55,7 +55,7 @@ export default function Sidebar({
 
   const notifications = [
     { id: 1, text: "Audit completed successfully", time: "10m ago" },
-    { id: 2, text: "Connected to Neon PostgreSQL DB", time: "2h ago" },
+    { id: 2, text: "Local session storage is active", time: "2h ago" },
   ];
 
   const menuItems = [

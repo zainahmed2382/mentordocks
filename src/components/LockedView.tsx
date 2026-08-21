@@ -81,7 +81,7 @@ export default function LockedView({ viewName, onLoginClick }: LockedViewProps) 
 
       <div className="mt-8 pt-6 border-t border-gray-100 dark:border-slate-800 w-full flex justify-center items-center gap-1.5 text-gray-400 dark:text-gray-500 font-sans text-xs">
         <HelpCircle className="h-3.5 w-3.5" />
-        <span>Your data is stored in a secure Neon PostgreSQL instance.</span>
+        <span>Your data is stored locally in the app session for this project.</span>
       </div>
     </div>
   );

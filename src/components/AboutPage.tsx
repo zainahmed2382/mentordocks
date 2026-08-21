@@ -1,5 +1,5 @@
 import React from "react";
-import { Info, Sparkles, Server, Zap, Compass, Database, Terminal, ShieldAlert } from "lucide-react";
+import { Info, Sparkles, Server, Zap, Compass, Terminal, ShieldAlert } from "lucide-react";
 
 export default function AboutPage() {
   const pipelineSteps = [
@@ -40,7 +40,7 @@ export default function AboutPage() {
   const techStack = [
     { name: "Mentor AI Core", role: "Cognitive AI Core Analyzer", desc: "Performs high-performance context mapping and code repair suggestions.", icon: Sparkles, color: "text-purple-600 dark:text-purple-400" },
     { name: "Node.js / Express", role: "Server Orchestration & Crawl", desc: "Executes parallel HTTP handshakes and HTML tag regex parsing.", icon: Server, color: "text-green-600 dark:text-green-400" },
-    { name: "Neon Serverless Postgres", role: "Durable History Logging", desc: "Stores users records, metrics arrays, and issues tables.", icon: Database, color: "text-teal-600 dark:text-teal-400" },
+    { name: "In-Memory Data Layer", role: "Local Session Persistence", desc: "Stores active user sessions, projects, and scan history without an external database dependency.", icon: Server, color: "text-teal-600 dark:text-teal-400" },
     { name: "React 19 & Tailwind", role: "Interactive Client Client", desc: "Renders responsive bento structures with smooth motion effects.", icon: Zap, color: "text-cyan-500 dark:text-cyan-400" }
   ];
 
