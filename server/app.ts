@@ -80,6 +80,13 @@ function optionalAuthenticateToken(req: any, res: any, next: any) {
   });
 }
 
+function requirePersistentUser(req: any, res: any, next: any) {
+  if (isMongoConfigured() && !req.user) {
+    return res.status(401).json({ error: "Log in to save scan history" });
+  }
+  next();
+}
+
 // --- AUTHENTICATION ENDPOINTS ---
 
 // Signup Endpoint
@@ -286,14 +293,18 @@ app.post("/api/projects", optionalAuthenticateToken, async (req: any, res: any) 
 // --- SCANS ENDPOINTS ---
 
 // GET saved scan history
-app.get("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => {
+app.get("/api/scans", optionalAuthenticateToken, requirePersistentUser, async (req: any, res: any) => {
   try {
     const scansCollection = await getMongoCollection("scans");
+    if (isMongoConfigured() && !scansCollection) {
+      return res.status(503).json({ error: "MongoDB Atlas is unavailable" });
+    }
     if (scansCollection && req.user) {
       const docs = await scansCollection.find({ userId: Number(req.user.userId) }).sort({ createdAt: -1 }).toArray();
       return res.json(docs.map((doc) => ({
         id: doc.id,
         url: doc.url,
+        status: doc.status || "completed",
         score: doc.score,
         healthMessage: doc.healthMessage,
         problems: doc.problems,
@@ -310,7 +321,7 @@ app.get("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => {
 });
 
 // POST save a scan report
-app.post("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => {
+app.post("/api/scans", optionalAuthenticateToken, requirePersistentUser, async (req: any, res: any) => {
   const { url, score, healthMessage, problems, recommendations, metrics, date } = req.body;
 
   if (!url) {
@@ -319,11 +330,15 @@ app.post("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => 
 
   try {
     const scansCollection = await getMongoCollection("scans");
+    if (isMongoConfigured() && !scansCollection) {
+      return res.status(503).json({ error: "MongoDB Atlas is unavailable" });
+    }
     if (scansCollection && req.user) {
       const newScan = {
         id: "scan_" + Date.now(),
         userId: Number(req.user.userId),
         url,
+        status: "completed",
         score,
         healthMessage,
         problems: problems || [],
@@ -364,10 +379,13 @@ app.post("/api/scans", optionalAuthenticateToken, async (req: any, res: any) => 
 });
 
 // DELETE a scan report
-app.delete("/api/scans/:id", optionalAuthenticateToken, async (req: any, res: any) => {
+app.delete("/api/scans/:id", optionalAuthenticateToken, requirePersistentUser, async (req: any, res: any) => {
   const { id } = req.params;
   try {
     const scansCollection = await getMongoCollection("scans");
+    if (isMongoConfigured() && !scansCollection) {
+      return res.status(503).json({ error: "MongoDB Atlas is unavailable" });
+    }
     if (scansCollection && req.user) {
       await scansCollection.deleteOne({ id, userId: Number(req.user.userId) });
       return res.status(200).json({ message: "Scan deleted successfully" });
@@ -419,7 +437,7 @@ app.post("/api/pagespeed", optionalAuthenticateToken, async (req: any, res: any)
 });
 
 // --- URL SCANNER (Lighthouse / PSI / Puppeteer / CDP) ---
-app.post("/api/scans/analyze", optionalAuthenticateToken, async (req: any, res: any) => {
+app.post("/api/scans/analyze", optionalAuthenticateToken, requirePersistentUser, async (req: any, res: any) => {
   const { url, scanMode, device, checks } = req.body || {};
 
   if (!url) {
@@ -453,11 +471,15 @@ app.post("/api/scans/analyze", optionalAuthenticateToken, async (req: any, res: 
       };
 
       const scansCollection = await getMongoCollection("scans");
+      if (isMongoConfigured() && !scansCollection) {
+        return res.status(503).json({ error: "MongoDB Atlas is unavailable" });
+      }
       if (scansCollection && req.user) {
         await scansCollection.insertOne({
           id: payload.id,
           userId: Number(req.user.userId),
           url: payload.url,
+          status: payload.status,
           score: payload.score,
           healthMessage: payload.healthMessage,
           problems: payload.problems || [],

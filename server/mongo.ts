@@ -1,5 +1,8 @@
 import { MongoClient, MongoClientOptions, Db, Collection } from "mongodb";
 import { attachDatabasePool } from "@vercel/functions";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const mongoOptions: MongoClientOptions = {
   appName: "mentordocks",
