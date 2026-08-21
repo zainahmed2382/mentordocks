@@ -388,7 +388,10 @@ export default function App() {
               user ? (
                 <ProfilePage
                   user={user}
-                  onUpdateUser={(updated) => setUser(updated)}
+                  onUpdateUser={async (updated) => {
+                    const result = await api.updateProfile(updated.name);
+                    setUser(result.user);
+                  }}
                   auditCount={scanHistory.length}
                   avgScore={
                     scanHistory.length > 0
@@ -423,7 +426,10 @@ export default function App() {
               ) : (
                 <ProfilePage
                   user={user}
-                  onUpdateUser={(updated) => setUser(updated)}
+                  onUpdateUser={async (updated) => {
+                    const result = await api.updateProfile(updated.name);
+                    setUser(result.user);
+                  }}
                   auditCount={scanHistory.length}
                 />
               )
@@ -435,7 +441,10 @@ export default function App() {
               ) : (
                 <ProfilePage
                   user={user}
-                  onUpdateUser={(updated) => setUser(updated)}
+                  onUpdateUser={async (updated) => {
+                    const result = await api.updateProfile(updated.name);
+                    setUser(result.user);
+                  }}
                   auditCount={scanHistory.length}
                 />
               )

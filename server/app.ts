@@ -204,6 +204,42 @@ app.get("/api/auth/me", authenticateToken, async (req: any, res: any) => {
     }
 
     const user = inMemoryUsers.find((u) => u.id === Number(req.user.userId));
+
+app.put("/api/auth/profile", authenticateToken, async (req: any, res: any) => {
+  const name = typeof req.body?.name === "string" ? req.body.name.trim() : "";
+
+  if (!name) {
+    return res.status(400).json({ error: "Username is required" });
+  }
+
+  try {
+    const usersCollection = await getMongoCollection("users");
+    if (usersCollection) {
+      const result = await usersCollection.findOneAndUpdate(
+        { id: Number(req.user.userId) },
+        { $set: { name, updatedAt: new Date() } },
+        { returnDocument: "after" }
+      );
+
+      if (!result) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      return res.json({ user: { id: result.id, email: result.email, name: result.name } });
+    }
+
+    const user = inMemoryUsers.find((entry) => entry.id === Number(req.user.userId));
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.name = name;
+    return res.json({ user: { id: user.id, email: user.email, name: user.name } });
+  } catch (err: any) {
+    console.error("Profile update error:", err);
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }

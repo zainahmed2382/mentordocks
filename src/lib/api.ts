@@ -184,6 +184,24 @@ export const api = {
     }
   },
 
+  async updateProfile(name: string): Promise<{ user: User }> {
+    const response = await fetch(`${API_BASE}/api/auth/profile`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify({ name }),
+    });
+    const data = await safeJson(response);
+    if (!response.ok) {
+      throw new Error(data?.error || "Failed to update profile");
+    }
+
+    const token = getToken();
+    if (token && data?.user) {
+      setSession(token, data.user);
+    }
+    return data;
+  },
+
   logout(): void {
     clearSession();
   },

@@ -4,7 +4,7 @@ import { User as ApiUser } from "../lib/api";
 
 interface ProfilePageProps {
   user: ApiUser | null;
-  onUpdateUser: (updatedUser: ApiUser) => void;
+  onUpdateUser: (updatedUser: ApiUser) => void | Promise<void>;
   auditCount: number;
   avgScore?: number;
 }
@@ -14,13 +14,16 @@ export default function ProfilePage({ user, onUpdateUser, auditCount, avgScore =
   const [name, setName] = useState(user?.name || "Mentor User");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (user) {
-      const updated = { ...user, name };
-      onUpdateUser(updated);
-      setSuccessMsg("Profile updated successfully!");
-      setIsEditing(false);
-      setTimeout(() => setSuccessMsg(""), 3000);
+      try {
+        await onUpdateUser({ ...user, name });
+        setSuccessMsg("Profile updated successfully!");
+        setIsEditing(false);
+        setTimeout(() => setSuccessMsg(""), 3000);
+      } catch (error: any) {
+        setSuccessMsg(error?.message || "Failed to update profile.");
+      }
     }
   };
 
