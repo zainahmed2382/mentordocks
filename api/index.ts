@@ -1,54 +1,37 @@
-import 'dotenv/config';
-import express from 'express';
-import * as authRouterModule from './_auth/index.js';
-import * as auditRouterModule from './audit.js';
-import * as auditsRouterModule from './audits.js';
-import * as healthRouterModule from './_health.js';
+import { createRequire } from "module";
+import { existsSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const app = express();
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const resolveRouter = (mod: any, name: string) => {
-  const router = mod?.default ?? mod;
-  if (!router || typeof router !== 'function') {
-    throw new Error(`${name} did not export a valid Express router`);
+const bundlePath = path.join(__dirname, "_server.cjs");
+
+let app: any;
+try {
+  if (!existsSync(bundlePath)) {
+    throw new Error(
+      `Server bundle not found at ${bundlePath}. ` +
+      `Make sure "npm run build:server" completed successfully during the Vercel build step.`
+    );
   }
-  return router;
-};
-
-const authRouter = resolveRouter(authRouterModule, 'authRouter');
-const auditRouter = resolveRouter(auditRouterModule, 'auditRouter');
-const auditsRouter = resolveRouter(auditsRouterModule, 'auditsRouter');
-const healthRouter = resolveRouter(healthRouterModule, 'healthRouter');
-
-// Native zero-dependency CORS middleware (prevents Vercel Cannot find package 'cors' errors)
-app.use((req, res, next) => {
-  const origin = process.env.CORS_ORIGIN || '*';
-  res.header('Access-Control-Allow-Origin', origin);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-    return;
+  app = require(bundlePath).default;
+  if (!app || typeof app !== "function") {
+    throw new Error("Server bundle did not export a default Express app function.");
   }
-  next();
-});
+} catch (loadErr: any) {
+  const msg = loadErr?.message || String(loadErr);
+  console.error("[FATAL] Failed to load server bundle:", msg);
+  app = function fallbackApp(req: any, res: any) {
+    res.status(500).json({
+      error: "Server failed to initialize.",
+      detail: msg,
+    });
+  };
+}
 
-app.use(express.json());
-
-app.use('/api/auth', authRouter);
-app.use('/api/audit', auditRouter);
-app.use('/api/audits', auditsRouter);
-app.use('/api/health', healthRouter);
-
-// 404 JSON fallback
-app.use((_req, res) => {
-  res.status(404).json({ error: 'API route not found' });
-});
-
-// Global error handler to prevent serverless function crashes
-app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('Unhandled API Error:', err);
-  res.status(500).json({ error: err?.message || 'Internal server error' });
-});
-
-export default app;
+export default async function handler(req: any, res: any) {
+  await app(req, res);
+}

@@ -1,0 +1,428 @@
+import React, { useState } from "react";
+import { motion } from "motion/react";
+import { WebsiteScan, ProblemItem, ScoreMetrics, PLACEHOLDER_SCAN } from "../types";
+import {
+  CodeXml,
+  MonitorSmartphone,
+  Type,
+  Palette,
+  Accessibility,
+  Gauge,
+  Globe,
+  MousePointerClick,
+  CheckCircle2,
+  ArrowLeft,
+  Sparkles,
+  Zap,
+  FileDown
+} from "lucide-react";
+import { downloadPdfReport } from "../lib/generatePdf";
+import EducationalAuditCard from "./EducationalAuditCard";
+
+interface DetailedAnalysisPageProps {
+  activeScan: WebsiteScan | null;
+  onNavigateToDashboard?: () => void;
+}
+
+type AnalyzerTab = "code" | "responsive" | "typography" | "color" | "accessibility" | "performance" | "seo" | "ux";
+
+export default function DetailedAnalysisPage({
+  activeScan,
+  onNavigateToDashboard,
+}: DetailedAnalysisPageProps) {
+  const scan = activeScan ?? PLACEHOLDER_SCAN;
+  const [activeTab, setActiveTab] = useState<AnalyzerTab>("ux");
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadPdfReport(scan);
+    } catch (err) {
+      console.error("Error downloading PDF report:", err);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const analyzers = [
+    { id: "ux", label: "UI / UX Experience", icon: MousePointerClick, scoreKey: "uiUx" as keyof ScoreMetrics, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/20" },
+    { id: "code", label: "Code Quality", icon: CodeXml, scoreKey: "codeQuality" as keyof ScoreMetrics, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-950/20" },
+    { id: "responsive", label: "Responsiveness", icon: MonitorSmartphone, scoreKey: "responsiveness" as keyof ScoreMetrics, color: "text-pink-600 dark:text-pink-400", bg: "bg-pink-50 dark:bg-pink-950/20" },
+    { id: "typography", label: "Typography", icon: Type, scoreKey: "typography" as keyof ScoreMetrics, color: "text-sky-600 dark:text-sky-400", bg: "bg-sky-50 dark:bg-sky-950/20" },
+    { id: "color", label: "Color Theme", icon: Palette, scoreKey: "colorTheme" as keyof ScoreMetrics, color: "text-amber-500 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-950/20" },
+    { id: "accessibility", label: "Accessibility", icon: Accessibility, scoreKey: "accessibility" as keyof ScoreMetrics, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/20" },
+    { id: "performance", label: "Performance", icon: Gauge, scoreKey: "performance" as keyof ScoreMetrics, color: "text-rose-600 dark:text-rose-400", bg: "bg-rose-50 dark:bg-rose-950/20" },
+    { id: "seo", label: "SEO Indexing", icon: Globe, scoreKey: "seo" as keyof ScoreMetrics, color: "text-teal-600 dark:text-teal-400", bg: "bg-teal-50 dark:bg-teal-950/20" }
+  ];
+
+  const getAnalyzerAssertions = (tab: AnalyzerTab) => {
+    const hasProb = (keySubstring: string) =>
+      scan.problems.some((p) => p.id.toLowerCase().includes(keySubstring.toLowerCase()) || p.title.toLowerCase().includes(keySubstring.toLowerCase()));
+
+    switch (tab) {
+      case "ux":
+        return [
+          { name: "Clear visual hierarchy and reading structure", status: scan.metrics.uiUx >= 70 },
+          { name: "Consistent layout spacing & section margins", status: scan.metrics.uiUx >= 80 },
+          { name: "Responsive interactive touch targets", status: !hasProb("mobile_overflow") },
+          { name: "High overall user experience index", status: scan.metrics.uiUx >= 85 },
+        ];
+      case "code":
+        return [
+          { name: "HTTPS encryption enforced across domain", status: !hasProb("https") && !hasProb("unreachable") },
+          { name: "HTTP response security headers present", status: !hasProb("security_headers") },
+          { name: "Unique HTML element IDs (no duplicate IDs)", status: !hasProb("duplicate_ids") },
+          { name: "Clean JavaScript execution (no runtime errors)", status: !hasProb("js_errors") && !hasProb("console_errors") },
+        ];
+      case "responsive":
+        return [
+          { name: "Standard mobile viewport tag declaration", status: !hasProb("viewport") },
+          { name: "No horizontal layout overflow on mobile screens", status: !hasProb("mobile_overflow") },
+          { name: "Responsive container fluidity score", status: scan.metrics.responsiveness >= 75 },
+          { name: "Mobile rendering compatibility", status: scan.metrics.responsiveness >= 85 },
+        ];
+      case "typography":
+        return [
+          { name: "Primary H1 heading present on page", status: !hasProb("h1_missing") },
+          { name: "Single primary H1 heading hierarchy", status: !hasProb("h1_multiple") },
+          { name: "Typographic legibility & readable contrast", status: scan.metrics.typography >= 75 },
+          { name: "Structured heading outline across page", status: scan.metrics.typography >= 85 },
+        ];
+      case "color":
+        return [
+          { name: "WCAG AA color contrast standards (min 4.5:1 ratio)", status: !hasProb("contrast") },
+          { name: "Accessible foreground text elements", status: scan.metrics.colorTheme >= 75 },
+          { name: "High color readability rating", status: scan.metrics.colorTheme >= 85 },
+          { name: "Visually distinct link and action contrast", status: scan.metrics.colorTheme >= 90 },
+        ];
+      case "accessibility":
+        return [
+          { name: "Descriptive alt attributes on image tags", status: !hasProb("alt_text") },
+          { name: "Associated labels on all form input controls", status: !hasProb("missing_labels") },
+          { name: "Accessible document structure & ARIA tags", status: scan.metrics.accessibility >= 75 },
+          { name: "High screen reader accessibility rating", status: scan.metrics.accessibility >= 85 },
+        ];
+      case "performance":
+        return [
+          { name: "Fast server response time (TTFB under 800ms)", status: !hasProb("ttfb") },
+          { name: "Largest Contentful Paint (LCP under 2.5s)", status: !hasProb("lcp") },
+          { name: "Low Cumulative Layout Shift (CLS under 0.1)", status: !hasProb("cls") },
+          { name: "Fast Interaction to Next Paint (INP under 200ms)", status: !hasProb("inp") },
+        ];
+      case "seo":
+        return [
+          { name: "Meta description tag present for search snippets", status: !hasProb("meta_description") },
+          { name: "Open Graph metadata present for social sharing", status: !hasProb("og_tags") },
+          { name: "Primary H1 tag for search engine indexing", status: !hasProb("h1_missing") },
+          { name: "High overall SEO indexability rating", status: scan.metrics.seo >= 80 },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  // Select active score
+  const selectedAnalyzer = analyzers.find((a) => a.id === activeTab);
+  const activeScore = selectedAnalyzer ? scan.metrics[selectedAnalyzer.scoreKey] : 0;
+
+  // Filter problems for active category
+  const activeProblems = scan.problems.filter((p) => {
+    if (activeTab === "ux" && p.category === "ux") return true;
+    if (activeTab === "code" && p.category === "code") return true;
+    if (activeTab === "responsive" && p.category === "responsive") return true;
+    if (activeTab === "typography" && p.category === "typography") return true;
+    if (activeTab === "color" && p.category === "color") return true;
+    if (activeTab === "accessibility" && p.category === "accessibility") return true;
+    if (activeTab === "performance" && p.category === "performance") return true;
+    if (activeTab === "seo" && p.category === "seo") return true;
+    return false;
+  });
+
+  // Filter recommendations for active category
+  const activeRecs = scan.recommendations.filter((r) => {
+    return r.category?.toLowerCase() === activeTab || r.category?.toLowerCase().includes(activeTab);
+  });
+
+  return (
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-16 pt-10 pb-20 font-sans flex flex-col gap-8">
+      {/* Page Header */}
+      <div className="border-b border-gray-200/60 dark:border-slate-800/60 pb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          {onNavigateToDashboard && (
+            <button
+              onClick={onNavigateToDashboard}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 mb-3 cursor-pointer transition-colors group"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-1 transition-transform" />
+              <span>Back to Dashboard</span>
+            </button>
+          )}
+          <h1 className="font-display text-3xl md:text-4xl font-extrabold text-[#1A1A1A] dark:text-slate-100 tracking-tight flex items-center gap-3">
+            <div className="p-2 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200/60 dark:border-indigo-800/60 text-indigo-600 dark:text-indigo-400">
+              <CodeXml className="h-7 w-7" />
+            </div>
+            <span>Detailed Analysis</span>
+          </h1>
+          <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 mt-2 font-medium">
+            Explore category scores, check individual test items, and learn how to resolve identified problems.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="font-mono text-xs text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200/60 dark:border-indigo-900/40 px-4 py-2.5 rounded-full font-bold self-start lg:self-auto shadow-xs">
+            Target: {scan.url}
+          </div>
+
+          <motion.button
+            onClick={handleDownloadPdf}
+            disabled={isDownloading}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center gap-2 px-4.5 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-sans font-bold text-xs shadow-md shadow-indigo-600/20 transition duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed self-start lg:self-auto"
+            id="download-pdf-btn"
+          >
+            {isDownloading ? (
+              <>
+                <span className="h-3.5 w-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Generating...</span>
+              </>
+            ) : (
+              <>
+                <FileDown className="h-3.5 w-3.5" />
+                <span>Export PDF</span>
+              </>
+            )}
+          </motion.button>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-8 w-full">
+        {/* Top Header Row: Select Category */}
+        <div className="bg-white dark:bg-[#131520] p-5 md:p-6 border border-gray-200/80 dark:border-slate-800 rounded-[32px] shadow-sm flex flex-col gap-4">
+          <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-800/80 pb-3">
+            <h2 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-indigo-500" />
+              Audit Categories
+            </h2>
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-950/30 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40">
+              8 Categories Evaluated
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+            {analyzers.map((analyzer) => {
+              const Icon = analyzer.icon;
+              const isSelected = activeTab === analyzer.id;
+              const score = scan.metrics[analyzer.scoreKey];
+              return (
+                <button
+                  key={analyzer.id}
+                  onClick={() => setActiveTab(analyzer.id as AnalyzerTab)}
+                  className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border transition-all cursor-pointer text-center group ${
+                    isSelected
+                      ? "bg-indigo-600 border-indigo-600 text-white shadow-[0_8px_20px_rgba(79,70,229,0.2)] scale-[1.02]"
+                      : "bg-white dark:bg-[#0A0B10]/40 hover:bg-gray-50 dark:hover:bg-slate-800/40 border-gray-200 dark:border-slate-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-slate-700"
+                  }`}
+                >
+                  <div
+                    className={`p-2 rounded-xl transition-colors mb-2 ${
+                      isSelected ? "bg-white/20 text-white" : `${analyzer.bg} ${analyzer.color}`
+                    }`}
+                  >
+                    <Icon className="h-4.5 w-4.5" />
+                  </div>
+                  <span className={`text-xs font-bold leading-tight truncate w-full ${isSelected ? "text-white" : "text-[#1A1A1A] dark:text-slate-200"}`}>
+                    {analyzer.label}
+                  </span>
+                  <div className="flex items-center gap-0.5 mt-1.5">
+                    <span className={`text-xs font-extrabold ${isSelected ? "text-white/95" : "text-indigo-600 dark:text-indigo-400"}`}>
+                      {score}
+                    </span>
+                    <span className={`text-[9px] font-bold ${isSelected ? "text-white/60" : "text-gray-400 dark:text-gray-500"}`}>
+                      /100
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Detailed Dashboard for Selected Analyzer */}
+        <div className="flex flex-col gap-6 w-full">
+          {/* Active Header Card */}
+          {selectedAnalyzer && (
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800 rounded-[32px] p-6 md:p-8 shadow-sm relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-indigo-50/40 dark:from-indigo-950/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex items-center gap-3">
+                  <div className={`p-3 rounded-2xl ${selectedAnalyzer.bg} border border-gray-100 dark:border-slate-800/80`}>
+                    <selectedAnalyzer.icon className={`h-6 w-6 ${selectedAnalyzer.color}`} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-xl font-extrabold text-[#1A1A1A] dark:text-slate-100 tracking-tight">
+                      {selectedAnalyzer.label} Audit
+                    </h3>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 font-medium">
+                      Automated assessment against web standards and best practices
+                    </p>
+                  </div>
+                </div>
+
+                {/* Score representation */}
+                <div className="bg-gray-50 dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl px-4 py-2 flex flex-col items-center shadow-sm shrink-0">
+                  <span className="text-2xl font-display font-extrabold text-indigo-600 dark:text-indigo-400">{activeScore}</span>
+                  <span className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">SCORE</span>
+                </div>
+              </div>
+
+              {/* Progress track */}
+              <div className="mb-8">
+                <div className="flex justify-between items-center text-xs text-gray-400 dark:text-gray-500 font-bold uppercase mb-1.5 font-sans">
+                  <span>Rating</span>
+                  <span className={activeScore >= 85 ? "text-emerald-600 dark:text-emerald-400" : activeScore >= 70 ? "text-amber-500 dark:text-amber-400" : "text-rose-500 dark:text-rose-400"}>
+                    {activeScore >= 85 ? "Good Standards" : activeScore >= 70 ? "Moderate — Some Fixes Recommended" : "Needs Attention"}
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-1000 ${
+                      activeScore >= 85 ? "bg-emerald-500" : activeScore >= 70 ? "bg-amber-500" : "bg-rose-500"
+                    }`}
+                    style={{ width: `${activeScore}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Grid of Assertions Checkpoints */}
+              <div className="border-t border-gray-100 dark:border-slate-800 pt-6">
+                <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
+                  Checklist Items
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {getAnalyzerAssertions(activeTab).map((assertion, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-50/50 dark:bg-slate-900/40 border border-gray-100/80 dark:border-slate-800/80 rounded-2xl p-3 flex items-center justify-between gap-3 shadow-sm"
+                    >
+                      <span className="text-xs text-gray-700 dark:text-slate-300 font-semibold truncate leading-tight pr-1">
+                        {assertion.name}
+                      </span>
+                      {assertion.status ? (
+                        <span className="bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-900/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase shrink-0">
+                          Passed
+                        </span>
+                      ) : (
+                        <span className="bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border border-rose-200/50 dark:border-rose-900/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase shrink-0">
+                          Needs Fix
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Active Category Problems list */}
+          <div className="bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800 rounded-[32px] p-6 md:p-8 shadow-sm">
+            <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4 border-b border-gray-100 dark:border-slate-800 pb-3 flex justify-between items-center">
+              <span>Identified Issues</span>
+              <span className="text-[10px] bg-gray-100 dark:bg-slate-900 text-[#1A1A1A] dark:text-slate-200 font-bold px-2 py-0.5 rounded-full">
+                {activeProblems.length} Issue(s)
+              </span>
+            </h4>
+
+            {activeProblems.length === 0 ? (
+              <div className="p-8 text-center flex flex-col items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-emerald-50 dark:bg-emerald-950/20 text-emerald-500 dark:text-emerald-400 flex items-center justify-center mb-3">
+                  <CheckCircle2 className="h-5 w-5" />
+                </div>
+                {scan.problems.length === 0 ? (
+                  <>
+                    <p className="text-sm font-bold text-gray-800 dark:text-slate-200">No issues found!</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">This website passed all audit checks cleanly.</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm font-bold text-gray-800 dark:text-slate-200">
+                      No issues found in {selectedAnalyzer?.label || "this category"}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                      This category passed all tests cleanly. ({scan.problems.length} issue(s) found across other categories.)
+                    </p>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4">
+                {activeProblems.map((problem, index) => (
+                  <EducationalAuditCard
+                    key={problem.id || index}
+                    problem={problem}
+                    defaultExpanded={index === 0}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Active Category Actionable recommendations */}
+          <div className="bg-white dark:bg-[#131520] border border-indigo-100 dark:border-indigo-950/40 rounded-[32px] p-6 md:p-8 shadow-[0_8px_30px_rgba(79,70,229,0.02)] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-50/60 dark:bg-indigo-950/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <h4 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4 border-b border-gray-100 dark:border-slate-800 pb-3 flex items-center gap-1.5 z-10 relative">
+              <Sparkles className="h-4 w-4 text-indigo-500 dark:text-indigo-400" /> Actionable Recommendations
+            </h4>
+
+            {activeRecs.length === 0 ? (
+              <div className="p-8 text-center flex flex-col items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-indigo-50 dark:bg-indigo-950/20 text-indigo-500 dark:text-indigo-400 flex items-center justify-center mb-3">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <p className="text-sm font-bold text-gray-800 dark:text-slate-200">No additional fixes needed</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  This category meets all recommended standards.
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4 z-10 relative">
+                {activeRecs.map((rec, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white dark:bg-slate-900 border border-gray-200/85 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-500 rounded-2xl p-4 flex gap-4 items-center justify-between group transition duration-200 shadow-sm"
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="p-2 bg-indigo-50 dark:bg-indigo-950/30 rounded-full border border-indigo-100 dark:border-indigo-900/40 shrink-0">
+                        <Zap className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <h5 className="font-sans font-bold text-xs md:text-sm text-[#1A1A1A] dark:text-slate-200 leading-tight truncate">
+                          {rec.title}
+                        </h5>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed truncate mt-1">{rec.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0 flex flex-col items-end">
+                      <span className="font-sans font-bold text-xs px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/40">
+                        {rec.pointsAdded >= 10 ? "High Impact" : rec.pointsAdded >= 6 ? "Medium Impact" : "Low Impact"}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
