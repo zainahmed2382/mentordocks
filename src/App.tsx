@@ -133,7 +133,14 @@ export default function App() {
     loadUserData();
   }, [user]);
 
-  const handleStartScan = (url: string, options?: AnalyzeUrlOptions) => {
+  const handleStartScan = (url: string, options?: AnalyzeUrlOptions, currentUser: ApiUser | null = user) => {
+    if (!currentUser) {
+      setPendingScanUrl(url);
+      pendingScanOptionsRef.current = options;
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     setScanError(null);
     setScannedUrl(url);
     const promise = api.analyzeUrl(url, options);
@@ -472,7 +479,7 @@ export default function App() {
           setUser(authenticatedUser);
           setIsAuthModalOpen(false);
           if (pendingScanUrl) {
-            handleStartScan(pendingScanUrl, pendingScanOptionsRef.current);
+            handleStartScan(pendingScanUrl, pendingScanOptionsRef.current, authenticatedUser);
             setPendingScanUrl(null);
           }
         }}

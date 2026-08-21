@@ -77,7 +77,8 @@ export async function getNextSequenceValue(sequenceName: string): Promise<number
   const collection = await getMongoCollection("counters");
   if (!collection) return Date.now();
 
-  const result = await collection.findOneAndUpdate(
+  const counterCollection = collection as unknown as Collection<{ _id: string; value: number }>;
+  const result = await counterCollection.findOneAndUpdate(
     { _id: sequenceName },
     { $inc: { value: 1 } },
     { upsert: true, returnDocument: "after" }

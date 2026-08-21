@@ -473,11 +473,15 @@ app.post("/api/pagespeed", optionalAuthenticateToken, async (req: any, res: any)
 });
 
 // --- URL SCANNER (Lighthouse / PSI / Puppeteer / CDP) ---
-app.post("/api/scans/analyze", optionalAuthenticateToken, requirePersistentUser, async (req: any, res: any) => {
+app.post("/api/scans/analyze", authenticateToken, async (req: any, res: any) => {
   const { url, scanMode, device, checks } = req.body || {};
 
   if (!url) {
     return res.status(400).json({ error: "URL is required" });
+  }
+
+  if (!req.user) {
+    return res.status(401).json({ error: "You must be logged in or registered before running an audit." });
   }
 
   const deep = scanMode !== "standard";
