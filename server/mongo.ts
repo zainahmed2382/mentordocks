@@ -9,12 +9,25 @@ const mongoOptions: MongoClientOptions = {
   maxIdleTimeMS: 5000,
 };
 
-export const mongoClient = new MongoClient(process.env.MONGODB_URI || "", mongoOptions);
+function getMongoUri(): string | undefined {
+  const uri = process.env.MONGODB_URI?.trim();
+  if (!uri) return undefined;
+
+  if (!uri.startsWith("mongodb://") && !uri.startsWith("mongodb+srv://")) {
+    console.warn("[Mongo] Invalid MONGODB_URI format. MongoDB support disabled until a valid connection string is configured.");
+    return undefined;
+  }
+
+  return uri;
+}
+
+const mongoUri = getMongoUri();
+export const mongoClient: MongoClient | null = mongoUri ? new MongoClient(mongoUri, mongoOptions) : null;
 
 let mongoDb: Db | null = null;
 let mongoInitPromise: Promise<Db | null> | null = null;
 
-if (process.env.MONGODB_URI) {
+if (mongoClient) {
   try {
     attachDatabasePool(mongoClient as any);
   } catch (error) {
@@ -23,7 +36,7 @@ if (process.env.MONGODB_URI) {
 }
 
 export async function connectMongoDb(): Promise<Db | null> {
-  if (!process.env.MONGODB_URI) {
+  if (!mongoClient || !mongoUri) {
     return null;
   }
 
@@ -88,5 +101,5 @@ export async function getNextSequenceValue(sequenceName: string): Promise<number
 }
 
 export function isMongoConfigured(): boolean {
-  return Boolean(process.env.MONGODB_URI);
+  return Boolean(getMongoUri());
 }
